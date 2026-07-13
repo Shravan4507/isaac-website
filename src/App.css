@@ -1,0 +1,33 @@
+.app-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.desktop-navbar-wrapper {
+  display: block;
+}
+
+.mobile-menu-wrapper {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .desktop-navbar-wrapper {
+    display: none;
+  }
+  .mobile-menu-wrapper {
+    display: block;
+  }
+}

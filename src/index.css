@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'Zen Dots';
+  src: url('/fonts/ZenDots-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  font-family: 'Zen Dots', system-ui, -apple-system, sans-serif;
+  color-scheme: light dark;
+  background: #000000 !important;
+}
+
+body {
+  margin: 0;
+  background: #000000 !important;
+  font-family: 'Zen Dots', system-ui, sans-serif;
+}
+
+/* Hide scrollbar globally but keep functionality */
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+html, body {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
