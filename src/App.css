@@ -2,7 +2,161 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container.home-active {
+  height: auto;
   min-height: 100vh;
+  overflow-y: auto;
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.hero-logo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.welcome-section-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.welcome-section-flow {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.future-section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  z-index: 3;
+}
+
+.welcome-container {
+  max-width: 680px;
+  padding: 40px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(240, 240, 250, 0);
+  margin: 0 24px;
+}
+
+.welcome-title {
+  font-family: 'D-Din-Bold', sans-serif;
+  font-size: 60px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 2px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+
+.welcome-title-logo {
+  height: 1.5em;
+  width: auto;
+  object-fit: contain;
+  display: inline-block;
+}
+
+.welcome-subtitle {
+  font-family: 'D-Din', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(240, 240, 250, 0.8);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+}
+
+.welcome-text {
+  font-family: 'D-Din', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(240, 240, 250, 0.8);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.logo-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  max-width: 580px;
+  pointer-events: auto;
+  transform-origin: 5.75% 22%;
+}
+
+.hero-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.8));
+}
+
+.dive-in-btn {
+  position: absolute;
+  bottom: -35px;
+  right: 4%;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(240, 240, 250, 0.35);
+  color: #f0f0fa;
+  font-family: 'D-Din', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+}
+
+.dive-in-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(240, 240, 250, 0.35);
+  color: #000000;
+}
+
+.dive-in-btn:active {
+  transform: scale(0.98);
 }
 
 .background-wrapper {
@@ -27,7 +181,77 @@
   .desktop-navbar-wrapper {
     display: none;
   }
+
   .mobile-menu-wrapper {
     display: block;
   }
+}
+
+@media (max-width: 680px) {
+  .welcome-title {
+    font-size: 36px;
+    gap: 8px 10px;
+  }
+}
+
+.kickoff-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(240, 240, 250, 0.35);
+  color: #f0f0fa;
+  font-family: 'D-Din', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  margin-top: 40px;
+}
+
+.kickoff-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(240, 240, 250, 0.35);
+  color: #000000;
+}
+
+.kickoff-btn:active {
+  transform: scale(0.98);
+}
+
+.kickoff-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.kickoff-btn:hover .kickoff-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PAGE ROUTE TRANSITIONS (BLUR FADE IN)
+   ────────────────────────────────────────────────────────────────────────── */
+@keyframes pageBlurFadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.route-transition-wrapper {
+  animation: pageBlurFadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  width: 100%;
+  height: 100%;
 }

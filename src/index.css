@@ -1,7 +1,21 @@
 @font-face {
-  font-family: 'Zen Dots';
-  src: url('/fonts/ZenDots-Regular.ttf') format('truetype');
-  font-weight: normal;
+  font-family: 'D-Din';
+  src: url('/fonts/d-din/D-DIN.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'D-Din-Bold';
+  src: url('/fonts/d-din/D-DIN-Bold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'D-Din-Regular';
+  src: url('/fonts/d-din/D-DIN-Regular.otf') format('opentype');
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -26,8 +40,10 @@ body {
   display: none !important;
 }
 
-html, body {
-  -ms-overflow-style: none !important;  /* IE and Edge */
-  scrollbar-width: none !important;  /* Firefox */
+html,
+body {
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
 }
-

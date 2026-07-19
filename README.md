@@ -1,77 +1,40 @@
-# React + TypeScript + Vite
+# ISAAC Synergy Network (Indian Synergy of Astronomy & Astrophysics Clubs)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the ISAAC Synergy Network dashboard. This platform is a unified space designed to connect astronomy clubs, students, educators, and space enthusiasts across India to share resources, plan events, publish research findings, and coordinate observations.
 
-Currently, two official plugins are available:
+## 🛰️ Current Development Status
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+> [!WARNING]
+> **Work In Progress**
+> This repository represents a few hours of rapid development. There is a significant amount of work remaining to reach production-grade features.
+>
+> As this is an early prototype, **there might be bugs**. If you encounter any unexpected behaviors, please report them immediately so we can refine our flight deck coordinate systems!
 
-## React Compiler
+## 🪐 Features Implemented So Far
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **Custom State-Based SPA Router**: Allows seamless transitions between cosmic coordinates without page reloads.
+  - `/home` - Main Dashboard showing upcoming events, resources, gallery, and publications.
+  - `/clubs` - Clubs interactive map directory with map style toggles (Cosmos, Satellite, Streets) and zoom controls.
+  - `/about` - About placeholder page.
+  - `/login` - Auth gateway with premium glassmorphic credentials styling.
+  - `/onboarding` - Pilot configuration settings card (horizontal split layout).
+  - `/{username}` - Dynamic pilot profile card showing ranks and cosmic telemetry logs.
+- **Dynamic 3D Backgrounds**: Integration of custom WebGL-based stars/galaxy renderings.
+- **Responsive Layouts**: Scaled and refined interfaces optimized for mobile views up to massive desktop screens.
 
-Note: This will impact Vite dev & build performances.
+## 🚀 Setting Up local Orbit
 
-## Expanding the ESLint configuration
+1. **Clone & Install**:
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. **Launch Dev Engine**:
+   ```bash
+   npm run dev
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+3. **Verify Bundle**:
+   ```bash
+   npm run build
+   ```
