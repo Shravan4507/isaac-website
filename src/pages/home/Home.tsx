@@ -1,4 +1,3 @@
-import Navbar from '../../components/navbar/navbar'
 import Constellation from '../../components/constellation/Constellation'
 import EventsCarousel from '../../components/events-carousel/EventsCarousel'
 import Footer from '../../components/footer/footer'
@@ -7,9 +6,6 @@ import './Home.css'
 export default function Home() {
   return (
     <div className="home-page-container">
-      {/* Sleek Top Navigation */}
-      <Navbar />
-
       {/* Main Content Area */}
       <main className="home-main-content">
         <div className="video-container">

@@ -13,6 +13,7 @@ import Events from './pages/events/Events'
 import Resources from './pages/resources/Resources'
 import Gallery from './pages/gallery/Gallery'
 import Publications from './pages/publications/Publications'
+import Constellations from './pages/constellations/Constellations'
 import './App.css'
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
   // Check if currentPath is a dynamic user profile route
   const getProfileUsername = (path: string): string | null => {
     const segments = path.split('/').filter(Boolean)
-    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'events', 'resources', 'gallery', 'publications']
+    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'events', 'resources', 'gallery', 'publications', 'constellations']
     if (segments.length === 1 && !systemPages.includes(segments[0])) {
       return segments[0]
     }
@@ -46,6 +47,7 @@ function App() {
                       path === '/resources' || 
                       path === '/gallery' || 
                       path === '/publications' || 
+                      path === '/constellations' || 
                       getProfileUsername(path) !== null
     if (isSpecial) return 'home'
     
@@ -78,7 +80,8 @@ function App() {
                            path === '/events' || 
                            path === '/resources' || 
                            path === '/gallery' || 
-                           path === '/publications'
+                           path === '/publications' || 
+                           path === '/constellations'
 
           // Intercept page route changes to prevent full refresh
           if (isSystem || isProfile) {
@@ -119,6 +122,7 @@ function App() {
                       path === '/resources' || 
                       path === '/gallery' || 
                       path === '/publications' || 
+                      path === '/constellations' || 
                       getProfileUsername(path) !== null
                       
     if (stage === 'home' && !isSpecial) {
@@ -195,7 +199,7 @@ function App() {
   }
 
   return (
-    <div className={`app-container ${stage === 'home' ? 'home-active' : ''}`}>
+    <div className={`app-container ${stage === 'home' ? 'home-active' : ''} ${currentPath === '/constellations' ? 'constellations-active' : ''}`}>
       {/* 1. Hero Section Layer - Render only if stage is hero */}
       {stage === 'hero' && (
         <section className="hero-section">
@@ -243,82 +247,83 @@ function App() {
 
       {/* 3. Main Home/Clubs Page Section - Render when stage is home */}
       {stage === 'home' && (
-        <div key={currentPath} className="route-transition-wrapper">
-          {currentPath === '/clubs' && (
-            <div className="clubs-route-layout">
-              <Navbar />
-              <Clubs />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/about' && (
-            <div className="about-route-layout">
-              <Navbar />
-              <About />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/events' && (
-            <div className="events-route-layout">
-              <Navbar />
-              <Events />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/resources' && (
-            <div className="resources-route-layout">
-              <Navbar />
-              <Resources />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/gallery' && (
-            <div className="gallery-route-layout">
-              <Navbar />
-              <Gallery />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/publications' && (
-            <div className="publications-route-layout">
-              <Navbar />
-              <Publications />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/login' && (
-            <div className="login-route-layout">
-              <Navbar />
-              <Login />
-              <Footer />
-            </div>
-          )}
-          {currentPath === '/onboarding' && (
-            <div className="onboarding-route-layout">
-              <Navbar />
-              <Onboarding onComplete={handleOnboardingComplete} />
-              <Footer />
-            </div>
-          )}
-          {profileUsername !== null && (
-            <div className="profile-route-layout">
-              <Navbar />
-              <UserProfile username={profileUsername} onSignOut={handleSignOut} />
-              <Footer />
-            </div>
-          )}
-          {currentPath !== '/clubs' && 
-           currentPath !== '/about' && 
-           currentPath !== '/events' && 
-           currentPath !== '/resources' && 
-           currentPath !== '/gallery' && 
-           currentPath !== '/publications' && 
-           currentPath !== '/login' && 
-           currentPath !== '/onboarding' && 
-           profileUsername === null && (
-             <Home />
-           )}
-        </div>
+        <>
+          <Navbar />
+          <div key={currentPath} className="route-transition-wrapper">
+            {currentPath === '/clubs' && (
+              <div className="clubs-route-layout">
+                <Clubs />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/about' && (
+              <div className="about-route-layout">
+                <About />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/events' && (
+              <div className="events-route-layout">
+                <Events />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/resources' && (
+              <div className="resources-route-layout">
+                <Resources />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/gallery' && (
+              <div className="gallery-route-layout">
+                <Gallery />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/publications' && (
+              <div className="publications-route-layout">
+                <Publications />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/constellations' && (
+              <div className="constellations-route-layout">
+                <Constellations />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/login' && (
+              <div className="login-route-layout">
+                <Login />
+                <Footer />
+              </div>
+            )}
+            {currentPath === '/onboarding' && (
+              <div className="onboarding-route-layout">
+                <Onboarding onComplete={handleOnboardingComplete} />
+                <Footer />
+              </div>
+            )}
+            {profileUsername !== null && (
+              <div className="profile-route-layout">
+                <UserProfile username={profileUsername} onSignOut={handleSignOut} />
+                <Footer />
+              </div>
+            )}
+            {currentPath !== '/clubs' && 
+             currentPath !== '/about' && 
+             currentPath !== '/events' && 
+             currentPath !== '/resources' && 
+             currentPath !== '/gallery' && 
+             currentPath !== '/publications' && 
+             currentPath !== '/constellations' && 
+             currentPath !== '/login' && 
+             currentPath !== '/onboarding' && 
+             profileUsername === null && (
+               <Home />
+             )}
+          </div>
+        </>
       )}
 
       <div className="background-wrapper">

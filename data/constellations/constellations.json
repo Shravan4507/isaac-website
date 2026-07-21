@@ -1,0 +1,5976 @@
+[
+  {
+    "id": "ant",
+    "abbreviation": "Ant",
+    "latinName": "Antlia",
+    "englishName": "Air Pump",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.21686,
+      "dec": -33.479376
+    },
+    "starIds": [
+      48926,
+      51172
+    ],
+    "mainStarIds": [
+      51172,
+      48926
+    ],
+    "lines": [
+      [
+        51172,
+        48926
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ara",
+    "abbreviation": "Ara",
+    "latinName": "Ara",
+    "englishName": "Altar",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 17.4016,
+      "dec": -55.370086
+    },
+    "starIds": [
+      82363,
+      83081,
+      85258,
+      85267,
+      85727,
+      85792,
+      88714
+    ],
+    "mainStarIds": [
+      85258,
+      85792,
+      83081,
+      85267,
+      85727,
+      88714,
+      82363
+    ],
+    "lines": [
+      [
+        88714,
+        85792,
+        83081,
+        82363,
+        85727,
+        85267,
+        85258,
+        88714
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "and",
+    "abbreviation": "And",
+    "latinName": "Andromeda",
+    "englishName": "Andromeda",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 0.966425,
+      "dec": 36.246666
+    },
+    "starIds": [
+      677,
+      3092,
+      3881,
+      4436,
+      5447,
+      9640
+    ],
+    "mainStarIds": [
+      677,
+      5447,
+      9640,
+      3092,
+      4436,
+      3881
+    ],
+    "lines": [
+      [
+        677,
+        3092,
+        5447
+      ],
+      [
+        9640,
+        5447,
+        4436,
+        3881
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "sgr",
+    "abbreviation": "Sgr",
+    "latinName": "Sagittarius",
+    "englishName": "Archer",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 18.976888,
+      "dec": -29.104064
+    },
+    "starIds": [
+      87072,
+      88635,
+      89341,
+      89642,
+      89931,
+      90185,
+      90496,
+      92041,
+      92855,
+      93085,
+      93506,
+      93683,
+      93864,
+      94820,
+      95168,
+      95294,
+      95347,
+      96406,
+      98032,
+      98412,
+      98688
+    ],
+    "mainStarIds": [
+      90185,
+      92855,
+      93506,
+      89931,
+      90496,
+      88635,
+      89642,
+      92041,
+      93864,
+      93085
+    ],
+    "lines": [
+      [
+        89931,
+        90496
+      ],
+      [
+        89642,
+        90185,
+        88635,
+        87072
+      ],
+      [
+        88635,
+        89931,
+        90185,
+        93506,
+        92041,
+        89931
+      ],
+      [
+        92041,
+        90496,
+        89341
+      ],
+      [
+        93506,
+        93864,
+        92855,
+        92041
+      ],
+      [
+        92855,
+        93085,
+        93683,
+        94820,
+        95168
+      ],
+      [
+        93864,
+        96406,
+        98688,
+        98412,
+        98032,
+        95347
+      ],
+      [
+        98032,
+        95294
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "sge",
+    "abbreviation": "Sge",
+    "latinName": "Sagitta",
+    "englishName": "Arrow",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.841495,
+      "dec": 18.701487
+    },
+    "starIds": [
+      96757,
+      96837,
+      97365,
+      98337,
+      98920
+    ],
+    "mainStarIds": [
+      98337,
+      97365,
+      96757,
+      96837,
+      98920
+    ],
+    "lines": [
+      [
+        96837,
+        97365,
+        96757
+      ],
+      [
+        97365,
+        98337,
+        98920
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "com",
+    "abbreviation": "Com",
+    "latinName": "Coma Berenices",
+    "englishName": "Bernice's Hair",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 12.93778,
+      "dec": 24.558679
+    },
+    "starIds": [
+      60742,
+      64241,
+      64394
+    ],
+    "mainStarIds": [
+      64394,
+      64241,
+      60742
+    ],
+    "lines": [
+      [
+        64241,
+        64394,
+        60742
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "aps",
+    "abbreviation": "Aps",
+    "latinName": "Apus",
+    "englishName": "Bird of Paradise",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.024479,
+      "dec": -78.486445
+    },
+    "starIds": [
+      72370,
+      81065,
+      81852
+    ],
+    "mainStarIds": [
+      72370,
+      81065,
+      81852
+    ],
+    "lines": [
+      [
+        72370,
+        81065,
+        81852
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "boo",
+    "abbreviation": "Boo",
+    "latinName": "Boötes",
+    "englishName": "Boötes",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 14.532068,
+      "dec": 26.285071
+    },
+    "starIds": [
+      67459,
+      67927,
+      69673,
+      71053,
+      71075,
+      71795,
+      72105,
+      73555,
+      74666
+    ],
+    "mainStarIds": [
+      69673,
+      72105,
+      67927,
+      71075,
+      74666,
+      73555,
+      71053,
+      71795,
+      67459
+    ],
+    "lines": [
+      [
+        71795,
+        69673,
+        72105,
+        74666,
+        73555,
+        71075,
+        71053,
+        69673,
+        67927,
+        67459
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "tau",
+    "abbreviation": "Tau",
+    "latinName": "Taurus",
+    "englishName": "Bull",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 4.475354,
+      "dec": 18.41152
+    },
+    "starIds": [
+      15900,
+      17847,
+      18724,
+      20205,
+      20455,
+      20648,
+      20889,
+      20894,
+      21421,
+      21881,
+      25428,
+      26451
+    ],
+    "mainStarIds": [
+      21421,
+      25428,
+      26451,
+      20894,
+      18724,
+      20889,
+      15900,
+      17847,
+      20205,
+      20455
+    ],
+    "lines": [
+      [
+        25428,
+        21881,
+        20889
+      ],
+      [
+        21421,
+        26451
+      ],
+      [
+        20205,
+        20455
+      ],
+      [
+        20205,
+        18724,
+        15900
+      ],
+      [
+        21421,
+        20889
+      ],
+      [
+        21421,
+        20894,
+        20205
+      ],
+      [
+        20889,
+        20648,
+        20455,
+        17847
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cap",
+    "abbreviation": "Cap",
+    "latinName": "Capricornus",
+    "englishName": "Capricornus",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 21.072176,
+      "dec": -18.753842
+    },
+    "starIds": [
+      100064,
+      100345,
+      102485,
+      102978,
+      104139,
+      105515,
+      105881,
+      106985,
+      107556
+    ],
+    "mainStarIds": [
+      107556,
+      100345,
+      100064,
+      106985,
+      105881,
+      104139,
+      102978,
+      102485,
+      105515
+    ],
+    "lines": [
+      [
+        100064,
+        100345,
+        104139,
+        105515,
+        106985,
+        107556
+      ],
+      [
+        105515,
+        105881,
+        104139
+      ],
+      [
+        100345,
+        102485
+      ],
+      [
+        104139,
+        102978
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "nor",
+    "abbreviation": "Nor",
+    "latinName": "Norma",
+    "englishName": "Carpenter's Square",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.265495,
+      "dec": -50.392614
+    },
+    "starIds": [
+      78639,
+      79509,
+      80000,
+      80582
+    ],
+    "mainStarIds": [
+      80000,
+      80582,
+      78639,
+      79509
+    ],
+    "lines": [
+      [
+        79509,
+        80000,
+        80582,
+        78639,
+        80000
+      ],
+      [
+        78639,
+        79509
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cas",
+    "abbreviation": "Cas",
+    "latinName": "Cassiopeia",
+    "englishName": "Cassiopeia",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 1.021989,
+      "dec": 60.061847
+    },
+    "starIds": [
+      746,
+      3179,
+      4427,
+      6686,
+      8886
+    ],
+    "mainStarIds": [
+      4427,
+      3179,
+      746,
+      6686,
+      8886
+    ],
+    "lines": [
+      [
+        8886,
+        6686,
+        4427,
+        3179,
+        746
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cen",
+    "abbreviation": "Cen",
+    "latinName": "Centaurus",
+    "englishName": "Centaur",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 13.468777,
+      "dec": -47.933839
+    },
+    "starIds": [
+      56480,
+      56561,
+      59196,
+      60823,
+      61932,
+      65109,
+      65936,
+      66657,
+      67464,
+      67472,
+      68002,
+      68282,
+      68702,
+      68933,
+      71352,
+      71683,
+      73334
+    ],
+    "mainStarIds": [
+      71683,
+      68702,
+      68933,
+      61932,
+      66657,
+      71352,
+      68002,
+      59196,
+      65109,
+      56561
+    ],
+    "lines": [
+      [
+        71683,
+        68702,
+        66657,
+        68002,
+        68282,
+        67472,
+        67464,
+        65936,
+        65109
+      ],
+      [
+        67464,
+        68933
+      ],
+      [
+        67472,
+        71352,
+        73334
+      ],
+      [
+        68002,
+        61932,
+        60823,
+        59196,
+        56480,
+        56561
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cep",
+    "abbreviation": "Cep",
+    "latinName": "Cepheus",
+    "englishName": "Cepheus",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 22.290408,
+      "dec": 67.036047
+    },
+    "starIds": [
+      105199,
+      106032,
+      109492,
+      112724,
+      116727
+    ],
+    "mainStarIds": [
+      105199,
+      116727,
+      106032,
+      109492,
+      112724
+    ],
+    "lines": [
+      [
+        109492,
+        112724,
+        106032,
+        105199,
+        109492
+      ],
+      [
+        112724,
+        116727,
+        106032
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cha",
+    "abbreviation": "Cha",
+    "latinName": "Chamaeleon",
+    "englishName": "Chameleon",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.401894,
+      "dec": -78.279916
+    },
+    "starIds": [
+      40702,
+      51839,
+      60000
+    ],
+    "mainStarIds": [
+      40702,
+      51839,
+      60000
+    ],
+    "lines": [
+      [
+        40702,
+        51839,
+        60000
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "aur",
+    "abbreviation": "Aur",
+    "latinName": "Auriga",
+    "englishName": "Charioteer",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.449174,
+      "dec": 38.501231
+    },
+    "starIds": [
+      23015,
+      23453,
+      24608,
+      25428,
+      28360,
+      28380
+    ],
+    "mainStarIds": [
+      24608,
+      25428,
+      28360,
+      28380,
+      23015,
+      23453
+    ],
+    "lines": [
+      [
+        28380,
+        28360,
+        24608,
+        23453,
+        23015
+      ],
+      [
+        25428,
+        23015
+      ],
+      [
+        25428,
+        28380
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "hor",
+    "abbreviation": "Hor",
+    "latinName": "Horologium",
+    "englishName": "Clock",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 3.323756,
+      "dec": -52.194018
+    },
+    "starIds": [
+      12484,
+      14240,
+      19747
+    ],
+    "mainStarIds": [
+      19747,
+      14240,
+      12484
+    ],
+    "lines": [
+      [
+        19747,
+        12484,
+        14240
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cnc",
+    "abbreviation": "Cnc",
+    "latinName": "Cancer",
+    "englishName": "Crab",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 8.638152,
+      "dec": 19.44061
+    },
+    "starIds": [
+      40526,
+      40843,
+      42806,
+      42911,
+      43103,
+      44066
+    ],
+    "mainStarIds": [
+      40526,
+      42911,
+      43103,
+      44066,
+      42806,
+      40843
+    ],
+    "lines": [
+      [
+        43103,
+        42806,
+        40843
+      ],
+      [
+        42806,
+        42911,
+        40526
+      ],
+      [
+        42911,
+        44066
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "gru",
+    "abbreviation": "Gru",
+    "latinName": "Grus",
+    "englishName": "Crane",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 22.605342,
+      "dec": -45.231932
+    },
+    "starIds": [
+      108085,
+      109111,
+      109268,
+      110997,
+      112122,
+      112623,
+      113638,
+      114131,
+      114421
+    ],
+    "mainStarIds": [
+      109268,
+      112122,
+      108085,
+      112623,
+      114421,
+      110997,
+      113638,
+      114131,
+      109111
+    ],
+    "lines": [
+      [
+        114131,
+        110997,
+        109268,
+        112122,
+        114421,
+        114131
+      ],
+      [
+        112122,
+        113638
+      ],
+      [
+        112122,
+        112623
+      ],
+      [
+        109268,
+        109111,
+        108085
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "crv",
+    "abbreviation": "Crv",
+    "latinName": "Corvus",
+    "englishName": "Crow",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 12.362963,
+      "dec": -20.166461
+    },
+    "starIds": [
+      59199,
+      59316,
+      59803,
+      60965,
+      61174,
+      61359
+    ],
+    "mainStarIds": [
+      59803,
+      61359,
+      60965,
+      59316,
+      59199,
+      61174
+    ],
+    "lines": [
+      [
+        61174,
+        60965,
+        59803,
+        59316,
+        59199
+      ],
+      [
+        59316,
+        61359,
+        60965
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "crt",
+    "abbreviation": "Crt",
+    "latinName": "Crater",
+    "englishName": "Cup",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 11.453597,
+      "dec": -16.218782
+    },
+    "starIds": [
+      53740,
+      54682,
+      55282,
+      55687,
+      55705,
+      56633,
+      57283,
+      58188
+    ],
+    "mainStarIds": [
+      55282,
+      55705,
+      53740,
+      54682,
+      56633,
+      57283,
+      55687,
+      58188
+    ],
+    "lines": [
+      [
+        53740,
+        54682,
+        55705,
+        55282,
+        53740
+      ],
+      [
+        55282,
+        55687,
+        56633,
+        58188,
+        57283,
+        55705
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "del",
+    "abbreviation": "Del",
+    "latinName": "Delphinus",
+    "englishName": "Dolphin",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 20.668391,
+      "dec": 14.60186
+    },
+    "starIds": [
+      101421,
+      101769,
+      101958,
+      102281,
+      102532
+    ],
+    "mainStarIds": [
+      101769,
+      101958,
+      101421,
+      102532,
+      102281
+    ],
+    "lines": [
+      [
+        101421,
+        101769,
+        101958,
+        102532,
+        102281,
+        101769
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "col",
+    "abbreviation": "Col",
+    "latinName": "Columba",
+    "englishName": "Dove",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.945645,
+      "dec": -35.998324
+    },
+    "starIds": [
+      25859,
+      26634,
+      27628,
+      28199,
+      28328,
+      29807,
+      30277
+    ],
+    "mainStarIds": [
+      26634,
+      27628,
+      30277,
+      25859,
+      28328,
+      28199,
+      29807
+    ],
+    "lines": [
+      [
+        30277,
+        29807,
+        28199,
+        27628,
+        28328
+      ],
+      [
+        27628,
+        26634,
+        25859
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "dra",
+    "abbreviation": "Dra",
+    "latinName": "Draco",
+    "englishName": "Dragon",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.710037,
+      "dec": 63.207269
+    },
+    "starIds": [
+      56211,
+      61281,
+      68756,
+      75458,
+      78527,
+      80331,
+      83895,
+      85670,
+      85829,
+      87585,
+      87833,
+      89937,
+      94376,
+      94648,
+      97433
+    ],
+    "mainStarIds": [
+      87833,
+      80331,
+      85670,
+      94376,
+      83895,
+      75458,
+      89937,
+      68756,
+      87585,
+      56211
+    ],
+    "lines": [
+      [
+        87585,
+        87833,
+        85670,
+        85829,
+        87585,
+        94376,
+        97433,
+        94648,
+        89937,
+        83895,
+        80331,
+        78527,
+        75458,
+        68756,
+        61281,
+        56211
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cir",
+    "abbreviation": "Cir",
+    "latinName": "Circinus",
+    "englishName": "Drawing Compass",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 15.130011,
+      "dec": -61.032378
+    },
+    "starIds": [
+      71908,
+      74824,
+      75323
+    ],
+    "mainStarIds": [
+      71908,
+      74824,
+      75323
+    ],
+    "lines": [
+      [
+        71908,
+        75323
+      ],
+      [
+        71908,
+        74824
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "aql",
+    "abbreviation": "Aql",
+    "latinName": "Aquila",
+    "englishName": "Eagle",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.57947,
+      "dec": 5.915171
+    },
+    "starIds": [
+      93244,
+      93747,
+      93805,
+      95501,
+      97278,
+      97649,
+      97804,
+      98036,
+      99473
+    ],
+    "mainStarIds": [
+      97649,
+      97278,
+      93747,
+      99473,
+      95501,
+      93805,
+      98036,
+      97804,
+      93244
+    ],
+    "lines": [
+      [
+        98036,
+        97649,
+        97278
+      ],
+      [
+        97649,
+        95501,
+        97804
+      ],
+      [
+        99473,
+        97804
+      ],
+      [
+        95501,
+        93747,
+        93244
+      ],
+      [
+        95501,
+        93805
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cae",
+    "abbreviation": "Cae",
+    "latinName": "Caelum",
+    "englishName": "Engraving Tool",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 4.630307,
+      "dec": -41.320599
+    },
+    "starIds": [
+      21060,
+      21770,
+      21861
+    ],
+    "mainStarIds": [
+      21770,
+      21861,
+      21060
+    ],
+    "lines": [
+      [
+        21060,
+        21770,
+        21861
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "eri",
+    "abbreviation": "Eri",
+    "latinName": "Eridanus",
+    "englishName": "Eridanus",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 3.569834,
+      "dec": -26.155803
+    },
+    "starIds": [
+      7588,
+      9007,
+      10602,
+      11407,
+      12413,
+      12486,
+      12843,
+      13701,
+      13847,
+      14146,
+      15197,
+      15474,
+      15510,
+      16537,
+      16611,
+      17378,
+      17651,
+      17797,
+      17874,
+      20042,
+      20535,
+      21393,
+      21444,
+      21594,
+      22109,
+      22701,
+      23875,
+      23972
+    ],
+    "mainStarIds": [
+      7588,
+      23875,
+      13847,
+      17378,
+      20042,
+      10602,
+      9007,
+      15474,
+      16537,
+      21393
+    ],
+    "lines": [
+      [
+        7588,
+        9007,
+        10602,
+        11407,
+        12413,
+        12486,
+        13847,
+        15510,
+        17797,
+        17874,
+        20042,
+        20535,
+        21393,
+        17651,
+        16611,
+        15474,
+        14146,
+        12843,
+        13701,
+        15197,
+        16537,
+        17378,
+        21444,
+        22109,
+        22701,
+        23875,
+        23972,
+        21594
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "psc",
+    "abbreviation": "Psc",
+    "latinName": "Pisces",
+    "englishName": "Fishes",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.243394,
+      "dec": 9.158666
+    },
+    "starIds": [
+      1645,
+      3760,
+      4889,
+      4906,
+      5742,
+      6193,
+      7007,
+      7097,
+      7884,
+      8198,
+      8833,
+      9487,
+      114971,
+      115227,
+      115738,
+      115830,
+      116771,
+      116928,
+      117245,
+      118268
+    ],
+    "mainStarIds": [
+      7097,
+      114971,
+      9487,
+      118268,
+      116771,
+      8198,
+      4906,
+      115830,
+      7884,
+      116928
+    ],
+    "lines": [
+      [
+        4889,
+        5742
+      ],
+      [
+        4889,
+        6193,
+        5742,
+        7097,
+        8198,
+        9487,
+        8833,
+        7884,
+        7007,
+        4906,
+        3760,
+        1645,
+        118268,
+        116771,
+        117245,
+        116928,
+        115738,
+        114971,
+        115227,
+        115830,
+        116771
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "mus",
+    "abbreviation": "Mus",
+    "latinName": "Musca",
+    "englishName": "Fly",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 12.42309,
+      "dec": -69.026359
+    },
+    "starIds": [
+      57363,
+      61199,
+      61585,
+      62322
+    ],
+    "mainStarIds": [
+      61585,
+      62322,
+      57363,
+      61199
+    ],
+    "lines": [
+      [
+        62322,
+        57363,
+        61199,
+        61585,
+        62322
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "vol",
+    "abbreviation": "Vol",
+    "latinName": "Volans",
+    "englishName": "Flying Fish",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 7.9542,
+      "dec": -68.702035
+    },
+    "starIds": [
+      34481,
+      35228,
+      37504,
+      39794,
+      41312,
+      44382
+    ],
+    "mainStarIds": [
+      41312,
+      34481,
+      37504,
+      35228,
+      44382,
+      39794
+    ],
+    "lines": [
+      [
+        37504,
+        34481,
+        39794,
+        37504
+      ],
+      [
+        39794,
+        35228
+      ],
+      [
+        39794,
+        41312,
+        44382,
+        39794
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "vul",
+    "abbreviation": "Vul",
+    "latinName": "Vulpecula",
+    "englishName": "Fox",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.748387,
+      "dec": 26.209239
+    },
+    "starIds": [
+      95771,
+      98543
+    ],
+    "mainStarIds": [
+      95771,
+      98543
+    ],
+    "lines": [
+      [
+        95771,
+        98543
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "for",
+    "abbreviation": "For",
+    "latinName": "Fornax",
+    "englishName": "Furnace",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 3.009709,
+      "dec": -30.696758
+    },
+    "starIds": [
+      13147,
+      14879
+    ],
+    "mainStarIds": [
+      14879,
+      13147
+    ],
+    "lines": [
+      [
+        13147,
+        14879
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cam",
+    "abbreviation": "Cam",
+    "latinName": "Camelopardalis",
+    "englishName": "Giraffe",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 4.311545,
+      "dec": 67.983737
+    },
+    "starIds": [
+      16228,
+      17959,
+      18505,
+      22783,
+      25110
+    ],
+    "mainStarIds": [
+      16228,
+      22783,
+      17959,
+      18505,
+      25110
+    ],
+    "lines": [
+      [
+        16228,
+        18505,
+        22783
+      ],
+      [
+        16228,
+        17959,
+        22783
+      ],
+      [
+        17959,
+        25110
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "uma",
+    "abbreviation": "UMa",
+    "latinName": "Ursa Major",
+    "englishName": "Great Bear",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.848194,
+      "dec": 52.750545
+    },
+    "starIds": [
+      41704,
+      44127,
+      44471,
+      46733,
+      46853,
+      48319,
+      48402,
+      50372,
+      50801,
+      53910,
+      54061,
+      54539,
+      57399,
+      58001,
+      59774,
+      62956,
+      65378,
+      67301
+    ],
+    "mainStarIds": [
+      62956,
+      54061,
+      67301,
+      65378,
+      53910,
+      58001,
+      54539,
+      50801,
+      44127,
+      46853
+    ],
+    "lines": [
+      [
+        67301,
+        65378,
+        62956,
+        59774,
+        54061,
+        53910,
+        58001,
+        59774
+      ],
+      [
+        58001,
+        57399,
+        54539,
+        50372
+      ],
+      [
+        54539,
+        50801
+      ],
+      [
+        53910,
+        48402,
+        46853,
+        44471
+      ],
+      [
+        46853,
+        44127
+      ],
+      [
+        48402,
+        48319,
+        41704,
+        46733,
+        54061
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cma",
+    "abbreviation": "CMa",
+    "latinName": "Canis Major",
+    "englishName": "Greater Dog",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 6.884076,
+      "dec": -23.208014
+    },
+    "starIds": [
+      30122,
+      30324,
+      31416,
+      31592,
+      32349,
+      32759,
+      33160,
+      33165,
+      33347,
+      33579,
+      33856,
+      33977,
+      34045,
+      34444,
+      35037,
+      35904
+    ],
+    "mainStarIds": [
+      32349,
+      33579,
+      34444,
+      30324,
+      35904,
+      30122,
+      33977,
+      33856,
+      32759,
+      31592
+    ],
+    "lines": [
+      [
+        33160,
+        34045,
+        33347,
+        32349,
+        33977,
+        34444,
+        35037,
+        35904
+      ],
+      [
+        33579,
+        33856,
+        34444
+      ],
+      [
+        33856,
+        33165,
+        31592,
+        31416
+      ],
+      [
+        31592,
+        30324
+      ],
+      [
+        31592,
+        32349
+      ],
+      [
+        33579,
+        32759
+      ],
+      [
+        30122,
+        33579
+      ],
+      [
+        33347,
+        33160
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lep",
+    "abbreviation": "Lep",
+    "latinName": "Lepus",
+    "englishName": "Hare",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.525331,
+      "dec": -16.516422
+    },
+    "starIds": [
+      23685,
+      24244,
+      24305,
+      24327,
+      24845,
+      24873,
+      25606,
+      25985,
+      27072,
+      27288,
+      27654,
+      28103,
+      28910
+    ],
+    "mainStarIds": [
+      25985,
+      25606,
+      23685,
+      24305,
+      27288,
+      27072,
+      28103,
+      27654,
+      24845,
+      24327
+    ],
+    "lines": [
+      [
+        28910,
+        28103,
+        27288,
+        25985,
+        24305
+      ],
+      [
+        25985,
+        27654,
+        27072,
+        25606,
+        23685
+      ],
+      [
+        25985,
+        25606
+      ],
+      [
+        24305,
+        24845
+      ],
+      [
+        24305,
+        24327
+      ],
+      [
+        23685,
+        24305
+      ],
+      [
+        24327,
+        24244
+      ],
+      [
+        24845,
+        24873
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "her",
+    "abbreviation": "Her",
+    "latinName": "Hercules",
+    "englishName": "Hercules",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 17.12295,
+      "dec": 33.582246
+    },
+    "starIds": [
+      77760,
+      79992,
+      80170,
+      80816,
+      81126,
+      81693,
+      81833,
+      83207,
+      84379,
+      84380,
+      84606,
+      85112,
+      85693,
+      86414,
+      86974,
+      87808,
+      87933,
+      88794
+    ],
+    "mainStarIds": [
+      80816,
+      81693,
+      84379,
+      84380,
+      86974,
+      81833,
+      87933,
+      80170,
+      86414,
+      88794
+    ],
+    "lines": [
+      [
+        86414,
+        87808,
+        85112,
+        84606,
+        84380,
+        81833,
+        81126,
+        79992,
+        77760
+      ],
+      [
+        81833,
+        81693,
+        80816,
+        80170
+      ],
+      [
+        81693,
+        83207,
+        85693,
+        84379
+      ],
+      [
+        86974,
+        87933,
+        88794
+      ],
+      [
+        83207,
+        84380
+      ],
+      [
+        86974,
+        85693
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cvn",
+    "abbreviation": "CVn",
+    "latinName": "Canes Venatici",
+    "englishName": "Hunting Dogs",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 12.748109,
+      "dec": 39.83793
+    },
+    "starIds": [
+      61317,
+      63125
+    ],
+    "mainStarIds": [
+      63125,
+      61317
+    ],
+    "lines": [
+      [
+        61317,
+        63125
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ind",
+    "abbreviation": "Ind",
+    "latinName": "Indus",
+    "englishName": "Indian",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 20.956903,
+      "dec": -53.065028
+    },
+    "starIds": [
+      101772,
+      103227,
+      105319
+    ],
+    "mainStarIds": [
+      101772,
+      103227,
+      105319
+    ],
+    "lines": [
+      [
+        105319,
+        101772,
+        103227,
+        105319
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "car",
+    "abbreviation": "Car",
+    "latinName": "Carina",
+    "englishName": "Keel",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 9.352187,
+      "dec": -58.401563
+    },
+    "starIds": [
+      30438,
+      31685,
+      39429,
+      41037,
+      42568,
+      45080,
+      45238,
+      45556,
+      50099,
+      50371,
+      51232,
+      52419,
+      52468,
+      53253,
+      54463
+    ],
+    "mainStarIds": [
+      30438,
+      45238,
+      41037,
+      39429,
+      45556,
+      52419,
+      31685,
+      50099,
+      50371,
+      45080
+    ],
+    "lines": [
+      [
+        45238,
+        50099,
+        52419,
+        52468,
+        54463,
+        53253,
+        51232,
+        50371,
+        45556
+      ],
+      [
+        42568,
+        41037,
+        30438
+      ],
+      [
+        45080,
+        45556
+      ],
+      [
+        45080,
+        42568
+      ],
+      [
+        30438,
+        31685
+      ],
+      [
+        41037,
+        39429
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "umi",
+    "abbreviation": "UMi",
+    "latinName": "Ursa Minor",
+    "englishName": "Lesser Bear",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 14.149929,
+      "dec": 79.632454
+    },
+    "starIds": [
+      11767,
+      72607,
+      75097,
+      77055,
+      79822,
+      82080,
+      85822
+    ],
+    "mainStarIds": [
+      11767,
+      72607,
+      75097,
+      82080,
+      77055,
+      85822,
+      79822
+    ],
+    "lines": [
+      [
+        11767,
+        85822,
+        82080,
+        77055,
+        79822,
+        75097,
+        72607,
+        77055
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cmi",
+    "abbreviation": "CMi",
+    "latinName": "Canis Minor",
+    "englishName": "Lesser Dog",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 7.553773,
+      "dec": 6.757154
+    },
+    "starIds": [
+      36188,
+      37279
+    ],
+    "mainStarIds": [
+      37279,
+      36188
+    ],
+    "lines": [
+      [
+        37279,
+        36188
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lmi",
+    "abbreviation": "LMi",
+    "latinName": "Leo Minor",
+    "englishName": "Lesser Lion",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.261864,
+      "dec": 35.641083
+    },
+    "starIds": [
+      46952,
+      49593,
+      51233,
+      53229
+    ],
+    "mainStarIds": [
+      53229,
+      51233,
+      49593,
+      46952
+    ],
+    "lines": [
+      [
+        53229,
+        51233,
+        49593,
+        46952
+      ],
+      [
+        49593,
+        53229
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "hyi",
+    "abbreviation": "Hyi",
+    "latinName": "Hydrus",
+    "englishName": "Lesser Water Snake",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 2.243392,
+      "dec": -69.997886
+    },
+    "starIds": [
+      2021,
+      9236,
+      11001,
+      12394,
+      17678
+    ],
+    "mainStarIds": [
+      2021,
+      9236,
+      17678,
+      11001,
+      12394
+    ],
+    "lines": [
+      [
+        2021,
+        17678,
+        12394,
+        11001,
+        9236
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "leo",
+    "abbreviation": "Leo",
+    "latinName": "Leo",
+    "englishName": "Lion",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.534056,
+      "dec": 19.143914
+    },
+    "starIds": [
+      47908,
+      48455,
+      49583,
+      49669,
+      50335,
+      50583,
+      54872,
+      54879,
+      57632
+    ],
+    "mainStarIds": [
+      49669,
+      50583,
+      57632,
+      54872,
+      47908,
+      54879,
+      50335,
+      49583,
+      48455
+    ],
+    "lines": [
+      [
+        57632,
+        54879,
+        49669,
+        49583,
+        50583,
+        54872,
+        57632
+      ],
+      [
+        50583,
+        50335,
+        48455,
+        47908
+      ],
+      [
+        54872,
+        54879
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "equ",
+    "abbreviation": "Equ",
+    "latinName": "Equuleus",
+    "englishName": "Little Horse",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 21.264747,
+      "dec": 8.049386
+    },
+    "starIds": [
+      104521,
+      104858,
+      104987,
+      105570
+    ],
+    "mainStarIds": [
+      104987,
+      104858,
+      104521,
+      105570
+    ],
+    "lines": [
+      [
+        104521,
+        104858,
+        105570,
+        104987,
+        104521
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lac",
+    "abbreviation": "Lac",
+    "latinName": "Lacerta",
+    "englishName": "Lizard",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 22.431543,
+      "dec": 46.761155
+    },
+    "starIds": [
+      109937,
+      110538,
+      110609,
+      111022,
+      111104,
+      111169
+    ],
+    "mainStarIds": [
+      111169,
+      109937,
+      111022,
+      110538,
+      111104,
+      110609
+    ],
+    "lines": [
+      [
+        109937,
+        111104,
+        111022,
+        110609,
+        110538,
+        111169,
+        111022
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lyn",
+    "abbreviation": "Lyn",
+    "latinName": "Lynx",
+    "englishName": "Lynx",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 8.236499,
+      "dec": 45.157958
+    },
+    "starIds": [
+      30060,
+      33449,
+      36145,
+      41075,
+      44248,
+      44700,
+      45688,
+      45860
+    ],
+    "mainStarIds": [
+      45860,
+      45688,
+      44248,
+      41075,
+      33449,
+      30060,
+      44700,
+      36145
+    ],
+    "lines": [
+      [
+        45860,
+        45688,
+        44700,
+        44248,
+        41075,
+        36145,
+        33449,
+        30060
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lyr",
+    "abbreviation": "Lyr",
+    "latinName": "Lyra",
+    "englishName": "Lyre",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 18.817464,
+      "dec": 35.867929
+    },
+    "starIds": [
+      91262,
+      91971,
+      92420,
+      92791,
+      93194
+    ],
+    "mainStarIds": [
+      91262,
+      93194,
+      92420,
+      92791,
+      91971
+    ],
+    "lines": [
+      [
+        91262,
+        91971,
+        92420,
+        93194,
+        92791,
+        91971
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "vir",
+    "abbreviation": "Vir",
+    "latinName": "Virgo",
+    "englishName": "Maiden",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 13.479109,
+      "dec": -0.956864
+    },
+    "starIds": [
+      57380,
+      60129,
+      61941,
+      63090,
+      63608,
+      65474,
+      66249,
+      68520,
+      69427,
+      69701,
+      71957,
+      72220
+    ],
+    "mainStarIds": [
+      65474,
+      61941,
+      63608,
+      66249,
+      63090,
+      72220,
+      71957,
+      60129,
+      57380,
+      69701
+    ],
+    "lines": [
+      [
+        57380,
+        60129,
+        61941,
+        65474,
+        69427,
+        69701,
+        71957
+      ],
+      [
+        65474,
+        66249,
+        68520,
+        72220
+      ],
+      [
+        66249,
+        63090,
+        63608
+      ],
+      [
+        63090,
+        61941
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "pyx",
+    "abbreviation": "Pyx",
+    "latinName": "Pyxis",
+    "englishName": "Mariner Compass",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 8.745705,
+      "dec": -32.068194
+    },
+    "starIds": [
+      42515,
+      42828,
+      43409
+    ],
+    "mainStarIds": [
+      42828,
+      42515,
+      43409
+    ],
+    "lines": [
+      [
+        42515,
+        42828,
+        43409
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "mic",
+    "abbreviation": "Mic",
+    "latinName": "Microscopium",
+    "englishName": "Microscope",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 21.051094,
+      "dec": -32.736676
+    },
+    "starIds": [
+      102831,
+      103738,
+      105140
+    ],
+    "mainStarIds": [
+      103738,
+      105140,
+      102831
+    ],
+    "lines": [
+      [
+        105140,
+        103738,
+        102831
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "crb",
+    "abbreviation": "CrB",
+    "latinName": "Corona Borealis",
+    "englishName": "Northern Crown",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 15.73051,
+      "dec": 28.038929
+    },
+    "starIds": [
+      75695,
+      76127,
+      76267,
+      76952,
+      77512,
+      78159,
+      78493
+    ],
+    "mainStarIds": [
+      76267,
+      75695,
+      76952,
+      76127,
+      78159,
+      77512,
+      78493
+    ],
+    "lines": [
+      [
+        76127,
+        75695,
+        76267,
+        76952,
+        77512,
+        78159,
+        78493
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "oct",
+    "abbreviation": "Oct",
+    "latinName": "Octans",
+    "englishName": "Octant",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.635915,
+      "dec": -80.813182
+    },
+    "starIds": [
+      70638,
+      107089,
+      112405
+    ],
+    "mainStarIds": [
+      107089,
+      112405,
+      70638
+    ],
+    "lines": [
+      [
+        107089,
+        112405,
+        70638,
+        107089
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ori",
+    "abbreviation": "Ori",
+    "latinName": "Orion",
+    "englishName": "Orion",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.501349,
+      "dec": 6.467902
+    },
+    "starIds": [
+      22449,
+      22509,
+      22549,
+      22730,
+      22797,
+      22845,
+      23123,
+      24436,
+      25336,
+      25930,
+      26207,
+      26311,
+      26727,
+      27366,
+      27913,
+      27989,
+      28614,
+      28716,
+      29038,
+      29426,
+      29434
+    ],
+    "mainStarIds": [
+      24436,
+      27989,
+      25336,
+      26311,
+      26727,
+      27366,
+      25930,
+      22449,
+      26207,
+      22549
+    ],
+    "lines": [
+      [
+        26727,
+        26311,
+        25930
+      ],
+      [
+        29434,
+        29426
+      ],
+      [
+        29434,
+        28716,
+        27913
+      ],
+      [
+        29426,
+        29038,
+        27913
+      ],
+      [
+        29426,
+        28614,
+        27989,
+        26727,
+        27366,
+        24436,
+        25930,
+        25336,
+        26207,
+        27989
+      ],
+      [
+        25336,
+        22449,
+        22549,
+        22730,
+        22797,
+        23123
+      ],
+      [
+        22449,
+        22509,
+        22845
+      ],
+      [
+        29038,
+        28614
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "pic",
+    "abbreviation": "Pic",
+    "latinName": "Pictor",
+    "englishName": "Painter's Easel",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 6.140575,
+      "dec": -56.391523
+    },
+    "starIds": [
+      27321,
+      27530,
+      32607
+    ],
+    "mainStarIds": [
+      32607,
+      27321,
+      27530
+    ],
+    "lines": [
+      [
+        32607,
+        27530,
+        27321
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "pav",
+    "abbreviation": "Pav",
+    "latinName": "Pavo",
+    "englishName": "Peacock",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.418322,
+      "dec": -65.284782
+    },
+    "starIds": [
+      86929,
+      88866,
+      90098,
+      91792,
+      92609,
+      93015,
+      98495,
+      99240,
+      100751,
+      102395,
+      105858
+    ],
+    "mainStarIds": [
+      100751,
+      102395,
+      99240,
+      86929,
+      98495,
+      91792,
+      105858,
+      92609,
+      88866,
+      90098
+    ],
+    "lines": [
+      [
+        100751,
+        105858,
+        102395,
+        99240,
+        100751
+      ],
+      [
+        99240,
+        98495,
+        91792,
+        93015,
+        99240
+      ],
+      [
+        93015,
+        92609,
+        90098,
+        88866,
+        92609
+      ],
+      [
+        88866,
+        86929
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "peg",
+    "abbreviation": "Peg",
+    "latinName": "Pegasus",
+    "englishName": "Pegasus",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 19.301332,
+      "dec": 20.656441
+    },
+    "starIds": [
+      677,
+      1067,
+      107315,
+      107354,
+      109176,
+      109352,
+      109427,
+      112029,
+      112158,
+      112440,
+      112447,
+      112748,
+      113881,
+      113963
+    ],
+    "mainStarIds": [
+      677,
+      107315,
+      113881,
+      113963,
+      1067,
+      112158,
+      112029,
+      112748,
+      109427,
+      109176
+    ],
+    "lines": [
+      [
+        1067,
+        113963
+      ],
+      [
+        113881,
+        112158,
+        109352
+      ],
+      [
+        113881,
+        112748,
+        112440,
+        109176,
+        107354
+      ],
+      [
+        113963,
+        112447,
+        112029,
+        109427,
+        107315
+      ],
+      [
+        677,
+        113881
+      ],
+      [
+        677,
+        1067
+      ],
+      [
+        113881,
+        113963
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "per",
+    "abbreviation": "Per",
+    "latinName": "Perseus",
+    "englishName": "Perseus",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 3.427181,
+      "dec": 42.285306
+    },
+    "starIds": [
+      13254,
+      13268,
+      14328,
+      14354,
+      14576,
+      15863,
+      17358,
+      17448,
+      18246,
+      18532,
+      18614
+    ],
+    "mainStarIds": [
+      15863,
+      14576,
+      18246,
+      18532,
+      14328,
+      17358,
+      14354,
+      13268,
+      17448,
+      18614
+    ],
+    "lines": [
+      [
+        17448,
+        18246,
+        18614,
+        18532,
+        17358,
+        15863,
+        14328,
+        13268
+      ],
+      [
+        15863,
+        14576,
+        14354,
+        13254
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "phe",
+    "abbreviation": "Phe",
+    "latinName": "Phoenix",
+    "englishName": "Phoenix",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 1.020059,
+      "dec": -46.548877
+    },
+    "starIds": [
+      765,
+      2072,
+      2081,
+      5165,
+      5348,
+      6867,
+      7083,
+      8837
+    ],
+    "mainStarIds": [
+      2081,
+      5165,
+      6867,
+      765,
+      2072,
+      7083,
+      5348,
+      8837
+    ],
+    "lines": [
+      [
+        5348,
+        5165,
+        2072,
+        5348
+      ],
+      [
+        5165,
+        7083,
+        8837,
+        5165,
+        6867,
+        2072,
+        2081,
+        765,
+        2072
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ari",
+    "abbreviation": "Ari",
+    "latinName": "Aries",
+    "englishName": "Ram",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 2.188864,
+      "dec": 22.706204
+    },
+    "starIds": [
+      8832,
+      8903,
+      9884,
+      13209
+    ],
+    "mainStarIds": [
+      9884,
+      8903,
+      13209,
+      8832
+    ],
+    "lines": [
+      [
+        13209,
+        9884,
+        8903,
+        8832
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ret",
+    "abbreviation": "Ret",
+    "latinName": "Reticulum",
+    "englishName": "Reticle",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 4.057708,
+      "dec": -61.995776
+    },
+    "starIds": [
+      17440,
+      18597,
+      19780,
+      19921
+    ],
+    "mainStarIds": [
+      19780,
+      17440,
+      19921,
+      18597
+    ],
+    "lines": [
+      [
+        19780,
+        19921,
+        18597,
+        17440,
+        19780
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "vel",
+    "abbreviation": "Vel",
+    "latinName": "Vela",
+    "englishName": "Sails",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 9.518351,
+      "dec": -48.821293
+    },
+    "starIds": [
+      39953,
+      42536,
+      42913,
+      44816,
+      45941,
+      46651,
+      48774,
+      50191,
+      51986,
+      52727
+    ],
+    "mainStarIds": [
+      39953,
+      42913,
+      44816,
+      45941,
+      52727,
+      48774,
+      42536,
+      46651,
+      51986,
+      50191
+    ],
+    "lines": [
+      [
+        39953,
+        42536,
+        42913,
+        45941,
+        48774,
+        52727,
+        51986,
+        50191,
+        46651,
+        44816,
+        39953
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lib",
+    "abbreviation": "Lib",
+    "latinName": "Libra",
+    "englishName": "Scales",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 15.337693,
+      "dec": -16.445098
+    },
+    "starIds": [
+      72622,
+      73714,
+      74785,
+      76333,
+      77853
+    ],
+    "mainStarIds": [
+      74785,
+      72622,
+      73714,
+      76333,
+      77853
+    ],
+    "lines": [
+      [
+        77853,
+        76333,
+        74785,
+        72622,
+        73714,
+        76333
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "sco",
+    "abbreviation": "Sco",
+    "latinName": "Scorpius",
+    "englishName": "Scorpion",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.896278,
+      "dec": -33.876134
+    },
+    "starIds": [
+      78265,
+      78401,
+      78820,
+      80763,
+      81266,
+      82396,
+      82514,
+      82671,
+      84143,
+      85927,
+      86228,
+      86670,
+      87073
+    ],
+    "mainStarIds": [
+      80763,
+      85927,
+      86228,
+      78401,
+      82396,
+      86670,
+      78820,
+      81266,
+      78265,
+      87073
+    ],
+    "lines": [
+      [
+        85927,
+        86670,
+        87073,
+        86228,
+        84143,
+        82671,
+        82514,
+        82396,
+        81266,
+        80763,
+        78401
+      ],
+      [
+        80763,
+        78265
+      ],
+      [
+        80763,
+        78820
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "scl",
+    "abbreviation": "Scl",
+    "latinName": "Sculptor",
+    "englishName": "Sculptor",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 15.94667,
+      "dec": -33.235915
+    },
+    "starIds": [
+      4577,
+      115102,
+      116231
+    ],
+    "mainStarIds": [
+      4577,
+      116231,
+      115102
+    ],
+    "lines": [
+      [
+        116231,
+        4577,
+        115102,
+        116231
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "ser",
+    "abbreviation": "Ser",
+    "latinName": "Serpens",
+    "englishName": "Serpent",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.953072,
+      "dec": 0.364078
+    },
+    "starIds": [
+      76276,
+      77070,
+      77233,
+      77450,
+      77516,
+      77622,
+      78072,
+      79593,
+      84880,
+      86263,
+      86565,
+      88048,
+      88670,
+      89962,
+      90441,
+      92946
+    ],
+    "mainStarIds": [
+      77070,
+      79593,
+      89962,
+      88048,
+      77516,
+      86263,
+      77233,
+      77622,
+      76276,
+      78072
+    ],
+    "lines": [
+      [
+        79593,
+        77516,
+        77622,
+        77070,
+        76276,
+        77233,
+        78072,
+        77450,
+        77233
+      ],
+      [
+        92946,
+        90441,
+        89962,
+        88670,
+        88048,
+        86565,
+        86263,
+        84880
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "oph",
+    "abbreviation": "Oph",
+    "latinName": "Ophiuchus",
+    "englishName": "Serpent Bearer",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 17.127023,
+      "dec": -4.06354
+    },
+    "starIds": [
+      79882,
+      81377,
+      83000,
+      84012,
+      85755,
+      86032,
+      86742
+    ],
+    "mainStarIds": [
+      86032,
+      84012,
+      81377,
+      86742,
+      83000,
+      79882,
+      85755
+    ],
+    "lines": [
+      [
+        86032,
+        86742
+      ],
+      [
+        84012,
+        86742
+      ],
+      [
+        86032,
+        83000,
+        79882,
+        81377,
+        84012,
+        85755
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "sex",
+    "abbreviation": "Sex",
+    "latinName": "Sextans",
+    "englishName": "Sextant",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.318577,
+      "dec": -0.504331
+    },
+    "starIds": [
+      49641,
+      51437
+    ],
+    "mainStarIds": [
+      49641,
+      51437
+    ],
+    "lines": [
+      [
+        51437,
+        49641
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "sct",
+    "abbreviation": "Sct",
+    "latinName": "Scutum",
+    "englishName": "Shield",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 18.712601,
+      "dec": -9.773187
+    },
+    "starIds": [
+      90595,
+      91117,
+      92175,
+      92202,
+      92814
+    ],
+    "mainStarIds": [
+      91117,
+      92175,
+      90595,
+      92814,
+      92202
+    ],
+    "lines": [
+      [
+        92175,
+        92202,
+        92814,
+        90595,
+        91117,
+        92175
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cru",
+    "abbreviation": "Cru",
+    "latinName": "Crux",
+    "englishName": "Southern Cross",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 12.502631,
+      "dec": -59.662499
+    },
+    "starIds": [
+      59747,
+      60718,
+      61084,
+      62434
+    ],
+    "mainStarIds": [
+      60718,
+      62434,
+      61084,
+      59747
+    ],
+    "lines": [
+      [
+        61084,
+        60718
+      ],
+      [
+        62434,
+        59747
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cra",
+    "abbreviation": "CrA",
+    "latinName": "Corona Australis",
+    "englishName": "Southern Crown",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 18.975337,
+      "dec": -39.208923
+    },
+    "starIds": [
+      90887,
+      91875,
+      92953,
+      92989,
+      93174,
+      93542,
+      93825,
+      94005,
+      94114,
+      94160
+    ],
+    "mainStarIds": [
+      94160,
+      94114,
+      93825,
+      94005,
+      93542,
+      93174,
+      91875,
+      90887,
+      92953,
+      92989
+    ],
+    "lines": [
+      [
+        91875,
+        92989,
+        93174,
+        93825,
+        94114,
+        94160,
+        94005,
+        93542,
+        92953
+      ],
+      [
+        91875,
+        90887
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "psa",
+    "abbreviation": "PsA",
+    "latinName": "Piscis Austrinus",
+    "englishName": "Southern Fish",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 22.439234,
+      "dec": -30.493143
+    },
+    "starIds": [
+      107608,
+      108661,
+      109422,
+      111188,
+      111954,
+      113246,
+      113368
+    ],
+    "mainStarIds": [
+      113368,
+      111954,
+      113246,
+      111188,
+      109422,
+      107608,
+      108661
+    ],
+    "lines": [
+      [
+        113368,
+        111954,
+        108661,
+        107608,
+        109422,
+        111188,
+        113246
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "tra",
+    "abbreviation": "TrA",
+    "latinName": "Triangulum Australe",
+    "englishName": "Southern Triangle",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 16.015114,
+      "dec": -67.045996
+    },
+    "starIds": [
+      74946,
+      77952,
+      82273
+    ],
+    "mainStarIds": [
+      82273,
+      77952,
+      74946
+    ],
+    "lines": [
+      [
+        82273,
+        74946,
+        77952,
+        82273
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "pup",
+    "abbreviation": "Pup",
+    "latinName": "Puppis",
+    "englishName": "Stern",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 7.462445,
+      "dec": -37.632725
+    },
+    "starIds": [
+      31685,
+      32768,
+      35264,
+      36377,
+      38146,
+      39429,
+      39757
+    ],
+    "mainStarIds": [
+      39429,
+      35264,
+      39757,
+      32768,
+      31685,
+      36377,
+      38146
+    ],
+    "lines": [
+      [
+        39757,
+        38146,
+        35264,
+        31685,
+        32768,
+        36377,
+        39429,
+        39757
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cyg",
+    "abbreviation": "Cyg",
+    "latinName": "Cygnus",
+    "englishName": "Swan",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 20.276267,
+      "dec": 39.174897
+    },
+    "starIds": [
+      94779,
+      95853,
+      95947,
+      97165,
+      98110,
+      100453,
+      102098,
+      102488,
+      104732,
+      107310
+    ],
+    "mainStarIds": [
+      102098,
+      100453,
+      102488,
+      97165,
+      95947,
+      104732,
+      95853,
+      94779,
+      98110,
+      107310
+    ],
+    "lines": [
+      [
+        94779,
+        95853,
+        97165,
+        100453,
+        102098
+      ],
+      [
+        100453,
+        102488,
+        104732,
+        107310
+      ],
+      [
+        100453,
+        98110,
+        95947
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "dor",
+    "abbreviation": "Dor",
+    "latinName": "Dorado",
+    "englishName": "Swordfish",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.208399,
+      "dec": -59.56932
+    },
+    "starIds": [
+      19893,
+      21281,
+      26069,
+      27100,
+      27890
+    ],
+    "mainStarIds": [
+      21281,
+      26069,
+      19893,
+      27100,
+      27890
+    ],
+    "lines": [
+      [
+        27100,
+        27890,
+        26069,
+        27100
+      ],
+      [
+        26069,
+        21281,
+        19893
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "men",
+    "abbreviation": "Men",
+    "latinName": "Mensa",
+    "englishName": "Table Mountain",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 5.124541,
+      "dec": -73.635996
+    },
+    "starIds": [
+      21949,
+      25918
+    ],
+    "mainStarIds": [
+      25918,
+      21949
+    ],
+    "lines": [
+      [
+        25918,
+        21949
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "tel",
+    "abbreviation": "Tel",
+    "latinName": "Telescopium",
+    "englishName": "Telescope",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 18.465033,
+      "dec": -47.519524
+    },
+    "starIds": [
+      90422,
+      90568
+    ],
+    "mainStarIds": [
+      90422,
+      90568
+    ],
+    "lines": [
+      [
+        90568,
+        90422
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "tuc",
+    "abbreviation": "Tuc",
+    "latinName": "Tucana",
+    "englishName": "Toucan",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 11.614684,
+      "dec": -61.582083
+    },
+    "starIds": [
+      1599,
+      2484,
+      110130,
+      114996
+    ],
+    "mainStarIds": [
+      110130,
+      114996,
+      1599,
+      2484
+    ],
+    "lines": [
+      [
+        110130,
+        114996,
+        1599
+      ],
+      [
+        114996,
+        2484
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "tri",
+    "abbreviation": "Tri",
+    "latinName": "Triangulum",
+    "englishName": "Triangle",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Northern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 2.110776,
+      "dec": 32.80444
+    },
+    "starIds": [
+      8796,
+      10064,
+      10670
+    ],
+    "mainStarIds": [
+      10064,
+      8796,
+      10670
+    ],
+    "lines": [
+      [
+        10670,
+        10064,
+        8796,
+        10670
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "gem",
+    "abbreviation": "Gem",
+    "latinName": "Gemini",
+    "englishName": "Twins",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 7.009921,
+      "dec": 23.836914
+    },
+    "starIds": [
+      28734,
+      29655,
+      30343,
+      30883,
+      31681,
+      32246,
+      32362,
+      33018,
+      34088,
+      34693,
+      35350,
+      35550,
+      36046,
+      36850,
+      36962,
+      37740,
+      37826
+    ],
+    "mainStarIds": [
+      37826,
+      36850,
+      31681,
+      30343,
+      32246,
+      29655,
+      32362,
+      35550,
+      37740,
+      35350
+    ],
+    "lines": [
+      [
+        31681,
+        34088,
+        35550,
+        35350,
+        32362
+      ],
+      [
+        35550,
+        36962,
+        37740
+      ],
+      [
+        36962,
+        37826
+      ],
+      [
+        36962,
+        36046,
+        34693,
+        36850
+      ],
+      [
+        34693,
+        33018
+      ],
+      [
+        34693,
+        32246,
+        30883
+      ],
+      [
+        32246,
+        30343,
+        29655,
+        28734
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "mon",
+    "abbreviation": "Mon",
+    "latinName": "Monoceros",
+    "englishName": "Unicorn",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Winter",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 6.967022,
+      "dec": 1.384717
+    },
+    "starIds": [
+      29651,
+      30419,
+      30665,
+      30867,
+      31216,
+      31978,
+      32533,
+      34769,
+      37447,
+      39211,
+      39863
+    ],
+    "mainStarIds": [
+      30867,
+      37447,
+      29651,
+      34769,
+      39863,
+      30419,
+      31216,
+      31978,
+      39211,
+      32533
+    ],
+    "lines": [
+      [
+        29651,
+        34769
+      ],
+      [
+        30867,
+        34769,
+        32533,
+        30419,
+        31216,
+        31978
+      ],
+      [
+        32533,
+        31978,
+        30665
+      ],
+      [
+        34769,
+        39211,
+        39863
+      ],
+      [
+        39211,
+        37447
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "aqr",
+    "abbreviation": "Aqr",
+    "latinName": "Aquarius",
+    "englishName": "Water Bearer",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 22.477718,
+      "dec": -9.10642
+    },
+    "starIds": [
+      102618,
+      106278,
+      109074,
+      109139,
+      110003,
+      110395,
+      110960,
+      111123,
+      111497,
+      112716,
+      112961,
+      113136,
+      114341,
+      114855,
+      115438
+    ],
+    "mainStarIds": [
+      106278,
+      109074,
+      113136,
+      110960,
+      114341,
+      112961,
+      102618,
+      110395,
+      115438,
+      111497
+    ],
+    "lines": [
+      [
+        106278,
+        109074,
+        110395,
+        110960,
+        111497,
+        112961,
+        114855,
+        115438
+      ],
+      [
+        109074,
+        110003,
+        109139
+      ],
+      [
+        110003,
+        111123,
+        112716,
+        113136,
+        114341
+      ],
+      [
+        102618,
+        106278
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "hya",
+    "abbreviation": "Hya",
+    "latinName": "Hydra",
+    "englishName": "Water Snake",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Spring",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 10.761951,
+      "dec": -12.607861
+    },
+    "starIds": [
+      42313,
+      42402,
+      42799,
+      43109,
+      43234,
+      43813,
+      45336,
+      45751,
+      46390,
+      46509,
+      46776,
+      47452,
+      48356,
+      49841,
+      51069,
+      52943,
+      54204,
+      56343,
+      57936,
+      64166,
+      64962,
+      68895,
+      69415,
+      70306,
+      72571
+    ],
+    "mainStarIds": [
+      46390,
+      64962,
+      43813,
+      52943,
+      68895,
+      43109,
+      56343,
+      49841,
+      51069,
+      45336
+    ],
+    "lines": [
+      [
+        42799,
+        42402,
+        42313,
+        43109,
+        43234,
+        42799
+      ],
+      [
+        43234,
+        43813,
+        45336,
+        46776,
+        46509,
+        46390,
+        45751,
+        47452,
+        48356,
+        49841,
+        51069,
+        52943,
+        54204,
+        56343,
+        57936,
+        64166,
+        64962,
+        68895,
+        69415,
+        70306,
+        72571
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "cet",
+    "abbreviation": "Cet",
+    "latinName": "Cetus",
+    "englishName": "Whale",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Autumn",
+    "hemisphere": "Equatorial",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 2.174547,
+      "dec": -4.111401
+    },
+    "starIds": [
+      1562,
+      3419,
+      5364,
+      6537,
+      8102,
+      8645,
+      10324,
+      10826,
+      11345,
+      11484,
+      11783,
+      12093,
+      12387,
+      12390,
+      12706,
+      12770,
+      12828,
+      13954,
+      14135
+    ],
+    "mainStarIds": [
+      3419,
+      14135,
+      5364,
+      12706,
+      8102,
+      1562,
+      6537,
+      8645,
+      12387,
+      12770
+    ],
+    "lines": [
+      [
+        10324,
+        11484
+      ],
+      [
+        8102,
+        3419,
+        1562
+      ],
+      [
+        3419,
+        5364,
+        6537,
+        8645,
+        11345,
+        12390,
+        12770,
+        11783,
+        8102
+      ],
+      [
+        10826,
+        12390
+      ],
+      [
+        10826,
+        12387,
+        12706,
+        14135,
+        13954,
+        12828,
+        11484,
+        12093,
+        12706
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  },
+  {
+    "id": "lup",
+    "abbreviation": "Lup",
+    "latinName": "Lupus",
+    "englishName": "Wolf",
+    "nickname": "",
+    "description": "",
+    "mythology": "",
+    "interestingFacts": [],
+    "season": "Summer",
+    "hemisphere": "Southern",
+    "area": null,
+    "rank": null,
+    "centroid": {
+      "ra": 15.321582,
+      "dec": -42.237421
+    },
+    "starIds": [
+      70576,
+      71536,
+      71860,
+      73273,
+      74395,
+      75141,
+      75177,
+      76297,
+      76552,
+      77634,
+      78384,
+      78970
+    ],
+    "mainStarIds": [
+      71860,
+      73273,
+      76297,
+      75141,
+      74395,
+      78384,
+      75177,
+      77634,
+      71536,
+      70576
+    ],
+    "lines": [
+      [
+        77634,
+        78970,
+        78384,
+        77634
+      ],
+      [
+        78384,
+        76297,
+        75141,
+        75177
+      ],
+      [
+        75141,
+        73273
+      ],
+      [
+        76297,
+        76552,
+        74395,
+        71860
+      ],
+      [
+        74395,
+        71536
+      ],
+      [
+        71860,
+        70576
+      ],
+      [
+        71860,
+        73273
+      ]
+    ],
+    "bestViewingMonths": [],
+    "visibility": {
+      "north": null,
+      "south": null,
+      "bestMonths": []
+    },
+    "deepSkyObjects": [],
+    "meteorShowers": [],
+    "gallery": [],
+    "resources": [],
+    "relatedConstellations": [],
+    "image": null,
+    "wiki": null,
+    "iau": null
+  }
+]

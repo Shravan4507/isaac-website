@@ -26,3 +26,7 @@ dist-ssr
 # Local env files
 .env
 .env.*
+
+# Excluded data and script folders
+data/constellations/preprocessing/
+scripts/

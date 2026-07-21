@@ -1,11 +1,30 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
+import constellationsData from '../../../data/constellations/constellations.json'
+import starsData from '../../../data/constellations/stars.json'
 import './Constellation.css'
+
+interface ConstellationData {
+  id: string
+  abbreviation: string
+  latinName: string
+  englishName: string
+  starIds: number[]
+  lines: number[][]
+}
+
+interface StarData {
+  hip: number
+  rightAscension: number
+  declination: number
+  distance: number
+  magnitude: number
+}
 
 interface Star3D {
   id: number
-  x: number // X coordinate (-50 to 50)
-  y: number // Y coordinate (-50 to 50)
-  z: number // Z coordinate (-50 to 50) for 3D depth
+  x: number // X coordinate (-30 to 30)
+  y: number // Y coordinate (-30 to 30)
+  z: number // Z coordinate (-20 to 20) for 3D depth
   magnitude: number // Star size multiplier
 }
 
@@ -14,38 +33,114 @@ interface Connection {
   to: number
 }
 
-// Orion constellation stars mapped in 3D space
-const ORION_STARS: Star3D[] = [
-  { id: 1, x: 0, y: -38, z: 0, magnitude: 1.4 },     // Meissa (Head)
-  { id: 2, x: -18, y: -28, z: -15, magnitude: 2.6 },  // Betelgeuse (Shoulder - depth back)
-  { id: 3, x: 18, y: -25, z: 15, magnitude: 2.0 },    // Bellatrix (Shoulder - depth front)
-  { id: 4, x: -6, y: 0, z: -8, magnitude: 1.8 },      // Alnitak (Belt Left)
-  { id: 5, x: 0, y: 0, z: 0, magnitude: 2.0 },       // Alnilam (Belt Center)
-  { id: 6, x: 6, y: 0, z: 8, magnitude: 1.8 },       // Mintaka (Belt Right)
-  { id: 7, x: -15, y: 30, z: -10, magnitude: 1.9 },   // Saiph (Knee)
-  { id: 8, x: 15, y: 28, z: 10, magnitude: 2.8 },     // Rigel (Foot)
-]
-
-const ORION_CONNECTIONS: Connection[] = [
-  { from: 1, to: 2 },
-  { from: 1, to: 3 },
-  { from: 2, to: 4 },
-  { from: 3, to: 6 },
-  { from: 4, to: 5 },
-  { from: 5, to: 6 },
-  { from: 4, to: 7 },
-  { from: 6, to: 8 },
-  { from: 7, to: 8 },
-]
+// Map a value from one range to another
+function mapRange(
+  value: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number
+): number {
+  if (inMax === inMin) return (outMin + outMax) / 2
+  return outMin + ((value - inMin) / (inMax - inMin)) * (outMax - outMin)
+}
 
 export default function Constellation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const constellations = constellationsData as ConstellationData[]
+
+  // Select a random constellation once on mount (so it is stable for the session)
+  const chosenConstellation = useMemo(() => {
+    if (constellations.length === 0) return null
+    const randomIndex = Math.floor(Math.random() * constellations.length)
+    return constellations[randomIndex]
+  }, [constellations])
+
+  // Build star lookup map once
+  const starMap = useMemo(() => {
+    const map = new Map<number, StarData>()
+    for (const star of starsData as StarData[]) {
+      map.set(star.hip, star)
+    }
+    return map
+  }, [])
+
+  // Process stars and lines into 3D structure for projection
+  const { stars3D, connections } = useMemo(() => {
+    if (!chosenConstellation) {
+      return { stars3D: [], connections: [] }
+    }
+
+    const stars = chosenConstellation.starIds
+      .map((id) => starMap.get(id))
+      .filter(Boolean) as StarData[]
+
+    if (stars.length === 0) {
+      return { stars3D: [], connections: [] }
+    }
+
+    // Handle RA wrapping
+    let ras = stars.map((s) => s.rightAscension)
+    const rawRange = Math.max(...ras) - Math.min(...ras)
+    let raWrapped = false
+    if (rawRange > 12) {
+      ras = ras.map((ra) => (ra < 12 ? ra + 24 : ra))
+      raWrapped = true
+    }
+
+    const decs = stars.map((s) => s.declination)
+    const dists = stars.map((s) => s.distance)
+
+    const minRA = Math.min(...ras)
+    const maxRA = Math.max(...ras)
+    const minDec = Math.min(...decs)
+    const maxDec = Math.max(...decs)
+    const minDist = Math.min(...dists)
+    const maxDist = Math.max(...dists)
+
+    const stars3D: Star3D[] = stars.map((star) => {
+      let ra = star.rightAscension
+      if (raWrapped && ra < 12) ra += 24
+
+      // Map RA/Dec to x/y centered in [-30, 30] space
+      const x = mapRange(ra, minRA, maxRA, 30, -30)
+      const y = mapRange(star.declination, minDec, maxDec, 30, -30)
+
+      // Map distance to z centered in [-20, 20] space
+      const z = minDist === maxDist ? 0 : mapRange(star.distance, minDist, maxDist, -20, 20)
+
+      // Magnitude multiplier (brighter stars are larger)
+      const clampedMag = Math.max(-1, Math.min(7, star.magnitude))
+      const magnitudeVal = mapRange(clampedMag, -1, 7, 2.5, 1.0)
+
+      return {
+        id: star.hip,
+        x,
+        y,
+        z,
+        magnitude: magnitudeVal
+      }
+    })
+
+    const connections: Connection[] = []
+    chosenConstellation.lines.forEach((polyline) => {
+      for (let i = 0; i < polyline.length - 1; i++) {
+        connections.push({
+          from: polyline[i],
+          to: polyline[i + 1]
+        })
+      }
+    })
+
+    return { stars3D, connections }
+  }, [chosenConstellation, starMap])
+
   useEffect(() => {
     const canvas = canvasRef.current
     const container = containerRef.current
-    if (!canvas || !container) return
+    if (!canvas || !container || stars3D.length === 0) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -71,8 +166,8 @@ export default function Constellation() {
     window.addEventListener('resize', resize)
 
     // Twinkle offsets for stars
-    const twinkleSpeeds = ORION_STARS.map(() => 0.03 + Math.random() * 0.03)
-    const twinkleOffsets = ORION_STARS.map(() => Math.random() * Math.PI * 2)
+    const twinkleSpeeds = stars3D.map(() => 0.03 + Math.random() * 0.03)
+    const twinkleOffsets = stars3D.map(() => Math.random() * Math.PI * 2)
 
     const render = () => {
       time += 0.04
@@ -88,23 +183,22 @@ export default function Constellation() {
       const cameraDistance = 100 // Perspective camera depth distance
 
       // Project 3D points to 2D
-      const projectedStars = ORION_STARS.map((star, idx) => {
-        // 1. Rotate around Y-axis (Yaw)
+      const projectedStars = stars3D.map((star, idx) => {
+        // 1. Rotate Y-axis (Yaw)
         const cosY = Math.cos(angleY)
         const sinY = Math.sin(angleY)
         const x1 = star.x * cosY - star.z * sinY
         const z1 = star.x * sinY + star.z * cosY
 
-        // 2. Rotate around X-axis (Pitch tilt)
+        // 2. Rotate X-axis (Pitch tilt)
         const cosX = Math.cos(angleX)
         const sinX = Math.sin(angleX)
         const y2 = star.y * cosX - z1 * sinX
         const z2 = star.y * sinX + z1 * cosX
 
         // 3. Perspective Projection
-        // z2 acts as the depth relative to center. If z2 is positive, it's further away.
         const scaleFactor = cameraDistance / (cameraDistance + z2)
-        
+
         const pxX = width / 2 + x1 * scaleFactor * baseScale
         const pxY = height / 2 + y2 * scaleFactor * baseScale
 
@@ -112,26 +206,24 @@ export default function Constellation() {
           id: star.id,
           pxX,
           pxY,
-          depth: z2, // Store depth for depth-cueing and sorting
+          depth: z2,
           scaleFactor,
           magnitude: star.magnitude,
           idx
         }
       })
 
-      // Sort projected stars by depth (painter's algorithm) so back lines are drawn first
-      // Note: we need original index reference for lines connection
-      const starMap = new Map(projectedStars.map(s => [s.id, s]))
+      // Sort projected stars by depth (painter's algorithm)
+      const starMapObj = new Map(projectedStars.map(s => [s.id, s]))
 
       // Draw Connections (Lines)
-      ORION_CONNECTIONS.forEach(conn => {
-        const fromStar = starMap.get(conn.from)
-        const toStar = starMap.get(conn.to)
+      connections.forEach(conn => {
+        const fromStar = starMapObj.get(conn.from)
+        const toStar = starMapObj.get(conn.to)
         if (fromStar && toStar) {
-          // Fade line opacity based on depth (average scale factor)
           const avgScale = (fromStar.scaleFactor + toStar.scaleFactor) / 2
           const baseAlpha = 0.12
-          const depthAlpha = baseAlpha * Math.pow(avgScale, 2.5) // Higher power increases depth separation contrast
+          const depthAlpha = baseAlpha * Math.pow(avgScale, 2.5)
 
           ctx.strokeStyle = `rgba(240, 240, 250, ${Math.max(0.02, depthAlpha)})`
           ctx.lineWidth = Math.max(0.5, 1 * avgScale)
@@ -147,7 +239,6 @@ export default function Constellation() {
         const twinkle = 0.75 + 0.25 * Math.sin(time * twinkleSpeeds[star.idx] * 5 + twinkleOffsets[star.idx])
         const finalRadius = Math.max(0.2, star.magnitude * star.scaleFactor * twinkle)
 
-        // Depth cueing for shadows & glow
         ctx.shadowColor = '#ffffff'
         ctx.shadowBlur = Math.max(1, 8 * star.scaleFactor)
         ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.5 + 0.5 * star.scaleFactor)})`
@@ -157,7 +248,6 @@ export default function Constellation() {
         ctx.fill()
       })
 
-      // Reset shadows
       ctx.shadowBlur = 0
       ctx.shadowColor = 'transparent'
 
@@ -170,11 +260,17 @@ export default function Constellation() {
       window.removeEventListener('resize', resize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [])
+  }, [stars3D, connections])
 
   return (
     <div ref={containerRef} className="constellation-widget-container">
       <canvas ref={canvasRef} className="constellation-canvas" />
+      {chosenConstellation && (
+        <div className="constellation-widget-label">
+          <span className="constellation-widget-title">{chosenConstellation.englishName}</span>
+          <span className="constellation-widget-subtitle">{chosenConstellation.latinName}</span>
+        </div>
+      )}
     </div>
   )
 }

@@ -31,3 +31,32 @@
     margin-top: 30px;
   }
 }
+
+.constellation-widget-label {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+  text-align: center;
+  z-index: 2;
+}
+
+.constellation-widget-title {
+  font-family: 'D-Din-Bold', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.constellation-widget-subtitle {
+  font-family: 'D-Din', sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 1px;
+}

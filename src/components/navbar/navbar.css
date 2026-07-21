@@ -5,7 +5,7 @@
   width: 100%;
   height: 60px;
   background: rgba(0, 0, 0, 0);
-  z-index: 1000;
+  z-index: 10000;
   box-sizing: border-box;
 }
 
@@ -20,6 +20,8 @@
   align-items: center;
   gap: 80px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10002;
 }
 
 .navbar-logo-wrapper {
@@ -51,29 +53,16 @@
   font-family: 'D-Din', sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 2px;
   padding: 6px 0;
-  transition: color 0.2s ease;
+  transition: color 0.25s ease;
 }
 
-.navbar-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background-color: #ffffff;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.navbar-link:hover::after {
-  transform: scaleX(1);
+.navbar-link:hover {
+  color: rgba(255, 255, 255, 1);
 }
 
 /* Hamburger Toggle Button (Hidden on Desktop) */
@@ -87,7 +76,7 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 1001;
+  z-index: 10003;
 }
 
 .hamburger-line {
@@ -142,9 +131,10 @@
     justify-content: flex-start;
     padding: 120px 40px 40px 40px;
     gap: 32px;
-    z-index: 1000;
+    z-index: 10002;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
   }
 
   .navbar-links.open {
@@ -165,19 +155,131 @@
     padding: 8px 0;
   }
 
-  .navbar-link::after {
-    bottom: 4px;
-  }
-
   .navbar-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 999;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10001;
+  }
+
+  /* Mobile Accordion Style Dropdown */
+  .navbar-dropdown-menu {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 20px;
+    margin-top: 18px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .navbar-dropdown-menu.open {
+    display: flex;
+  }
+
+  .dropdown-item {
+    font-family: 'D-Din', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: color 0.2s ease;
+  }
+
+  .dropdown-item:hover {
+    color: #ffffff;
+  }
+
+  .mobile-only-caret {
+    display: inline-block;
+    font-size: 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-item-with-dropdown.active .mobile-only-caret {
+    transform: rotate(180deg);
+  }
+}
+
+/* ── Desktop View Specific Dropdown Styles ── */
+@media (min-width: 1281px) {
+  /* SpaceX style dimming backdrop overlay (placed behind navbar links/container) */
+  .navbar-backdrop-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.55) 45%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-backdrop-overlay.visible {
+    opacity: 1;
+  }
+
+  .navbar-item-with-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .navbar-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 0 0 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    min-width: 180px;
+    z-index: 10002;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-item-with-dropdown:hover .navbar-dropdown-menu,
+  .navbar-dropdown-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .dropdown-item {
+    font-family: 'D-Din', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: color 0.2s ease;
+    padding: 4px 0;
+  }
+
+  .dropdown-item:hover {
+    color: #ffffff;
+  }
+
+  .mobile-only-caret {
+    display: none !important;
   }
 }
