@@ -30,3 +30,6 @@ dist-ssr
 # Excluded data and script folders
 data/constellations/preprocessing/
 scripts/
+
+public/logo/favicon-black.png
+public/logo/favicon-white.png

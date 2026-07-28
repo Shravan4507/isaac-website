@@ -1,6 +1,7 @@
-import { useEffect, useRef, useMemo } from 'react'
+import { useEffect, useRef, useMemo, useState } from 'react'
 import constellationsData from '../../../data/constellations/constellations.json'
 import starsData from '../../../data/constellations/stars.json'
+import { usePerformanceTier } from '../../hooks/usePerformanceTier'
 import './Constellation.css'
 
 interface ConstellationData {
@@ -48,6 +49,8 @@ function mapRange(
 export default function Constellation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isInView, setIsInView] = useState(true)
+  const perfTier = usePerformanceTier()
 
   const constellations = constellationsData as ConstellationData[]
 
@@ -137,10 +140,27 @@ export default function Constellation() {
     return { stars3D, connections }
   }, [chosenConstellation, starMap])
 
+  // Observe container visibility to pause calculations when out of viewport
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.02 }
+    )
+    observer.observe(container)
+    return () => {
+      observer.unobserve(container)
+    }
+  }, [])
+
   useEffect(() => {
     const canvas = canvasRef.current
     const container = containerRef.current
-    if (!canvas || !container || stars3D.length === 0) return
+    if (!canvas || !container || stars3D.length === 0 || !isInView) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -150,6 +170,11 @@ export default function Constellation() {
     let height = 0
     let angleY = 0 // Horizontal rotation angle
     let time = 0
+
+    // FPS control throttle for low performance devices
+    const fpsLimit = perfTier === 'high' ? 60 : 30
+    const frameInterval = 1000 / fpsLimit
+    let lastFrameTime = 0
 
     const resize = () => {
       const rect = container.getBoundingClientRect()
@@ -169,7 +194,16 @@ export default function Constellation() {
     const twinkleSpeeds = stars3D.map(() => 0.03 + Math.random() * 0.03)
     const twinkleOffsets = stars3D.map(() => Math.random() * Math.PI * 2)
 
-    const render = () => {
+    const render = (timestamp: number) => {
+      animationFrameId = requestAnimationFrame(render)
+
+      // Throttle rendering if limit is set
+      const elapsed = timestamp - lastFrameTime
+      if (elapsed < frameInterval) {
+        return
+      }
+      lastFrameTime = timestamp - (elapsed % frameInterval)
+
       time += 0.04
       angleY += 0.006 // Rotate Y-axis (Spin)
       const angleX = 0.4 + Math.sin(time * 0.1) * 0.1 // Slight pitch wobble for full 3D feel
@@ -239,28 +273,47 @@ export default function Constellation() {
         const twinkle = 0.75 + 0.25 * Math.sin(time * twinkleSpeeds[star.idx] * 5 + twinkleOffsets[star.idx])
         const finalRadius = Math.max(0.2, star.magnitude * star.scaleFactor * twinkle)
 
-        ctx.shadowColor = '#ffffff'
-        ctx.shadowBlur = Math.max(1, 8 * star.scaleFactor)
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.5 + 0.5 * star.scaleFactor)})`
+        if (perfTier === 'high') {
+          // Glow effect via CPU filters (High Spec Devices)
+          ctx.shadowColor = '#ffffff'
+          ctx.shadowBlur = Math.max(1, 8 * star.scaleFactor)
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.5 + 0.5 * star.scaleFactor)})`
+          ctx.beginPath()
+          ctx.arc(star.pxX, star.pxY, finalRadius, 0, Math.PI * 2)
+          ctx.fill()
+        } else {
+          // Glow effect via concentric geometry paths (Low Spec Devices)
+          // Draw outer halo glow
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(0.2, 0.15 * star.scaleFactor)})`
+          ctx.beginPath()
+          ctx.arc(star.pxX, star.pxY, finalRadius * 3, 0, Math.PI * 2)
+          ctx.fill()
 
-        ctx.beginPath()
-        ctx.arc(star.pxX, star.pxY, finalRadius, 0, Math.PI * 2)
-        ctx.fill()
+          // Draw star core
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.7 + 0.3 * star.scaleFactor)})`
+          ctx.beginPath()
+          ctx.arc(star.pxX, star.pxY, finalRadius, 0, Math.PI * 2)
+          ctx.fill()
+        }
       })
 
-      ctx.shadowBlur = 0
-      ctx.shadowColor = 'transparent'
-
-      animationFrameId = requestAnimationFrame(render)
+      if (perfTier === 'high') {
+        ctx.shadowBlur = 0
+        ctx.shadowColor = 'transparent'
+      }
     }
 
-    render()
+    // Pass starting timestamp to the loop
+    animationFrameId = requestAnimationFrame((timestamp) => {
+      lastFrameTime = timestamp
+      render(timestamp)
+    })
 
     return () => {
       window.removeEventListener('resize', resize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [stars3D, connections])
+  }, [stars3D, connections, isInView, perfTier])
 
   return (
     <div ref={containerRef} className="constellation-widget-container">

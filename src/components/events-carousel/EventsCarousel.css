@@ -25,7 +25,7 @@
   height: 460px;
   border-radius: 4px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(240, 240, 250, 0.5);
@@ -37,7 +37,7 @@
 }
 
 .event-card:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.95);
   border-color: rgba(240, 240, 250, 0.5);
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
@@ -242,6 +242,7 @@
 }
 
 @media (max-width: 600px) {
+
   .card-left,
   .card-right {
     display: none;

@@ -1,22 +1,36 @@
+import { usePerformanceTier } from '../../hooks/usePerformanceTier'
 import Constellation from '../../components/constellation/Constellation'
 import EventsCarousel from '../../components/events-carousel/EventsCarousel'
 import Footer from '../../components/footer/footer'
 import './Home.css'
 
 export default function Home() {
+  const perfTier = usePerformanceTier()
+
   return (
     <div className="home-page-container">
       {/* Main Content Area */}
       <main className="home-main-content">
         <div className="video-container">
-          <video
-            src="/videos/Mars-Rotation.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="mars-video"
-          />
+          {perfTier === 'high' ? (
+            <video
+              src="/videos/Mars-Rotation.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="mars-video"
+            />
+          ) : (
+            <video
+              src="/videos/Mars-Rotation-low.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="mars-video"
+            />
+          )}
         </div>
 
         {/* Hero Content Overlay */}

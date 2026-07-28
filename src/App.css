@@ -256,6 +256,19 @@
   height: 100%;
 }
 
+@keyframes pageFadeInOnly {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.perf-low .route-transition-wrapper {
+  animation: pageFadeInOnly 0.25s ease-out forwards;
+}
+
 @media (min-width: 841px) {
   .app-container.constellations-active {
     height: 100vh !important;

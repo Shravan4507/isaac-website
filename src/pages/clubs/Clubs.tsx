@@ -6,10 +6,10 @@ import './Clubs.css'
 import { clubsData, type ClubData } from '../../dataset/clubsData'
 
 const STOCK_IMAGES = [
-  '/images/astrophotography.png',
-  '/images/star-party.png',
-  '/images/Our-Mission-bg.png',
-  '/images/Moon-Hero.png'
+  '/images/astrophotography.webp',
+  '/images/star-party.webp',
+  '/images/Our-Mission-bg.webp',
+  '/images/Moon-Hero.webp'
 ]
 
 export const getStateColor = (state: string): string => {

@@ -17,7 +17,7 @@ const EVENTS_DATA: EventItem[] = [
     date: 'Oct 12 - 14, 2026',
     location: 'Hanle, Ladakh',
     desc: 'Join astronomy clubs from across India for stargazing and scientific observations under the pristine dark skies of Ladakh.',
-    image: '/images/star-party.png',
+    image: '/images/star-party.webp',
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const EVENTS_DATA: EventItem[] = [
     date: 'Nov 14, 2026',
     location: 'Virtual Session',
     desc: 'Master deep-sky capture, calibration, stacking, and post-processing techniques using advanced image editing software.',
-    image: '/images/astrophotography.png',
+    image: '/images/astrophotography.webp',
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const EVENTS_DATA: EventItem[] = [
     date: 'Dec 01, 2026',
     location: 'Online Publication',
     desc: 'Check out the winter newsletter highlighting project updates, observation logs, and astrophotography submissions from member clubs.',
-    image: '/images/ISAAC_nl1_coverpage 1.png',
+    image: '/images/ISAAC_nl1_coverpage 1.webp',
   },
 ]
 
@@ -95,9 +95,43 @@ export default function EventsCarousel() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX
+    touchEndX.current = null
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return
+    
+    const distance = touchStartX.current - touchEndX.current
+    const minSwipeDistance = 50
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      handleNext()
+      resetAutoPlayWithDelay()
+    } else if (isRightSwipe) {
+      handlePrev()
+      resetAutoPlayWithDelay()
+    }
+  }
+
   return (
     <div className="events-carousel-wrapper">
-      <div className="events-track">
+      <div 
+        className="events-track"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {EVENTS_DATA.map((event, idx) => {
           // Calculate offset in looping system
           let offset = idx - activeIndex

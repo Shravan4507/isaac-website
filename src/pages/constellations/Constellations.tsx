@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import constellationsData from '../../../data/constellations/constellations.json'
 import starsData from '../../../data/constellations/stars.json'
+import { usePerformanceTier } from '../../hooks/usePerformanceTier'
 import './Constellations.css'
 
 interface ConstellationData {
@@ -74,6 +75,7 @@ function getStarRadius(magnitude: number): number {
 }
 
 export default function Constellations() {
+  const perfTier = usePerformanceTier()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedId, setSelectedId] = useState<string>('ori')
 
@@ -547,16 +549,39 @@ export default function Constellations() {
                   {/* Constellation connecting lines */}
                   {showLines &&
                     mapData.lineSegments.map((seg, i) => (
-                      <line
-                        key={`line-${i}`}
-                        x1={seg.x1}
-                        y1={seg.y1}
-                        x2={seg.x2}
-                        y2={seg.y2}
-                        stroke="rgba(255, 255, 255, 0.25)"
-                        strokeWidth="1.2"
-                        filter="url(#lineGlow)"
-                      />
+                      <g key={`line-group-${i}`}>
+                        {perfTier === 'high' ? (
+                          <line
+                            x1={seg.x1}
+                            y1={seg.y1}
+                            x2={seg.x2}
+                            y2={seg.y2}
+                            stroke="rgba(255, 255, 255, 0.25)"
+                            strokeWidth="1.2"
+                            filter="url(#lineGlow)"
+                          />
+                        ) : (
+                          <>
+                            {/* Fast double-line glow representation */}
+                            <line
+                              x1={seg.x1}
+                              y1={seg.y1}
+                              x2={seg.x2}
+                              y2={seg.y2}
+                              stroke="rgba(255, 255, 255, 0.08)"
+                              strokeWidth="3.5"
+                            />
+                            <line
+                              x1={seg.x1}
+                              y1={seg.y1}
+                              x2={seg.x2}
+                              y2={seg.y2}
+                              stroke="rgba(255, 255, 255, 0.35)"
+                              strokeWidth="1.0"
+                            />
+                          </>
+                        )}
+                      </g>
                     ))}
 
                   {/* Star dots */}
@@ -604,16 +629,16 @@ export default function Constellations() {
                           cy={sp.y}
                           r={sp.radius * (isSelectedStar ? 4 : 3)}
                           fill={isSelectedStar ? '#a855f7' : sp.color}
-                          opacity={isSelectedStar ? 0.35 : 0.08}
+                          opacity={isSelectedStar ? 0.35 : (perfTier === 'high' ? 0.08 : 0.15)}
                         />
 
-                        {/* Core glow */}
+                        {/* Core star body */}
                         <circle
                           cx={sp.x}
                           cy={sp.y}
                           r={sp.radius * (isSelectedStar ? 1.4 : 1)}
                           fill={isSelectedStar ? '#ffffff' : sp.color}
-                          filter="url(#starGlow)"
+                          filter={perfTier === 'high' ? "url(#starGlow)" : undefined}
                         />
 
                         {/* Star name label (named main stars only) */}

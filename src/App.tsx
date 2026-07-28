@@ -14,6 +14,7 @@ import Resources from './pages/resources/Resources'
 import Gallery from './pages/gallery/Gallery'
 import Publications from './pages/publications/Publications'
 import Constellations from './pages/constellations/Constellations'
+import { usePerformanceTier } from './hooks/usePerformanceTier'
 import './App.css'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
   // Keep track of the current URL path for custom SPA routing
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname)
+  const perfTier = usePerformanceTier()
 
   // Check if currentPath is a dynamic user profile route
   const getProfileUsername = (path: string): string | null => {
@@ -199,7 +201,7 @@ function App() {
   }
 
   return (
-    <div className={`app-container ${stage === 'home' ? 'home-active' : ''} ${currentPath === '/constellations' ? 'constellations-active' : ''}`}>
+    <div className={`app-container ${stage === 'home' ? 'home-active' : ''} ${currentPath === '/constellations' ? 'constellations-active' : ''} perf-${perfTier}`}>
       {/* 1. Hero Section Layer - Render only if stage is hero */}
       {stage === 'hero' && (
         <section className="hero-section">
