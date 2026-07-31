@@ -42,7 +42,7 @@ export default function Home() {
           </p>
           <div className="home-hero-actions">
             <a href="/clubs" className="home-action-btn">Explore Clubs</a>
-            <button className="home-action-btn primary">Join ISAAC</button>
+            <a href="/login" className="home-action-btn primary">Join ISAAC</a>
           </div>
         </div>
       </main>

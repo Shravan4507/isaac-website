@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import * as maptilersdk from '@maptiler/sdk'
+import '@maptiler/sdk/dist/maptiler-sdk.css'
 import './Onboarding.css'
 
 interface OnboardingProps {
@@ -33,6 +35,95 @@ const INDIAN_STATES = [
 ]
 
 const TAKEN_USERNAMES = ['stargazer', 'admin', 'voyager', 'carlsagan', 'isaac_admin']
+
+// Parse handles/usernames from pasted social media URLs
+const parseSocialUsername = (val: string, platform: string): string => {
+  let path = val.trim()
+  if (!path) return ''
+
+  // Remove protocol and www
+  path = path.replace(/^(https?:\/\/)?(www\.)?/, '')
+
+  if (platform === 'instagram') {
+    if (path.includes('instagram.com/')) {
+      path = path.split('instagram.com/')[1] || ''
+    }
+  } else if (platform === 'linkedin') {
+    if (path.includes('linkedin.com/')) {
+      path = path.split('linkedin.com/')[1] || ''
+    }
+  } else if (platform === 'youtube') {
+    if (path.includes('youtube.com/')) {
+      path = path.split('youtube.com/')[1] || ''
+    }
+  } else if (platform === 'facebook') {
+    if (path.includes('facebook.com/')) {
+      path = path.split('facebook.com/')[1] || ''
+    }
+  } else if (platform === 'discord') {
+    if (path.includes('discord.gg/')) {
+      path = path.split('discord.gg/')[1] || ''
+    } else if (path.includes('discord.com/invite/')) {
+      path = path.split('discord.com/invite/')[1] || ''
+    } else if (path.includes('discord.com/')) {
+      path = path.split('discord.com/')[1] || ''
+    }
+  } else if (platform === 'github') {
+    if (path.includes('github.com/')) {
+      path = path.split('github.com/')[1] || ''
+    }
+  }
+
+  // Remove leading @
+  if (path.startsWith('@')) {
+    path = path.slice(1)
+  }
+
+  // Strip query params and hashes
+  path = path.split('?')[0].split('#')[0]
+
+  // Remove trailing and leading slashes
+  path = path.replace(/^\/+|\/+$/g, '')
+
+  return path
+}
+
+const getInstagramUrl = (handle: string) => {
+  if (!handle) return ''
+  return `https://instagram.com/${handle}`
+}
+
+const getLinkedInUrl = (handle: string) => {
+  if (!handle) return ''
+  if (handle.startsWith('in/') || handle.startsWith('company/') || handle.startsWith('school/')) {
+    return `https://linkedin.com/${handle}`
+  }
+  return `https://linkedin.com/company/${handle}`
+}
+
+const getYouTubeUrl = (handle: string) => {
+  if (!handle) return ''
+  if (handle.startsWith('@') || handle.startsWith('c/') || handle.startsWith('channel/') || handle.startsWith('user/')) {
+    return `https://youtube.com/${handle}`
+  }
+  return `https://youtube.com/@${handle}`
+}
+
+const getFacebookUrl = (handle: string) => {
+  if (!handle) return ''
+  return `https://facebook.com/${handle}`
+}
+
+const getDiscordUrl = (handle: string) => {
+  if (!handle) return ''
+  return `https://discord.gg/${handle}`
+}
+
+const getGitHubUrl = (handle: string) => {
+  if (!handle) return ''
+  return `https://github.com/${handle}`
+}
+
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
   const [role, setRole] = useState<'pilot' | 'club' | null>(() => {
@@ -140,6 +231,15 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [clubAddress, setClubAddress] = useState('')
   const [clubZip, setClubZip] = useState('')
 
+  // Map selection states & refs
+  const [clubLat, setClubLat] = useState(20.5937)
+  const [clubLng, setClubLng] = useState(78.9629)
+  const [isResolvingAddress, setIsResolvingAddress] = useState(false)
+  const [geocodingError, setGeocodingError] = useState<string | null>(null)
+
+  const onboardingMapContainerRef = useRef<HTMLDivElement>(null)
+  const onboardingMapRef = useRef<maptilersdk.Map | null>(null)
+
   // Social presence
   const [socialWebsite, setSocialWebsite] = useState('')
   const [socialInstagram, setSocialInstagram] = useState('')
@@ -154,8 +254,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [clubActivities, setClubActivities] = useState<string[]>([])
   const [clubCustomActivity, setClubCustomActivity] = useState('')
 
-  // Verification & Declaration
-  const [proofFile, setProofFile] = useState<File | null>(null)
+  // Declaration
   const [declarationChecked, setDeclarationChecked] = useState(false)
 
   // 3. Logic & Helpers
@@ -193,6 +292,119 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       setIsDobReadOnly(true)
     }
   }, [])
+
+  // Map initialization and geolocation handler
+  useEffect(() => {
+    if (role !== 'club' || !onboardingMapContainerRef.current) {
+      if (onboardingMapRef.current) {
+        onboardingMapRef.current.remove()
+        onboardingMapRef.current = null
+      }
+      return
+    }
+
+    if (onboardingMapRef.current) return
+
+    try {
+      const apiKey = import.meta.env.VITE_MAPTILER_API_KEY || 'YOUR_MAPTILER_API_KEY'
+      maptilersdk.config.apiKey = apiKey
+
+      const map = new maptilersdk.Map({
+        container: onboardingMapContainerRef.current,
+        style: maptilersdk.MapStyle.STREETS.DARK,
+        center: [78.9629, 20.5937],
+        zoom: 4.5,
+        minZoom: 2,
+        maxZoom: 18,
+        navigationControl: false,
+        geolocateControl: false,
+      })
+
+      onboardingMapRef.current = map
+
+      const geolocate = new maptilersdk.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: false,
+        showUserLocation: true,
+        showAccuracyCircle: false
+      })
+      const nav = new maptilersdk.NavigationControl({ showCompass: false })
+
+      map.addControl(geolocate, 'bottom-right')
+      map.addControl(nav, 'bottom-right')
+
+      // Listen to map moveend to reverse-geocode coordinates under center pin
+      map.on('moveend', () => {
+        const center = map.getCenter()
+        setClubLat(center.lat)
+        setClubLng(center.lng)
+
+        setIsResolvingAddress(true)
+        setGeocodingError(null)
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${center.lat}&lon=${center.lng}&zoom=18&addressdetails=1`, {
+          headers: {
+            'Accept-Language': 'en',
+            'User-Agent': 'isaac-website-onboarding'
+          }
+        })
+          .then(res => {
+            if (!res.ok) throw new Error("Network response error")
+            return res.json()
+          })
+          .then(data => {
+            if (data && data.address) {
+              const addr = data.address
+              const city = addr.city || addr.town || addr.village || addr.suburb || addr.county || ''
+              const postcode = addr.postcode || ''
+              const state = addr.state || ''
+
+              if (city) setClubCity(city)
+              if (postcode) setClubZip(postcode.replace(/\D/g, ''))
+
+              if (state) {
+                const matchedState = INDIAN_STATES.find(
+                  s => s.toLowerCase() === state.toLowerCase()
+                )
+                if (matchedState) {
+                  setClubState(matchedState)
+                }
+              }
+
+              const road = addr.road || ''
+              const suburb = addr.suburb || addr.neighbourhood || ''
+              const addressParts = [road, suburb, city, state].filter(Boolean)
+              const formattedAddress = addressParts.join(', ')
+              if (formattedAddress) {
+                setClubAddress(formattedAddress)
+              }
+            }
+          })
+          .catch(err => {
+            console.error("Reverse geocoding failed:", err)
+            setGeocodingError("Failed to fetch address. Please fill fields manually.")
+          })
+          .finally(() => {
+            setIsResolvingAddress(false)
+          })
+      })
+
+      // Fix map rendering sizes inside flexbox / hidden tabs
+      setTimeout(() => {
+        if (onboardingMapRef.current) onboardingMapRef.current.resize()
+      }, 300)
+
+    } catch (err) {
+      console.error("Failed to initialize onboarding map:", err)
+    }
+
+    return () => {
+      if (onboardingMapRef.current) {
+        onboardingMapRef.current.remove()
+        onboardingMapRef.current = null
+      }
+    }
+  }, [role])
 
   // Sync WhatsApp number if checked
   useEffect(() => {
@@ -500,8 +712,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       newErrors.clubCustomActivity = 'Please specify other activities.'
     }
 
-    // Verification
-    if (!proofFile) newErrors.proofFile = 'Proof of club document is required.'
+    // Verification / Declaration
     if (!declarationChecked) newErrors.declarationChecked = 'Declaration checkbox must be checked.'
 
     setErrors(newErrors)
@@ -517,6 +728,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       localStorage.setItem('isaac_username', finalUsername)
       localStorage.setItem('isaac_fullname', clubName)
       localStorage.setItem('isaac_institution', clubCollege)
+      localStorage.setItem('isaac_lat', clubLat.toString())
+      localStorage.setItem('isaac_lng', clubLng.toString())
       localStorage.setItem('isaac_logged_in', 'true')
       localStorage.setItem('isaac_onboarded', 'true')
 
@@ -920,6 +1133,44 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               <span className="divider-label">CLUB CONTACT INFORMATION</span>
             </div>
 
+            {/* Map Selection Zone */}
+            <div className="onboarding-map-group">
+              <label className="form-label">SELECT CLUB LOCATION ON MAP *</label>
+              <div className="onboarding-map-wrapper">
+                <div ref={onboardingMapContainerRef} className="onboarding-map-container" />
+                
+                {/* Fixed center pin */}
+                <div className="onboarding-map-center-pin">
+                  <svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor" className="pin-icon">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                  </svg>
+                  <div className="pin-pulse" />
+                </div>
+
+                {/* Status Overlay */}
+                <div className="onboarding-map-status-overlay">
+                  {isResolvingAddress ? (
+                    <div className="status-resolving">
+                      <div className="status-spinner" />
+                      <span>Resolving address...</span>
+                    </div>
+                  ) : geocodingError ? (
+                    <span className="status-error">{geocodingError}</span>
+                  ) : clubCity || clubState ? (
+                    <span className="status-success" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ flexShrink: 0 }}>
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      <span>{[clubCity, clubState].filter(Boolean).join(', ')}</span>
+                    </span>
+                  ) : (
+                    <span>Drag map to set exact club location</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="form-row">
               <div className="form-group flex-1">
                 <label className="form-label">OFFICIAL CLUB EMAIL *</label>
@@ -1009,9 +1260,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="instagram.com/..."
+                  placeholder="e.g. stargazers_society"
                   value={socialInstagram}
-                  onChange={(e) => setSocialInstagram(e.target.value)}
+                  onChange={(e) => setSocialInstagram(parseSocialUsername(e.target.value, 'instagram'))}
                 />
               </div>
 
@@ -1020,9 +1271,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="linkedin.com/company/..."
+                  placeholder="e.g. stargazers-society"
                   value={socialLinkedIn}
-                  onChange={(e) => setSocialLinkedIn(e.target.value)}
+                  onChange={(e) => setSocialLinkedIn(parseSocialUsername(e.target.value, 'linkedin'))}
                 />
               </div>
 
@@ -1031,9 +1282,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="youtube.com/c/..."
+                  placeholder="e.g. stargazers_society"
                   value={socialYouTube}
-                  onChange={(e) => setSocialYouTube(e.target.value)}
+                  onChange={(e) => setSocialYouTube(parseSocialUsername(e.target.value, 'youtube'))}
                 />
               </div>
 
@@ -1042,9 +1293,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="facebook.com/..."
+                  placeholder="e.g. stargazers.society"
                   value={socialFacebook}
-                  onChange={(e) => setSocialFacebook(e.target.value)}
+                  onChange={(e) => setSocialFacebook(parseSocialUsername(e.target.value, 'facebook'))}
                 />
               </div>
 
@@ -1053,9 +1304,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="discord.gg/..."
+                  placeholder="e.g. invite_code"
                   value={socialDiscord}
-                  onChange={(e) => setSocialDiscord(e.target.value)}
+                  onChange={(e) => setSocialDiscord(parseSocialUsername(e.target.value, 'discord'))}
                 />
               </div>
 
@@ -1064,9 +1315,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <input
                   type="text"
                   className="form-input social-input"
-                  placeholder="github.com/..."
+                  placeholder="e.g. stargazers-society"
                   value={socialGitHub}
-                  onChange={(e) => setSocialGitHub(e.target.value)}
+                  onChange={(e) => setSocialGitHub(parseSocialUsername(e.target.value, 'github'))}
                 />
               </div>
             </div>
@@ -1136,50 +1387,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               </div>
             )}
 
-            {/* ──────── SECTION 6: VERIFICATION ──────── */}
+            {/* ──────── SECTION 6: DECLARATION ──────── */}
             <div className="club-section-divider">
               <span className="divider-num">06</span>
-              <span className="divider-label">VERIFICATION DOCUMENT</span>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">PROOF OF CLUB *</label>
-              <div className="upload-tip">
-                Upload any one of the following: College Approval Letter, Faculty Recommendation Letter, Club Constitution / Registration Document, or an Official Club Poster / Event Brochure.
-              </div>
-              <div className="file-upload-wrapper">
-                <input
-                  type="file"
-                  id="club-proof-upload"
-                  accept=".pdf,.png,.jpg,.jpeg"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0] || null
-                    setProofFile(file)
-                  }}
-                  style={{ display: 'none' }}
-                />
-                <label htmlFor="club-proof-upload" className={`file-upload-label ${errors.proofFile ? 'error-border' : ''}`}>
-                  {proofFile ? (
-                    <div className="file-uploaded-info">
-                      <span className="file-name">{proofFile.name}</span>
-                      <button type="button" className="file-remove-btn" onClick={(e) => { e.preventDefault(); setProofFile(null); }}>Remove</button>
-                    </div>
-                  ) : (
-                    <>
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}>
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
-                      </svg>
-                      <span>Upload Proof Document (PDF/PNG/JPG)</span>
-                    </>
-                  )}
-                </label>
-              </div>
-              {errors.proofFile && <span className="field-error-text">{errors.proofFile}</span>}
-            </div>
-
-            {/* ──────── SECTION 7: DECLARATION ──────── */}
-            <div className="club-section-divider">
-              <span className="divider-num">07</span>
               <span className="divider-label">DECLARATION</span>
             </div>
 
@@ -1253,7 +1463,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 </a>
               )}
               {socialInstagram && (
-                <a href={socialInstagram} target="_blank" rel="noopener noreferrer" className="preview-social-link instagram">
+                <a href={getInstagramUrl(socialInstagram)} target="_blank" rel="noopener noreferrer" className="preview-social-link instagram">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
@@ -1262,7 +1472,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 </a>
               )}
               {socialLinkedIn && (
-                <a href={socialLinkedIn} target="_blank" rel="noopener noreferrer" className="preview-social-link linkedin">
+                <a href={getLinkedInUrl(socialLinkedIn)} target="_blank" rel="noopener noreferrer" className="preview-social-link linkedin">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                     <rect x="2" y="9" width="4" height="12" />
@@ -1271,7 +1481,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 </a>
               )}
               {socialYouTube && (
-                <a href={socialYouTube} target="_blank" rel="noopener noreferrer" className="preview-social-link youtube">
+                <a href={getYouTubeUrl(socialYouTube)} target="_blank" rel="noopener noreferrer" className="preview-social-link youtube">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.41 19c1.71.46 8.59.46 8.59.46s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
                     <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" />
@@ -1279,21 +1489,21 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 </a>
               )}
               {socialFacebook && (
-                <a href={socialFacebook} target="_blank" rel="noopener noreferrer" className="preview-social-link facebook">
+                <a href={getFacebookUrl(socialFacebook)} target="_blank" rel="noopener noreferrer" className="preview-social-link facebook">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                   </svg>
                 </a>
               )}
               {socialDiscord && (
-                <a href={socialDiscord} target="_blank" rel="noopener noreferrer" className="preview-social-link discord">
+                <a href={getDiscordUrl(socialDiscord)} target="_blank" rel="noopener noreferrer" className="preview-social-link discord">
                   <svg viewBox="0 0 127.14 96.36" width="16" height="16" fill="currentColor" style={{ display: 'block' }}>
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.5-5c1-.73,2-1.5,2.92-2.3a75.48,75.48,0,0,0,72.15,0c.93.8,1.92,1.57,2.92,2.3a68.43,68.43,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31.53-18.83C129,54.65,123.5,31.58,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
                   </svg>
                 </a>
               )}
               {socialGitHub && (
-                <a href={socialGitHub} target="_blank" rel="noopener noreferrer" className="preview-social-link github">
+                <a href={getGitHubUrl(socialGitHub)} target="_blank" rel="noopener noreferrer" className="preview-social-link github">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                   </svg>

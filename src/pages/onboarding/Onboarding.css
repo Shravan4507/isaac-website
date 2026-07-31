@@ -255,9 +255,9 @@
 }
 
 .onboarding-submit-btn {
-  background: transparent;
+  background: #ffffff;
   border: 1px solid rgba(240, 240, 250, 0.3);
-  color: #ffffff;
+  color: #000000;
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
@@ -1315,15 +1315,17 @@
 .club-preview-avatar-row {
   padding: 0 24px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  justify-content: flex-end;
+  align-items: center;
+  height: 55px;
+  position: relative;
 }
 
 .club-preview-socials {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 6px;
+  z-index: 1;
 }
 
 .preview-social-link {
@@ -1371,13 +1373,15 @@
 }
 
 .club-preview-avatar-circle {
+  position: absolute;
+  left: 24px;
+  top: 0;
+  transform: translateY(-50%);
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  background: #00000000;
-  border: none;
-  margin-top: -100px;
-  /* Overlap half of banner height */
+  background: #000000;
+  border: 2px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1408,11 +1412,11 @@
 }
 
 .club-preview-info-body {
-  padding: 16px 24px 24px;
+  padding: 8px 24px 24px;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  margin-top: -50px;
+  margin-top: 0;
 }
 
 .club-preview-name {
@@ -1564,4 +1568,137 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+/* Map Selector Styles */
+.onboarding-map-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.onboarding-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.onboarding-map-container {
+  width: 100%;
+  height: 100%;
+  filter: grayscale(1) brightness(0.9) contrast(1.05);
+}
+
+/* Center Pin styling */
+.onboarding-map-center-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.onboarding-map-center-pin .pin-icon {
+  color: #ffffff;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  animation: pinBounce 0.3s ease-out;
+}
+
+.onboarding-map-center-pin .pin-pulse {
+  position: absolute;
+  bottom: -4px;
+  width: 12px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.3);
+  animation: pulseScale 1s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes pinBounce {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseScale {
+  0% { transform: scale(0.6); opacity: 0.4; }
+  100% { transform: scale(1.2); opacity: 0.9; }
+}
+
+/* Map Status Overlay */
+.onboarding-map-status-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'D-Din', sans-serif;
+  font-size: 12px;
+  z-index: 5;
+  max-width: 80%;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-resolving {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.status-error {
+  color: #ff4a4a;
+}
+
+.status-success {
+  color: #ffffff;
+  font-family: 'D-Din-Bold', sans-serif;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* MapTiler customization overrides */
+.maplibregl-ctrl-group {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 4px !important;
+}
+
+.maplibregl-ctrl-group button {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.maplibregl-ctrl-group button:last-child {
+  border-bottom: none !important;
+}
+
+.maplibregl-ctrl-group button span {
+  filter: invert(1) !important;
 }
