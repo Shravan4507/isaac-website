@@ -282,4 +282,19 @@
   .mobile-only-caret {
     display: none !important;
   }
+
+  .navbar-settings-dropdown .navbar-dropdown-menu {
+    right: 0;
+    left: auto;
+    text-align: right;
+  }
+}
+
+/* Logout Button Color styling */
+.dropdown-item.logout-btn {
+  color: #ef4444 !important;
+}
+
+.dropdown-item.logout-btn:hover {
+  color: #ff6b6b !important;
 }

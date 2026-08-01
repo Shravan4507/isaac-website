@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { usePerformanceTier } from '../../hooks/usePerformanceTier'
 import Constellation from '../../components/constellation/Constellation'
 import EventsCarousel from '../../components/events-carousel/EventsCarousel'
@@ -6,6 +7,11 @@ import './Home.css'
 
 export default function Home() {
   const perfTier = usePerformanceTier()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    setIsLoggedIn(localStorage.getItem('isaac_logged_in') === 'true')
+  }, [])
 
   return (
     <div className="home-page-container">
@@ -42,7 +48,11 @@ export default function Home() {
           </p>
           <div className="home-hero-actions">
             <a href="/clubs" className="home-action-btn">Explore Clubs</a>
-            <a href="/login" className="home-action-btn primary">Join ISAAC</a>
+            {isLoggedIn ? (
+              <a href="/dashboard" className="home-action-btn primary">Go to Dashboard</a>
+            ) : (
+              <a href="/login" className="home-action-btn primary">Join ISAAC</a>
+            )}
           </div>
         </div>
       </main>

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import { db } from '../../firebase'
 import './Login.css'
 
 export default function Login() {
@@ -6,6 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleGoogleLogin = () => {
     // Simulate login for public user
@@ -29,7 +32,7 @@ export default function Login() {
     window.dispatchEvent(new PopStateEvent('popstate'))
   }
 
-  const handleClubSubmit = (e: React.FormEvent) => {
+  const handleClubSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setShowForgotPassword(false)
@@ -42,18 +45,81 @@ export default function Login() {
       return
     }
 
-    // Correct password is "password" (case-insensitive) for demo purposes
-    if (cleanPass.toLowerCase() === 'password') {
-      localStorage.setItem('isaac_logged_in', 'true')
-      localStorage.setItem('isaac_role', 'Club Admin')
-      localStorage.setItem('isaac_username', cleanUser.toLowerCase().replace(/\s+/g, ''))
-      localStorage.setItem('isaac_fullname', cleanUser + ' Management')
-      localStorage.setItem('isaac_onboarded', 'true')
-      window.history.pushState(null, '', '/home')
-      window.dispatchEvent(new PopStateEvent('popstate'))
-    } else {
-      setError('Access authorization failed: Invalid key.')
-      setShowForgotPassword(true)
+    setIsLoading(true)
+
+    try {
+      const clubsRef = collection(db, 'clubs')
+      const q = query(clubsRef, where('repEmail', '==', cleanUser))
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.empty) {
+        setError('Access authorization failed: No club found with this representative email.')
+        setIsLoading(false)
+        return
+      }
+
+      let authenticated = false
+      let clubDoc: any = null
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data()
+        const dbPassword = data.password || ''
+        const rawPhone = data.repPhone || ''
+        const cleanDbPhone = rawPhone.replace(/\D/g, '')
+        const last10DbPhone = cleanDbPhone.slice(-10)
+
+        const cleanInputPhone = cleanPass.replace(/\D/g, '')
+        const last10InputPhone = cleanInputPhone.slice(-10)
+
+        if (dbPassword) {
+          if (dbPassword === cleanPass) {
+            authenticated = true
+            clubDoc = data
+          }
+        } else {
+          if (last10DbPhone === last10InputPhone && last10InputPhone.length === 10) {
+            authenticated = true
+            clubDoc = data
+          }
+        }
+      })
+
+      if (authenticated && clubDoc) {
+        localStorage.setItem('isaac_logged_in', 'true')
+        localStorage.setItem('isaac_role', 'Club Admin')
+        localStorage.setItem('isaac_club_id', clubDoc.id)
+        localStorage.setItem('isaac_verified', String(clubDoc.verified === true))
+        localStorage.setItem('isaac_username', clubDoc.username || `club_${clubDoc.clubName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_')}`)
+        localStorage.setItem('isaac_fullname', clubDoc.clubName)
+        localStorage.setItem('isaac_institution', clubDoc.institution || clubDoc.clubCollege || '')
+        localStorage.setItem('isaac_lat', clubDoc.latitude !== undefined ? String(clubDoc.latitude) : (clubDoc.clubLat !== undefined ? String(clubDoc.clubLat) : ''))
+        localStorage.setItem('isaac_lng', clubDoc.longitude !== undefined ? String(clubDoc.longitude) : (clubDoc.clubLng !== undefined ? String(clubDoc.clubLng) : ''))
+        localStorage.setItem('isaac_state', clubDoc.state || clubDoc.clubState || '')
+        localStorage.setItem('isaac_bio', clubDoc.description || clubDoc.clubDescription || '')
+        localStorage.setItem('isaac_logo', clubDoc.logo || clubDoc.clubLogo || '')
+        localStorage.setItem('isaac_banner', clubDoc.banner || clubDoc.clubBanner || '')
+        localStorage.setItem('isaac_onboarded', 'true')
+
+        // Save socials
+        localStorage.setItem('isaac_social_instagram', clubDoc.instagram || clubDoc.socialInstagram || '')
+        localStorage.setItem('isaac_social_linkedin', clubDoc.linkedin || clubDoc.socialLinkedIn || '')
+        localStorage.setItem('isaac_social_youtube', clubDoc.youtube || clubDoc.socialYouTube || '')
+        localStorage.setItem('isaac_social_facebook', clubDoc.facebook || clubDoc.socialFacebook || '')
+        localStorage.setItem('isaac_social_discord', clubDoc.discord || clubDoc.socialDiscord || '')
+        localStorage.setItem('isaac_social_github', clubDoc.github || clubDoc.socialGitHub || '')
+        localStorage.setItem('isaac_est_year', clubDoc.estYear || clubDoc.clubEstYear || '')
+
+        window.history.pushState(null, '', '/dashboard')
+        window.dispatchEvent(new PopStateEvent('popstate'))
+      } else {
+        setError('Access authorization failed: Invalid key (Password mismatch).')
+        setShowForgotPassword(true)
+      }
+    } catch (err: any) {
+      console.error('Firestore query login error:', err)
+      setError('Network authentication link error. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -138,8 +204,19 @@ export default function Login() {
               </div>
             )}
 
-            <button type="submit" className="club-submit-btn">
-              Authorize Access
+            <button type="submit" className="club-submit-btn" disabled={isLoading}>
+              {isLoading ? 'Authorizing Access...' : 'Authorize Access'}
+            </button>
+            <button
+              type="button"
+              className="club-register-btn"
+              onClick={() => {
+                window.history.pushState(null, '', '/onboarding?role=club')
+                window.dispatchEvent(new PopStateEvent('popstate'))
+              }}
+              disabled={isLoading}
+            >
+              Register as a club
             </button>
           </form>
         </div>

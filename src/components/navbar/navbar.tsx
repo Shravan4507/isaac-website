@@ -1,30 +1,105 @@
 import { useState, useEffect } from 'react'
 import './navbar.css'
 
-export default function Navbar() {
+interface NavbarProps {
+  currentPath?: string
+}
+
+export default function Navbar({ currentPath: propPath }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownActive, setDropdownActive] = useState(false)
+  const [settingsDropdownActive, setSettingsDropdownActive] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [role, setRole] = useState('')
+  const [currentPath, setCurrentPath] = useState(() => propPath || window.location.pathname)
+
+  useEffect(() => {
+    if (propPath) {
+      setCurrentPath(propPath)
+    }
+  }, [propPath])
 
   // Close dropdown when clicking outside of the dropdown container (helps with touch screens)
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (dropdownActive) {
-        const target = e.target as HTMLElement
-        if (!target.closest('.navbar-item-with-dropdown')) {
-          setDropdownActive(false)
-        }
+      const target = e.target as HTMLElement
+      if (dropdownActive && !target.closest('.navbar-item-with-dropdown')) {
+        setDropdownActive(false)
+      }
+      if (settingsDropdownActive && !target.closest('.navbar-settings-dropdown')) {
+        setSettingsDropdownActive(false)
       }
     }
     document.addEventListener('click', handleOutsideClick)
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [dropdownActive])
+  }, [dropdownActive, settingsDropdownActive])
+
+  useEffect(() => {
+    const checkLogin = () => {
+      setIsLoggedIn(localStorage.getItem('isaac_logged_in') === 'true')
+      setRole(localStorage.getItem('isaac_role') || '')
+      if (!propPath) {
+        setCurrentPath(window.location.pathname)
+      }
+    }
+    checkLogin()
+    window.addEventListener('popstate', checkLogin)
+    // Custom storage event just in case
+    window.addEventListener('storage', checkLogin)
+    return () => {
+      window.removeEventListener('popstate', checkLogin)
+      window.removeEventListener('storage', checkLogin)
+    }
+  }, [propPath])
+
+  const handleSettingsMouseEnter = () => {
+    if (window.innerWidth > 1280) {
+      setSettingsDropdownActive(true)
+    }
+  }
+
+  const handleSettingsMouseLeave = () => {
+    if (window.innerWidth > 1280) {
+      setSettingsDropdownActive(false)
+    }
+  }
+
+  const handleSettingsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    setSettingsDropdownActive(!settingsDropdownActive)
+  }
+
+  const handleSettingsAction = (action: string) => {
+    closeMenu()
+    setSettingsDropdownActive(false)
+    if (action === 'logout') {
+      localStorage.removeItem('isaac_logged_in')
+      localStorage.removeItem('isaac_club_id')
+      localStorage.removeItem('isaac_role')
+      localStorage.removeItem('isaac_fullname')
+      localStorage.removeItem('isaac_username')
+      localStorage.removeItem('isaac_institution')
+      localStorage.removeItem('isaac_logo')
+      localStorage.removeItem('isaac_banner')
+      localStorage.removeItem('isaac_est_year')
+      localStorage.removeItem('isaac_verified')
+      sessionStorage.clear()
+      
+      window.history.pushState(null, '', '/login')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    } else {
+      window.history.pushState(null, '', `/dashboard?roll=club&tab=${action}`)
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    }
+  }
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen)
     if (menuOpen) {
       setDropdownActive(false)
+      setSettingsDropdownActive(false)
     }
   }
 
@@ -60,7 +135,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       {/* SpaceX style dimming backdrop overlay */}
-      <div className={`navbar-backdrop-overlay ${dropdownActive ? 'visible' : ''}`} />
+      <div className={`navbar-backdrop-overlay ${dropdownActive || settingsDropdownActive ? 'visible' : ''}`} />
 
       <div className="navbar-container">
         {/* Left Side: Logo */}
@@ -113,7 +188,52 @@ export default function Navbar() {
 
             <a href="/gallery" className="navbar-link" onClick={closeMenu}>Gallery</a>
           </div>
-          <a href="/login" className="navbar-link navbar-login-link" onClick={closeMenu}>Log In</a>
+          {isLoggedIn ? (
+            currentPath === '/dashboard' && role === 'Club Admin' ? (
+              <div 
+                className={`navbar-item-with-dropdown navbar-settings-dropdown ${settingsDropdownActive ? 'active' : ''}`}
+                onMouseEnter={handleSettingsMouseEnter}
+                onMouseLeave={handleSettingsMouseLeave}
+              >
+                <a 
+                  href="#settings"
+                  className="navbar-link navbar-dropdown-trigger settings-trigger-btn"
+                  onClick={handleSettingsClick}
+                >
+                  Settings <span className="mobile-only-caret">▼</span>
+                </a>
+                <div className={`navbar-dropdown-menu ${settingsDropdownActive ? 'open' : ''}`}>
+                  <a 
+                    href="#edit-profile" 
+                    className="dropdown-item" 
+                    onClick={(e) => { e.preventDefault(); handleSettingsAction('edit-profile'); }}
+                  >
+                    Edit Profile
+                  </a>
+                  <a 
+                    href="#view-settings" 
+                    className="dropdown-item" 
+                    onClick={(e) => { e.preventDefault(); handleSettingsAction('view-settings'); }}
+                  >
+                    View Settings
+                  </a>
+                  <a 
+                    href="#logout" 
+                    className="dropdown-item logout-btn" 
+                    onClick={(e) => { e.preventDefault(); handleSettingsAction('logout'); }}
+                  >
+                    Logout
+                  </a>
+                </div>
+              </div>
+            ) : (
+              currentPath !== '/dashboard' && (
+                <a href="/dashboard" className="navbar-link navbar-login-link dashboard-link" onClick={closeMenu}>Dashboard</a>
+              )
+            )
+          ) : (
+            <a href="/login" className="navbar-link navbar-login-link" onClick={closeMenu}>Log In</a>
+          )}
         </div>
       </div>
 

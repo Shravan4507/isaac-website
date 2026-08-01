@@ -3,7 +3,9 @@ import { createPortal } from 'react-dom'
 import * as maptilersdk from '@maptiler/sdk'
 import '@maptiler/sdk/dist/maptiler-sdk.css'
 import './Clubs.css'
-import { clubsData, type ClubData } from '../../dataset/clubsData'
+import { type ClubData } from '../../dataset/clubsData'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { db } from '../../firebase'
 
 const STOCK_IMAGES = [
   '/images/astrophotography.webp',
@@ -45,6 +47,66 @@ export default function Clubs() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedClubId, setSelectedClubId] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Dynamic clubs state
+  const [clubsList, setClubsList] = useState<ClubData[]>([])
+  const [isFetching, setIsFetching] = useState(true)
+
+  // Helper for resolving social handles or full links safely
+  const getSocialUrl = (val: string, platform: 'website' | 'instagram' | 'linkedin' | 'youtube' | 'facebook' | 'discord' | 'github') => {
+    if (!val) return ''
+    const trimmed = val.trim()
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('mailto:')) {
+      return trimmed
+    }
+    if (platform === 'website') {
+      if (trimmed.includes('@') && !trimmed.includes('/')) {
+        return `mailto:${trimmed}`
+      }
+      return `https://${trimmed}`
+    }
+    if (platform === 'instagram') return `https://instagram.com/${trimmed}`
+    if (platform === 'linkedin') {
+      if (trimmed.startsWith('in/') || trimmed.startsWith('company/') || trimmed.startsWith('school/')) {
+        return `https://linkedin.com/${trimmed}`
+      }
+      return `https://linkedin.com/company/${trimmed}`
+    }
+    if (platform === 'youtube') {
+      if (trimmed.startsWith('@') || trimmed.startsWith('c/') || trimmed.startsWith('channel/') || trimmed.startsWith('user/')) {
+        return `https://youtube.com/${trimmed}`
+      }
+      return `https://youtube.com/@${trimmed}`
+    }
+    if (platform === 'facebook') return `https://facebook.com/${trimmed}`
+    if (platform === 'discord') return `https://discord.gg/${trimmed}`
+    if (platform === 'github') return `https://github.com/${trimmed}`
+    return trimmed
+  }
+
+  // Fetch verified clubs on mount
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const clubsRef = collection(db, 'clubs')
+        const q = query(clubsRef, where('verified', '==', true))
+        const querySnapshot = await getDocs(q)
+        const loadedClubs: ClubData[] = []
+        querySnapshot.forEach((doc) => {
+          loadedClubs.push({
+            id: doc.id,
+            ...doc.data()
+          } as ClubData)
+        })
+        setClubsList(loadedClubs)
+      } catch (err) {
+        console.error("Error fetching clubs from Firestore:", err)
+      } finally {
+        setIsFetching(false)
+      }
+    }
+    fetchClubs()
+  }, [])
 
   const changeMapStyle = (styleKey: 'cosmos' | 'satellite' | 'streets') => {
     try {
@@ -110,6 +172,8 @@ export default function Clubs() {
     }
 
     const stateColor = getStateColor(club.state)
+    const websiteUrl = getSocialUrl(club.website, 'website')
+    const instagramUrl = getSocialUrl(club.instagram, 'instagram')
 
     // Create custom space-themed map popup (acting as location-pointing toast)
     const popup = new maptilersdk.Popup({
@@ -121,7 +185,7 @@ export default function Clubs() {
       <div class="popup-card">
         <div class="popup-header" style="border-bottom-color: ${stateColor}33">
           ${club.verified ? `<span class="popup-verified-badge" style="color: ${stateColor}">✓ Verified Chapter</span>` : ''}
-          <h3 class="popup-club-name">${club.club}</h3>
+          <h3 class="popup-club-name">${club.clubName}</h3>
           <p class="popup-institution">${club.institution}</p>
         </div>
         <div class="popup-body">
@@ -129,8 +193,9 @@ export default function Clubs() {
           ${club.description ? `<p class="popup-desc">${club.description}</p>` : ''}
         </div>
         <div class="popup-footer">
-          ${club.website ? `<a href="${club.website}" target="_blank" rel="noopener noreferrer" class="popup-action-btn" style="--btn-color: ${stateColor}">Contact</a>` : ''}
-          ${club.instagram ? `<a href="${club.instagram}" target="_blank" rel="noopener noreferrer" class="popup-action-btn" style="--btn-color: ${stateColor}">Instagram</a>` : ''}
+          <a href="/club/${club.username || club.id}" class="popup-action-btn" style="--btn-color: ${stateColor}">Profile</a>
+          ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" rel="noopener noreferrer" class="popup-action-btn" style="--btn-color: ${stateColor}">Contact</a>` : ''}
+          ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="popup-action-btn" style="--btn-color: ${stateColor}">Instagram</a>` : ''}
         </div>
       </div>
     `)
@@ -149,12 +214,12 @@ export default function Clubs() {
   }
 
   // Filter clubs list based on Search
-  const filteredClubs = clubsData.filter((club) => {
+  const filteredClubs = clubsList.filter((club) => {
     return (
-      club.club.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      club.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      club.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      club.state.toLowerCase().includes(searchQuery.toLowerCase())
+      (club.clubName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (club.institution || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (club.city || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (club.state || '').toLowerCase().includes(searchQuery.toLowerCase())
     )
   })
 
@@ -557,39 +622,49 @@ export default function Clubs() {
             </div>
 
             <div className="clubs-list-scroll">
-              {filteredClubs.map((club) => {
-                const stateColor = getStateColor(club.state)
-                const isSelected = selectedClubId === club.id
-                return (
-                  <div
-                    key={club.id}
-                    className={`club-list-card ${isSelected ? 'active' : ''}`}
-                    onClick={() => handleSelectClub(club)}
-                  >
-                    <div className="club-card-left">
-                      <span className="club-indicator-dot" style={{ backgroundColor: stateColor }} />
-                      <div className="club-meta">
-                        <span className="club-card-name">{club.club}</span>
-                        <span className="club-card-institution">{club.shortName || club.institution}</span>
+              {isFetching ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(240, 240, 250, 0.4)', fontFamily: 'D-Din', fontSize: '13px' }}>
+                  Loading club telemetry...
+                </div>
+              ) : filteredClubs.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: 'rgba(240, 240, 250, 0.4)', fontFamily: 'D-Din', fontSize: '13px' }}>
+                  No verified chapters found.
+                </div>
+              ) : (
+                filteredClubs.map((club) => {
+                  const stateColor = getStateColor(club.state)
+                  const isSelected = selectedClubId === club.id
+                  return (
+                    <div
+                      key={club.id}
+                      className={`club-list-card ${isSelected ? 'active' : ''}`}
+                      onClick={() => handleSelectClub(club)}
+                    >
+                      <div className="club-card-left">
+                        <span className="club-indicator-dot" style={{ backgroundColor: stateColor }} />
+                        <div className="club-meta">
+                          <span className="club-card-name">{club.clubName}</span>
+                          <span className="club-card-institution">{club.shortName || club.institution}</span>
+                        </div>
                       </div>
+                      <span className="club-card-arrow">
+                        <svg 
+                          viewBox="0 0 24 24" 
+                          width="16" 
+                          height="16" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          fill="none" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </span>
                     </div>
-                    <span className="club-card-arrow">
-                      <svg 
-                        viewBox="0 0 24 24" 
-                        width="16" 
-                        height="16" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        fill="none" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                )
-              })}
+                  )
+                })
+              )}
             </div>
 
             <button className="view-all-clubs-btn" onClick={() => setIsModalOpen(true)}>
@@ -627,9 +702,9 @@ export default function Clubs() {
 
             <div className="modal-body-scroll">
               <div className="clubs-grid">
-                {clubsData.map((club, idx) => {
+                {clubsList.map((club, idx) => {
                   const stateColor = getStateColor(club.state)
-                  const stockImage = STOCK_IMAGES[idx % STOCK_IMAGES.length]
+                  const stockImage = club.banner || STOCK_IMAGES[idx % STOCK_IMAGES.length]
                   return (
                     <div key={club.id} className="club-modal-card">
                       <div className="card-image-wrapper">
@@ -639,7 +714,7 @@ export default function Clubs() {
                         </span>
                       </div>
                       <div className="card-details">
-                        <h3 className="card-club-title">{club.club}</h3>
+                        <h3 className="card-club-title">{club.clubName}</h3>
                         <p className="card-club-college">{club.institution}</p>
                         <p className="card-club-place">📍 {club.city}, {club.country}</p>
                         <p className="card-club-desc">{club.description}</p>
@@ -648,7 +723,7 @@ export default function Clubs() {
                           <div className="card-socials">
                             {club.website && (
                               <a 
-                                href={club.website} 
+                                href={getSocialUrl(club.website, 'website')} 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
                                 className="social-link" 
@@ -672,7 +747,7 @@ export default function Clubs() {
                             )}
                             {club.instagram && (
                               <a 
-                                href={club.instagram} 
+                                href={getSocialUrl(club.instagram, 'instagram')} 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
                                 className="social-link" 
@@ -694,17 +769,99 @@ export default function Clubs() {
                                 </svg>
                               </a>
                             )}
+                            {club.linkedin && (
+                              <a 
+                                href={getSocialUrl(club.linkedin, 'linkedin')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="social-link" 
+                                title="LinkedIn"
+                              >
+                                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                  <rect x="2" y="9" width="4" height="12"></rect>
+                                  <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                              </a>
+                            )}
+                            {club.github && (
+                              <a 
+                                href={getSocialUrl(club.github, 'github')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="social-link" 
+                                title="GitHub"
+                              >
+                                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                </svg>
+                              </a>
+                            )}
+                            {club.discord && (
+                              <a 
+                                href={getSocialUrl(club.discord, 'discord')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="social-link" 
+                                title="Discord"
+                              >
+                                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <circle cx="12" cy="12" r="10"></circle>
+                                  <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                  <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                  <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                              </a>
+                            )}
+                            {club.youtube && (
+                              <a 
+                                href={getSocialUrl(club.youtube, 'youtube')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="social-link" 
+                                title="YouTube"
+                              >
+                                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                                  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                                </svg>
+                              </a>
+                            )}
+                            {club.facebook && (
+                              <a 
+                                href={getSocialUrl(club.facebook, 'facebook')} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="social-link" 
+                                title="Facebook"
+                              >
+                                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                              </a>
+                            )}
                           </div>
 
-                          <button 
-                            className="card-map-zoom-btn"
-                            onClick={() => {
-                              setIsModalOpen(false)
-                              handleSelectClub(club)
-                            }}
-                          >
-                            Locate <span className="action-arrow">→</span>
-                          </button>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <a 
+                              href={`/club/${club.username || club.id}`}
+                              className="card-profile-btn"
+                              onClick={() => {
+                                setIsModalOpen(false)
+                              }}
+                            >
+                              Profile
+                            </a>
+                            <button 
+                              className="card-map-zoom-btn"
+                              onClick={() => {
+                                setIsModalOpen(false)
+                                handleSelectClub(club)
+                              }}
+                            >
+                              Locate <span className="action-arrow">→</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

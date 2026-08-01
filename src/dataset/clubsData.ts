@@ -1,20 +1,50 @@
 export interface ClubData {
-  id: string
-  club: string
-  institution: string
-  shortName: string
-  city: string
-  state: string
-  country: string
-  latitude: number
-  longitude: number
-  verified: boolean
-  website: string
-  instagram: string
-  description: string
+  // Identity & Location
+  id: string;
+  username: string;
+  clubName: string;
+  institution: string;
+  shortName: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  verified: boolean;
+  estYear: string;
+
+  // Visuals & About
+  logo: string;
+  banner: string;
+  description: string;
+  activities: string[];
+  customActivity?: string;
+
+  // Contacts
+  clubEmail: string;
+  address: string;
+  zipCode: string;
+
+  // Social handles/links
+  website: string;
+  instagram: string;
+  linkedin: string;
+  youtube: string;
+  facebook: string;
+  discord: string;
+  github: string;
+
+  // Representative info
+  repFirstName: string;
+  repMiddleName?: string;
+  repLastName: string;
+  repDesignation: string;
+  repCustomDesignation?: string;
+  repEmail: string;
+  repPhone: string;
 }
 
-export const clubsData: ClubData[] = [
+export const clubsData: any[] = [
   {
     id: "krittika-iitb",
     club: "Krittika",

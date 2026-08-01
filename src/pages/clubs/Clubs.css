@@ -449,11 +449,11 @@
    ────────────────────────────────────────────────────────────────────────── */
 .club-map-popup .maplibregl-popup-content,
 .club-map-popup .mapboxgl-popup-content {
-  background: rgba(2, 2, 5, 0.95) !important;
+  background: rgba(0, 0, 0, 0.95) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(240, 240, 250, 0.15) !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
   padding: 18px !important;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8) !important;
   color: #ffffff !important;
@@ -545,7 +545,6 @@
   background: var(--btn-color, #ffffff) !important;
   color: #000000 !important;
   border-color: var(--btn-color, #ffffff) !important;
-  box-shadow: 0 0 10px var(--btn-color, rgba(255, 255, 255, 0.3));
 }
 
 
@@ -1045,6 +1044,31 @@
 }
 
 .card-map-zoom-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.card-profile-btn {
+  background: transparent;
+  border: 1px solid rgba(240, 240, 250, 0.2);
+  color: #ffffff;
+  font-family: 'D-Din-Bold', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 9px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.card-profile-btn:hover {
   background: #ffffff;
   color: #000000;
   border-color: #ffffff;

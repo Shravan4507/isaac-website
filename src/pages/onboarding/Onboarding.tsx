@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import * as maptilersdk from '@maptiler/sdk'
 import '@maptiler/sdk/dist/maptiler-sdk.css'
+import { signInWithPopup } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
+import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import { auth, db, googleProvider, storage } from '../../firebase'
 import './Onboarding.css'
 
 interface OnboardingProps {
@@ -126,10 +130,10 @@ const getGitHubUrl = (handle: string) => {
 
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
-  const [role, setRole] = useState<'pilot' | 'club' | null>(() => {
+  const [role, setRole] = useState<'user' | 'club' | null>(() => {
     const params = new URLSearchParams(window.location.search)
     const r = params.get('role') || params.get('type')
-    if (r === 'pilot' || r === 'student') return 'pilot'
+    if (r === 'user' || r === 'pilot' || r === 'student') return 'user'
     if (r === 'club') return 'club'
     return null
   })
@@ -140,8 +144,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     const handleLocationChange = () => {
       const params = new URLSearchParams(window.location.search)
       const r = params.get('role') || params.get('type')
-      if (r === 'pilot' || r === 'student') {
-        setRole('pilot')
+      if (r === 'user' || r === 'pilot' || r === 'student') {
+        setRole('user')
       } else if (r === 'club') {
         setRole('club')
       } else {
@@ -152,7 +156,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     return () => window.removeEventListener('popstate', handleLocationChange)
   }, [])
 
-  const handleSelectRole = (selectedRole: 'pilot' | 'club') => {
+  const handleSelectRole = (selectedRole: 'user' | 'club') => {
     window.history.pushState(null, '', `/onboarding?role=${selectedRole}`)
     setRole(selectedRole)
   }
@@ -213,6 +217,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [clubName, setClubName] = useState('')
   const [clubCollege, setClubCollege] = useState('')
   const [clubEstYear, setClubEstYear] = useState('')
+  const [clubUsername, setClubUsername] = useState('')
 
   // Representative Info
   const [repFirstName, setRepFirstName] = useState('')
@@ -223,6 +228,10 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [repEmail, setRepEmail] = useState('')
   const [repCountry, setRepCountry] = useState(COUNTRIES[0])
   const [repPhone, setRepPhone] = useState('')
+  const [repUid, setRepUid] = useState('')
+  const [isRepEmailAuthenticated, setIsRepEmailAuthenticated] = useState(false)
+  const [isAuthenticatingRep, setIsAuthenticatingRep] = useState(false)
+  const [isSubmittingClub, setIsSubmittingClub] = useState(false)
 
   // Club Contact
   const [clubEmail, setClubEmail] = useState('')
@@ -665,6 +674,20 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     if (!clubName.trim()) newErrors.clubName = 'Club name is required.'
     if (!clubCollege.trim()) newErrors.clubCollege = 'College / Institution name is required.'
 
+    // Username validation
+    const usernameClean = clubUsername.trim()
+    if (!usernameClean) {
+      newErrors.clubUsername = 'Club username is required.'
+    } else if (usernameClean.length < 3 || usernameClean.length > 15) {
+      newErrors.clubUsername = 'Username must be between 3 and 15 characters.'
+    } else if (usernameClean.startsWith('.') || usernameClean.endsWith('.')) {
+      newErrors.clubUsername = 'Username cannot start or end with a period.'
+    } else if (/\.\./.test(usernameClean)) {
+      newErrors.clubUsername = 'Username cannot contain consecutive periods.'
+    } else if (TAKEN_USERNAMES.includes(usernameClean)) {
+      newErrors.clubUsername = 'This username is already claimed.'
+    }
+
     // Representative
     if (!repFirstName.trim()) newErrors.repFirstName = 'First name is required.'
     if (!repLastName.trim()) newErrors.repLastName = 'Last name is required.'
@@ -678,6 +701,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       newErrors.repEmail = 'Representative email is required.'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(repEmail.trim())) {
       newErrors.repEmail = 'Invalid email address format.'
+    } else if (!isRepEmailAuthenticated || !repUid) {
+      newErrors.repEmail = 'Please link Google Account by clicking this field.'
     }
 
     if (!repPhone.trim()) {
@@ -719,21 +744,123 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleClubSubmit = (e: React.FormEvent) => {
+  const handleRepEmailClick = async () => {
+    if (isRepEmailAuthenticated || isAuthenticatingRep) return
+    setIsAuthenticatingRep(true)
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result.user
+      if (user && user.email) {
+        setRepEmail(user.email)
+        setRepUid(user.uid)
+        setIsRepEmailAuthenticated(true)
+        setErrors((prev) => {
+          const next = { ...prev }
+          delete next.repEmail
+          return next
+        })
+      }
+    } catch (err: any) {
+      console.error('Google Auth Popup Error:', err)
+      let errMsg = 'Google Authentication failed. Please try again.'
+      if (err?.code === 'auth/popup-blocked') {
+        errMsg = 'Popup blocked by browser. Please enable popups and try again.'
+      } else if (err?.code === 'auth/popup-closed-by-user') {
+        errMsg = 'Sign-in window closed. Please try again.'
+      } else if (err?.code === 'auth/cancelled-popup-request') {
+        return
+      }
+      setErrors((prev) => ({ ...prev, repEmail: errMsg }))
+    } finally {
+      setIsAuthenticatingRep(false)
+    }
+  }
+
+  const handleClubSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateClubForm()) {
-      const finalUsername = `club_${clubName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_')}`
+      setIsSubmittingClub(true)
+      try {
+        let logoUrl = ''
+        let bannerUrl = ''
 
-      localStorage.setItem('isaac_role', 'club')
-      localStorage.setItem('isaac_username', finalUsername)
-      localStorage.setItem('isaac_fullname', clubName)
-      localStorage.setItem('isaac_institution', clubCollege)
-      localStorage.setItem('isaac_lat', clubLat.toString())
-      localStorage.setItem('isaac_lng', clubLng.toString())
-      localStorage.setItem('isaac_logged_in', 'true')
-      localStorage.setItem('isaac_onboarded', 'true')
+        // 1. Upload Logo to Firebase Storage if it's a data URL
+        if (clubLogo && clubLogo.startsWith('data:')) {
+          const logoRef = ref(storage, `clubs/${repUid}/logo.png`)
+          await uploadString(logoRef, clubLogo, 'data_url')
+          logoUrl = await getDownloadURL(logoRef)
+        } else if (clubLogo) {
+          logoUrl = clubLogo
+        }
 
-      onComplete(finalUsername)
+        // 2. Upload Banner to Firebase Storage if it's a data URL
+        if (clubBanner && clubBanner.startsWith('data:')) {
+          const bannerRef = ref(storage, `clubs/${repUid}/banner.png`)
+          await uploadString(bannerRef, clubBanner, 'data_url')
+          bannerUrl = await getDownloadURL(bannerRef)
+        } else if (clubBanner) {
+          bannerUrl = clubBanner
+        }
+
+        // 3. Save to Firestore with download URLs
+        await setDoc(doc(db, 'clubs', repUid), {
+          id: repUid,
+          username: clubUsername.trim().toLowerCase(),
+          clubName: clubName.trim(),
+          institution: clubCollege.trim(),
+          shortName: clubName.trim(),
+          city: clubCity.trim(),
+          state: clubState,
+          country: repCountry.name || 'India',
+          latitude: Number(clubLat) || 0,
+          longitude: Number(clubLng) || 0,
+          verified: false,
+          estYear: clubEstYear,
+          logo: logoUrl,
+          banner: bannerUrl,
+          description: clubDescription.trim(),
+          activities: clubActivities,
+          customActivity: clubCustomActivity.trim(),
+          clubEmail: clubEmail.trim(),
+          address: clubAddress.trim(),
+          zipCode: clubZip.trim(),
+          website: socialWebsite.trim(),
+          instagram: socialInstagram.trim(),
+          linkedin: socialLinkedIn.trim(),
+          youtube: socialYouTube.trim(),
+          facebook: socialFacebook.trim(),
+          discord: socialDiscord.trim(),
+          github: socialGitHub.trim(),
+          repFirstName: repFirstName.trim(),
+          repMiddleName: repMiddleName.trim(),
+          repLastName: repLastName.trim(),
+          repDesignation: repDesignation,
+          repCustomDesignation: repCustomDesignation.trim(),
+          repEmail: repEmail.trim(),
+          repPhone: repPhone,
+          createdAt: new Date().toISOString(),
+        })
+
+        const cleanPhone = repPhone.replace(/\D/g, '').slice(-10)
+        alert(
+          `REGISTRATION SUCCESSFUL!\n\n` +
+          `Your club registry has been saved to the ISAAC platform.\n\n` +
+          `Use the following credentials to authorize access:\n` +
+          `• Username: ${repEmail}\n` +
+          `• Password: ${cleanPhone}\n\n` +
+          `Note: Your username is the Representative's Email ID and the password is the 10-digit Phone Number.`
+        )
+
+        // Clear local storage and redirect to Login Gateway
+        localStorage.clear()
+        window.history.pushState(null, '', '/login')
+        window.dispatchEvent(new PopStateEvent('popstate'))
+      } catch (err: any) {
+        console.error('Registration error:', err)
+        alert('Failed to register club on Firestore database. Please check connection and try again.')
+      } finally {
+        setIsSubmittingClub(false)
+      }
     }
   }
 
@@ -804,7 +931,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <button
               type="button"
               className="gateway-option-card"
-              onClick={() => handleSelectRole('pilot')}
+              onClick={() => handleSelectRole('user')}
             >
               <div className="gateway-icon-container">
                 <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -813,7 +940,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   <circle cx="12" cy="10" r="1.5" />
                 </svg>
               </div>
-              <h3 className="gateway-card-title">PILOT PROFILE</h3>
+              <h3 className="gateway-card-title">USER PROFILE</h3>
               <p className="gateway-card-desc">For students, educators, astrophotographers, and individual astronomy enthusiasts.</p>
               <div className="gateway-card-arrow">INITIATE SIGNUP &rarr;</div>
             </button>
@@ -993,7 +1120,20 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                   onChange={(e) => setClubEstYear(e.target.value)}
                 />
               </div>
-              <div className="form-group flex-1" style={{ visibility: 'hidden' }}></div>
+              <div className="form-group flex-1">
+                <label className="form-label">CLUB USERNAME *</label>
+                <div className={`username-input-wrapper ${errors.clubUsername ? 'error-border' : ''}`}>
+                  <span className="username-prefix">@</span>
+                  <input
+                    type="text"
+                    className="form-input username-field"
+                    placeholder="e.g. polaris_astro"
+                    value={clubUsername}
+                    onChange={(e) => setClubUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._]/g, ''))}
+                  />
+                </div>
+                {errors.clubUsername && <span className="field-error-text">{errors.clubUsername}</span>}
+              </div>
             </div>
 
             {/* ──────── SECTION 2: CLUB REPRESENTATIVE ──────── */}
@@ -1076,13 +1216,32 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             <div className="form-row">
               <div className="form-group flex-1">
                 <label className="form-label">EMAIL ADDRESS *</label>
-                <input
-                  type="email"
-                  className={`form-input ${errors.repEmail ? 'error-border' : ''}`}
-                  placeholder="representative@email.com"
-                  value={repEmail}
-                  onChange={(e) => setRepEmail(e.target.value)}
-                />
+                {!isRepEmailAuthenticated ? (
+                  <button
+                    type="button"
+                    onClick={handleRepEmailClick}
+                    disabled={isAuthenticatingRep}
+                    className={`google-auth-btn ${errors.repEmail ? 'error-border' : ''}`}
+                  >
+                    <svg className="google-icon" viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+                    </svg>
+                    {isAuthenticatingRep ? 'Connecting Google Account...' : 'Continue with Google'}
+                  </button>
+                ) : (
+                  <div className="authenticated-email-display">
+                    <span className="email-value">{repEmail}</span>
+                    <span className="verified-badge">
+                      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      Verified
+                    </span>
+                  </div>
+                )}
                 {errors.repEmail && <span className="field-error-text">{errors.repEmail}</span>}
               </div>
 
@@ -1424,8 +1583,9 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 type="submit"
                 className="onboarding-submit-btn launcher-btn"
                 style={{ flex: 1 }}
+                disabled={isSubmittingClub}
               >
-                REGISTER CLUB
+                {isSubmittingClub ? 'REGISTERING CLUB...' : 'REGISTER CLUB'}
               </button>
             </div>
           </div>
@@ -1549,7 +1709,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         <div className="onboarding-left-panel">
           <div className="onboarding-header">
             <img src="/logo/ISAAC logo.png" alt="ISAAC Logo" className="onboarding-logo" />
-            <h2 className="onboarding-title">Initialize Pilot Profile</h2>
+            <h2 className="onboarding-title">Initialize User Profile</h2>
             <p className="onboarding-subtitle">Configure your coordinate keys to access the synergy network</p>
           </div>
 

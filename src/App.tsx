@@ -9,6 +9,9 @@ import About from './pages/about/About'
 import Login from './pages/login/Login'
 import Onboarding from './pages/onboarding/Onboarding'
 import UserProfile from './pages/profile/UserProfile'
+import ClubProfile from './pages/club-profile/ClubProfile'
+import UserDashboard from './pages/dashboard/user/UserDashboard'
+import ClubDashboard from './pages/dashboard/club/ClubDashboard'
 import Events from './pages/events/Events'
 import Resources from './pages/resources/Resources'
 import Gallery from './pages/gallery/Gallery'
@@ -24,19 +27,30 @@ function App() {
 
   // Keep track of the current URL path for custom SPA routing
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname)
+  const [currentSearch, setCurrentSearch] = useState(() => window.location.search)
   const perfTier = usePerformanceTier()
 
   // Check if currentPath is a dynamic user profile route
   const getProfileUsername = (path: string): string | null => {
     const segments = path.split('/').filter(Boolean)
-    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'events', 'resources', 'gallery', 'publications', 'constellations']
+    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'dashboard', 'events', 'resources', 'gallery', 'publications', 'constellations', 'club']
     if (segments.length === 1 && !systemPages.includes(segments[0])) {
       return segments[0]
     }
     return null
   }
 
+  // Check if currentPath is a dynamic public club profile route
+  const getClubProfileUsername = (path: string): string | null => {
+    const segments = path.split('/').filter(Boolean)
+    if (segments.length === 2 && segments[0] === 'club') {
+      return segments[1]
+    }
+    return null
+  }
+
   const profileUsername = getProfileUsername(currentPath)
+  const clubProfileUsername = getClubProfileUsername(currentPath)
 
   // Initialize stage from localStorage
   const [stage, setStage] = useState<'hero' | 'welcome' | 'home'>(() => {
@@ -45,12 +59,14 @@ function App() {
                       path === '/about' || 
                       path === '/login' || 
                       path === '/onboarding' || 
+                      path === '/dashboard' || 
                       path === '/events' || 
                       path === '/resources' || 
                       path === '/gallery' || 
                       path === '/publications' || 
                       path === '/constellations' || 
-                      getProfileUsername(path) !== null
+                      getProfileUsername(path) !== null ||
+                      getClubProfileUsername(path) !== null
     if (isSpecial) return 'home'
     
     const savedStage = localStorage.getItem('isaac_stage')
@@ -63,6 +79,7 @@ function App() {
   useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname)
+      setCurrentSearch(window.location.search)
     }
 
     const handleLinkClick = (e: MouseEvent) => {
@@ -73,12 +90,14 @@ function App() {
         if (url.origin === window.location.origin) {
           const path = url.pathname
           
+          const isClubProfile = getClubProfileUsername(path) !== null
           const isProfile = getProfileUsername(path) !== null
           const isSystem = path === '/clubs' || 
                            path === '/home' || 
                            path === '/about' || 
                            path === '/login' || 
                            path === '/onboarding' || 
+                           path === '/dashboard' || 
                            path === '/events' || 
                            path === '/resources' || 
                            path === '/gallery' || 
@@ -86,10 +105,11 @@ function App() {
                            path === '/constellations'
 
           // Intercept page route changes to prevent full refresh
-          if (isSystem || isProfile) {
+          if (isSystem || isProfile || isClubProfile) {
             e.preventDefault()
-            window.history.pushState(null, '', path + url.hash)
+            window.history.pushState(null, '', path + url.search + url.hash)
             setCurrentPath(path)
+            setCurrentSearch(url.search)
             setStage('home')
             
             // If there's a hash, scroll to it
@@ -113,6 +133,50 @@ function App() {
     }
   }, [])
 
+  // Route protections and redirection logic
+  useEffect(() => {
+    if (stage !== 'home') return
+
+    const isLoggedIn = localStorage.getItem('isaac_logged_in') === 'true'
+    const isOnboarded = localStorage.getItem('isaac_onboarded') === 'true'
+    const isProfilePath = getProfileUsername(currentPath) !== null
+
+    const isClubRegistration = currentPath === '/onboarding' && new URLSearchParams(window.location.search).get('role') === 'club'
+
+    if (currentPath === '/dashboard' || (currentPath === '/onboarding' && !isClubRegistration) || isProfilePath) {
+      if (!isLoggedIn) {
+        window.history.pushState(null, '', '/login')
+        setCurrentPath('/login')
+        setCurrentSearch('')
+      } else if (currentPath === '/onboarding' && isOnboarded) {
+        const role = localStorage.getItem('isaac_role') || ''
+        const isClub = role === 'Club Admin'
+        const targetQuery = isClub ? '?roll=club' : '?roll=user'
+        window.history.pushState(null, '', `/dashboard${targetQuery}`)
+        setCurrentPath('/dashboard')
+        setCurrentSearch(targetQuery)
+      } else if (currentPath === '/dashboard') {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.has('roll')) {
+          const role = localStorage.getItem('isaac_role') || ''
+          const isClub = role === 'Club Admin'
+          const targetQuery = isClub ? '?roll=club' : '?roll=user'
+          window.history.pushState(null, '', `/dashboard${targetQuery}`)
+          setCurrentSearch(targetQuery)
+        }
+      }
+    } else if (currentPath === '/login') {
+      if (isLoggedIn) {
+        const role = localStorage.getItem('isaac_role') || ''
+        const isClub = role === 'Club Admin'
+        const targetQuery = isClub ? '?roll=club' : '?roll=user'
+        window.history.pushState(null, '', `/dashboard${targetQuery}`)
+        setCurrentPath('/dashboard')
+        setCurrentSearch(targetQuery)
+      }
+    }
+  }, [currentPath, currentSearch, stage])
+
   // Keep URL synchronized to /home if in the home stage and not on special pages
   useEffect(() => {
     const path = window.location.pathname
@@ -120,12 +184,14 @@ function App() {
                       path === '/about' || 
                       path === '/login' || 
                       path === '/onboarding' || 
+                      path === '/dashboard' || 
                       path === '/events' || 
                       path === '/resources' || 
                       path === '/gallery' || 
                       path === '/publications' || 
                       path === '/constellations' || 
-                      getProfileUsername(path) !== null
+                      getProfileUsername(path) !== null ||
+                      getClubProfileUsername(path) !== null
                       
     if (stage === 'home' && !isSpecial) {
       window.history.pushState(null, '', '/home')
@@ -201,7 +267,7 @@ function App() {
   }
 
   return (
-    <div className={`app-container ${stage === 'home' ? 'home-active' : ''} ${currentPath === '/constellations' ? 'constellations-active' : ''} perf-${perfTier}`}>
+    <div className={`app-container ${stage === 'home' ? 'home-active' : ''} ${currentPath === '/constellations' ? 'constellations-active' : ''} ${currentPath === '/dashboard' ? 'dashboard-active' : ''} perf-${perfTier}`}>
       {/* 1. Hero Section Layer - Render only if stage is hero */}
       {stage === 'hero' && (
         <section className="hero-section">
@@ -250,8 +316,8 @@ function App() {
       {/* 3. Main Home/Clubs Page Section - Render when stage is home */}
       {stage === 'home' && (
         <>
-          <Navbar />
-          <div key={currentPath} className="route-transition-wrapper">
+          <Navbar currentPath={currentPath} />
+          <div key={currentPath + currentSearch} className="route-transition-wrapper">
             {currentPath === '/clubs' && (
               <div className="clubs-route-layout">
                 <Clubs />
@@ -306,6 +372,36 @@ function App() {
                 <Footer />
               </div>
             )}
+            {currentPath === '/dashboard' && (() => {
+              const params = new URLSearchParams(window.location.search)
+              const queryRole = params.get('role') || params.get('type')
+              const role = localStorage.getItem('isaac_role') || ''
+              const username = localStorage.getItem('isaac_username') || ''
+              
+              let isClub = false
+              if (queryRole) {
+                isClub = queryRole === 'club'
+              } else {
+                isClub = role === 'Club Admin' || username.startsWith('club_')
+              }
+
+              return (
+                <div className="dashboard-route-layout">
+                  {isClub ? (
+                    <ClubDashboard onSignOut={handleSignOut} />
+                  ) : (
+                    <UserDashboard onSignOut={handleSignOut} />
+                  )}
+                  <Footer />
+                </div>
+              )
+            })()}
+            {clubProfileUsername !== null && (
+              <div className="club-profile-route-layout">
+                <ClubProfile username={clubProfileUsername} />
+                <Footer />
+              </div>
+            )}
             {profileUsername !== null && (
               <div className="profile-route-layout">
                 <UserProfile username={profileUsername} onSignOut={handleSignOut} />
@@ -321,7 +417,9 @@ function App() {
              currentPath !== '/constellations' && 
              currentPath !== '/login' && 
              currentPath !== '/onboarding' && 
-             profileUsername === null && (
+             currentPath !== '/dashboard' && 
+             profileUsername === null && 
+             clubProfileUsername === null && (
                <Home />
              )}
           </div>

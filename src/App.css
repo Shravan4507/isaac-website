@@ -12,6 +12,11 @@
   overflow-y: auto;
 }
 
+.app-container.dashboard-active {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
 .hero-section {
   position: relative;
   width: 100%;
@@ -274,4 +279,49 @@
     height: 100vh !important;
     overflow: hidden !important;
   }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   PUBLIC PROFILES STICKY FOOTER LAYOUT
+   ────────────────────────────────────────────────────────────────────────── */
+.profile-route-layout,
+.club-profile-route-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   DASHBOARD FIXED FOOTER / VIEWPORT SCROLL LAYOUT
+   ────────────────────────────────────────────────────────────────────────── */
+.dashboard-route-layout {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background: #000000;
+}
+
+.club-dashboard-page-container {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-layout-container {
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.dashboard-route-layout > footer {
+  flex-shrink: 0;
+  z-index: 100;
 }
