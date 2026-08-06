@@ -56,7 +56,7 @@
 .calendar-view-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 12px;
   padding: 4px 8px;
@@ -68,7 +68,7 @@
 }
 
 .calendar-view-btn:hover {
-  color: #ffffff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.05);
 }
 
@@ -80,7 +80,7 @@
 .calendar-nav-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -91,7 +91,7 @@
 }
 
 .calendar-nav-btn:hover {
-  color: #ffffff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -134,7 +134,7 @@
 .calendar-weekday {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(252, 254, 237, 0.3);
   text-transform: uppercase;
   width: 32px;
   height: 32px;
@@ -151,7 +151,7 @@
   box-shadow: none;
   margin: 0;
   padding: 0;
-  color: #ffffff;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   border-radius: 4px;
@@ -204,7 +204,7 @@
 .calendar-month-item {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(252, 254, 237, 0.85);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   padding: 10px 0;
@@ -217,7 +217,7 @@
 .calendar-month-item:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .calendar-month-item.selected {
@@ -238,7 +238,7 @@
 .calendar-year-item {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(252, 254, 237, 0.85);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   padding: 10px 0;
@@ -251,7 +251,7 @@
 .calendar-year-item:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .calendar-year-item.selected {
@@ -273,7 +273,7 @@
 .calendar-footer-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 11px;
   cursor: pointer;
@@ -285,6 +285,6 @@
 }
 
 .calendar-footer-btn:hover {
-  color: #ffffff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.06);
 }

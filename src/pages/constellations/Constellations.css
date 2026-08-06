@@ -91,7 +91,7 @@
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 26px;
   line-height: 1.25;
-  color: #ffffff;
+  color: #fcfeed;
   margin: 0;
   text-align: center;
   letter-spacing: 0.5px;
@@ -120,7 +120,7 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(240, 240, 250, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -131,21 +131,21 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #ffffff;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13.5px;
   padding: 0;
 }
 
 .search-input::placeholder {
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   font-family: 'D-Din', sans-serif;
 }
 
 .search-clear-btn {
   background: transparent;
   border: none;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   cursor: pointer;
   font-size: 12px;
   padding: 2px 6px;
@@ -153,7 +153,7 @@
 }
 
 .search-clear-btn:hover {
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 /* Constellations Scrollable List */
@@ -209,7 +209,7 @@
 .constellation-english-name {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 16px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 0.5px;
   line-height: 1;
 }
@@ -217,7 +217,7 @@
 .constellation-latin-sub {
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   font-style: italic;
   line-height: 1;
   text-align: right;
@@ -226,7 +226,7 @@
 .no-results-msg {
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   text-align: center;
   padding: 30px 10px;
 }
@@ -298,7 +298,7 @@
   border: none;
   border-radius: 20px;
   padding: 8px 16px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 11px;
   text-transform: uppercase;
@@ -309,7 +309,7 @@
 }
 
 .style-btn:hover {
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .style-btn.active {
@@ -323,7 +323,7 @@
   right: 18px;
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(252, 254, 237, 0.2);
   letter-spacing: 1px;
   text-transform: uppercase;
   pointer-events: none;
@@ -377,7 +377,7 @@
 .star-card-name {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 15px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 0.5px;
 }
 
@@ -391,7 +391,7 @@
 .star-card-close {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   cursor: pointer;
   font-size: 12px;
   padding: 0;
@@ -399,7 +399,7 @@
 }
 
 .star-card-close:hover {
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .star-card-details {
@@ -417,13 +417,13 @@
 .star-detail-label {
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
 }
 
 .star-detail-val {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 11px;
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 /* Active Star Pulse Ring in SVG */
@@ -486,7 +486,7 @@
 .info-english-name {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 22px;
-  color: #ffffff;
+  color: #fcfeed;
   margin: 0;
   letter-spacing: 0.5px;
 }
@@ -494,7 +494,7 @@
 .info-latin-name {
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
-  color: rgba(240, 240, 250, 0.45);
+  color: rgba(252, 254, 237, 0.45);
   font-style: italic;
 }
 
@@ -508,7 +508,7 @@
 .info-tag {
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(252, 254, 237, 0.7);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
@@ -520,7 +520,7 @@
 .info-description {
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
-  color: rgba(240, 240, 250, 0.55);
+  color: rgba(252, 254, 237, 0.55);
   line-height: 1.6;
   margin: 0;
 }
@@ -536,7 +536,7 @@
   font-size: 11px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
 }
 
 .info-stars-chips {
@@ -558,13 +558,13 @@
 .chip-star-name {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 12px;
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .chip-star-mag {
   font-family: 'D-Din', sans-serif;
   font-size: 10px;
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
 }
 
 .info-mythology-section {
@@ -576,7 +576,7 @@
 .info-mythology-text {
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   line-height: 1.6;
   margin: 0;
 }

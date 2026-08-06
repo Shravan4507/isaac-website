@@ -53,7 +53,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(252, 254, 237, 0.7);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -62,7 +62,7 @@
 }
 
 .navbar-link:hover {
-  color: rgba(255, 255, 255, 1);
+  color: rgba(252, 254, 237, 1);
 }
 
 /* Hamburger Toggle Button (Hidden on Desktop) */
@@ -183,7 +183,7 @@
   .dropdown-item {
     font-family: 'D-Din', sans-serif;
     font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(252, 254, 237, 0.6);
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -191,7 +191,7 @@
   }
 
   .dropdown-item:hover {
-    color: #ffffff;
+    color: #fcfeed;
   }
 
   .mobile-only-caret {
@@ -267,7 +267,7 @@
   .dropdown-item {
     font-family: 'D-Din', sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(252, 254, 237, 0.65);
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -276,7 +276,7 @@
   }
 
   .dropdown-item:hover {
-    color: #ffffff;
+    color: #fcfeed;
   }
 
   .mobile-only-caret {

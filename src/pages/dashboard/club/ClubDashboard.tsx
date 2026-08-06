@@ -3,6 +3,7 @@ import BorderGlow from '../../../components/border-glow/BorderGlow'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import SettingsModal from './SettingsModal'
+import Toast, { type ToastType } from '../../../components/toast/Toast'
 import './ClubDashboard.css'
 
 interface ClubDashboardProps {
@@ -18,6 +19,7 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
   const [estYear, setEstYear] = useState('')
   const [verified, setVerified] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
   const clubId = localStorage.getItem('isaac_club_id') || ''
 
   // Social presence states
@@ -28,7 +30,7 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
   const [socialDiscord, setSocialDiscord] = useState('')
   const [socialGitHub, setSocialGitHub] = useState('')
 
-  const syncDashboardData = () => {
+  const syncDashboardData = (isSave: boolean = false) => {
     // 1. Initial load from local cache
     const cachedName = localStorage.getItem('isaac_fullname') || 'Stargazers Astronomy Club'
     const cachedUsername = localStorage.getItem('isaac_username') || ''
@@ -92,6 +94,10 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
             localStorage.setItem('isaac_social_facebook', data.facebook || '')
             localStorage.setItem('isaac_social_discord', data.discord || '')
             localStorage.setItem('isaac_social_github', data.github || '')
+
+            if (isSave) {
+              setToast({ message: "Club profile settings updated successfully!", type: "success" })
+            }
           }
         } catch (err) {
           console.error("Failed to sync fresh club data from Firestore:", err)
@@ -283,8 +289,16 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
         isOpen={showSettingsModal}
         onClose={handleCloseSettingsModal}
         clubId={clubId}
-        onSaveSuccess={syncDashboardData}
+        onSaveSuccess={() => syncDashboardData(true)}
       />
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   )
 }

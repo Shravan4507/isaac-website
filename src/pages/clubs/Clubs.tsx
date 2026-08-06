@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import * as maptilersdk from '@maptiler/sdk'
 import '@maptiler/sdk/dist/maptiler-sdk.css'
+import Toast, { type ToastType } from '../../components/toast/Toast'
 import './Clubs.css'
 import { type ClubData } from '../../dataset/clubsData'
 import { collection, getDocs, query, where } from 'firebase/firestore'
@@ -41,6 +42,7 @@ export default function Clubs() {
     return 'cosmos'
   })
   const [mapError, setMapError] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
   const [resetKey, setResetKey] = useState<number>(0)
 
   // Filtering & Modal states
@@ -122,9 +124,10 @@ export default function Clubs() {
       }
 
       mapRef.current.setStyle(styleUri)
+      setToast({ message: `Map projection updated to ${styleKey.toUpperCase()}`, type: 'success' })
     } catch (err: any) {
       console.error("Failed to swap style:", err)
-      setMapError(`Style load failed: ${err.message || err}`)
+      setToast({ message: `Failed to load map style: ${err.message || 'Style download error'}`, type: 'error' })
     }
   }
 
@@ -872,6 +875,13 @@ export default function Clubs() {
           </div>
         </div>,
         document.body
+      )}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
     </div>
   )

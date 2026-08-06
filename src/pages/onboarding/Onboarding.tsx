@@ -5,6 +5,7 @@ import { signInWithPopup } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { auth, db, googleProvider, storage } from '../../firebase'
+import Toast, { type ToastType } from '../../components/toast/Toast'
 import './Onboarding.css'
 
 interface OnboardingProps {
@@ -232,6 +233,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [isRepEmailAuthenticated, setIsRepEmailAuthenticated] = useState(false)
   const [isAuthenticatingRep, setIsAuthenticatingRep] = useState(false)
   const [isSubmittingClub, setIsSubmittingClub] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
 
   // Club Contact
   const [clubEmail, setClubEmail] = useState('')
@@ -392,6 +394,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           .catch(err => {
             console.error("Reverse geocoding failed:", err)
             setGeocodingError("Failed to fetch address. Please fill fields manually.")
+            setToast({ message: "Failed to fetch address. Please fill fields manually.", type: "info" })
           })
           .finally(() => {
             setIsResolvingAddress(false)
@@ -405,6 +408,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
     } catch (err) {
       console.error("Failed to initialize onboarding map:", err)
+      setToast({ message: "Could not initialize Map. Please enter your coordinates manually.", type: "error" })
     }
 
     return () => {
@@ -841,15 +845,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           createdAt: new Date().toISOString(),
         })
 
-        const cleanPhone = repPhone.replace(/\D/g, '').slice(-10)
-        alert(
-          `REGISTRATION SUCCESSFUL!\n\n` +
-          `Your club registry has been saved to the ISAAC platform.\n\n` +
-          `Use the following credentials to authorize access:\n` +
-          `• Username: ${repEmail}\n` +
-          `• Password: ${cleanPhone}\n\n` +
-          `Note: Your username is the Representative's Email ID and the password is the 10-digit Phone Number.`
-        )
+        sessionStorage.setItem('isaac_reg_success_msg', `REGISTRATION SUCCESSFUL! Sign in with your email (${repEmail}) and your 10-digit phone number as password.`)
 
         // Clear local storage and redirect to Login Gateway
         localStorage.clear()
@@ -857,7 +853,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         window.dispatchEvent(new PopStateEvent('popstate'))
       } catch (err: any) {
         console.error('Registration error:', err)
-        alert('Failed to register club on Firestore database. Please check connection and try again.')
+        setToast({ message: 'Failed to register club on Firestore database. Please check connection and try again.', type: 'error' })
       } finally {
         setIsSubmittingClub(false)
       }
@@ -2184,6 +2180,14 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         </div>
 
       </div>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   )
 }

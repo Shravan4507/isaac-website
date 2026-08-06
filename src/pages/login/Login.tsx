@@ -1,14 +1,33 @@
-import { useState } from 'react'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { useState, useEffect } from 'react'
+import { collection, query, where, getDocs, setDoc, getDoc, doc } from 'firebase/firestore'
 import { db } from '../../firebase'
+import { hashPassword, decryptData, verifyTOTPToken, verifyPasskeySignature } from '../../utils/security'
+import Toast from '../../components/toast/Toast'
 import './Login.css'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  // 2FA Verification states
+  const [show2FAVerify, setShow2FAVerify] = useState(false)
+  const [twoFactorCode, setTwoFactorCode] = useState('')
+  const [pendingClub, setPendingClub] = useState<any>(null)
+  const [pendingPassword, setPendingPassword] = useState('')
+  const [isErrorShake, setIsErrorShake] = useState(false)
+
+  // Load registration success toast message if redirected from onboarding
+  useEffect(() => {
+    const regMsg = sessionStorage.getItem('isaac_reg_success_msg')
+    if (regMsg) {
+      setToast({ message: regMsg, type: 'success' })
+      sessionStorage.removeItem('isaac_reg_success_msg')
+    }
+  }, [])
 
   const handleGoogleLogin = () => {
     // Simulate login for public user
@@ -32,16 +51,46 @@ export default function Login() {
     window.dispatchEvent(new PopStateEvent('popstate'))
   }
 
+  const performFullLogin = (clubDoc: any) => {
+    localStorage.setItem('isaac_logged_in', 'true')
+    localStorage.setItem('isaac_role', 'Club Admin')
+    localStorage.setItem('isaac_club_id', clubDoc.id)
+    localStorage.setItem('isaac_verified', String(clubDoc.verified === true))
+    localStorage.setItem('isaac_username', clubDoc.username || `club_${clubDoc.clubName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_')}`)
+    localStorage.setItem('isaac_fullname', clubDoc.clubName)
+    localStorage.setItem('isaac_institution', clubDoc.institution || clubDoc.clubCollege || '')
+    localStorage.setItem('isaac_lat', clubDoc.latitude !== undefined ? String(clubDoc.latitude) : (clubDoc.clubLat !== undefined ? String(clubDoc.clubLat) : ''))
+    localStorage.setItem('isaac_lng', clubDoc.longitude !== undefined ? String(clubDoc.longitude) : (clubDoc.clubLng !== undefined ? String(clubDoc.clubLng) : ''))
+    localStorage.setItem('isaac_state', clubDoc.state || clubDoc.clubState || '')
+    localStorage.setItem('isaac_bio', clubDoc.description || clubDoc.clubDescription || '')
+    localStorage.setItem('isaac_logo', clubDoc.logo || clubDoc.clubLogo || '')
+    localStorage.setItem('isaac_banner', clubDoc.banner || clubDoc.clubBanner || '')
+    localStorage.setItem('isaac_onboarded', 'true')
+
+    // Save socials
+    localStorage.setItem('isaac_social_instagram', clubDoc.instagram || clubDoc.socialInstagram || '')
+    localStorage.setItem('isaac_social_linkedin', clubDoc.linkedin || clubDoc.socialLinkedIn || '')
+    localStorage.setItem('isaac_social_youtube', clubDoc.youtube || clubDoc.socialYouTube || '')
+    localStorage.setItem('isaac_social_facebook', clubDoc.facebook || clubDoc.socialFacebook || '')
+    localStorage.setItem('isaac_social_discord', clubDoc.discord || clubDoc.socialDiscord || '')
+    localStorage.setItem('isaac_social_github', clubDoc.github || clubDoc.socialGitHub || '')
+    localStorage.setItem('isaac_est_year', clubDoc.estYear || clubDoc.clubEstYear || '')
+
+    window.history.pushState(null, '', '/dashboard')
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
+
   const handleClubSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setToast(null)
     setShowForgotPassword(false)
 
     const cleanUser = username.trim()
     const cleanPass = password.trim()
 
     if (!cleanUser || !cleanPass) {
-      setError('Please fill in all security parameters.')
+      setToast({ message: 'Please fill in all security parameters.', type: 'error' })
       return
     }
 
@@ -53,16 +102,17 @@ export default function Login() {
       const querySnapshot = await getDocs(q)
 
       if (querySnapshot.empty) {
-        setError('Access authorization failed: No club found with this representative email.')
+        setToast({ message: 'Access authorization failed: No club found with this representative email.', type: 'error' })
         setIsLoading(false)
         return
       }
 
       let authenticated = false
       let clubDoc: any = null
+      const inputHash = await hashPassword(cleanPass)
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data()
+      for (const d of querySnapshot.docs) {
+        const data = d.data()
         const dbPassword = data.password || ''
         const rawPhone = data.repPhone || ''
         const cleanDbPhone = rawPhone.replace(/\D/g, '')
@@ -72,59 +122,202 @@ export default function Login() {
         const last10InputPhone = cleanInputPhone.slice(-10)
 
         if (dbPassword) {
-          if (dbPassword === cleanPass) {
-            authenticated = true
-            clubDoc = data
+          if (dbPassword.length === 64) {
+            // Hashed password check
+            if (dbPassword === inputHash) {
+              authenticated = true
+              clubDoc = { ...data, id: d.id }
+              break
+            }
+          } else {
+            // Legacy plaintext password migration
+            if (dbPassword === cleanPass) {
+              authenticated = true
+              clubDoc = { ...data, id: d.id }
+              try {
+                // Update Firestore to hashed password format
+                await setDoc(d.ref, { password: inputHash }, { merge: true })
+              } catch (migrateErr) {
+                console.error('Failed to migrate password to hashed format:', migrateErr)
+              }
+              break
+            }
           }
         } else {
+          // Legacy phone number fallback migration
           if (last10DbPhone === last10InputPhone && last10InputPhone.length === 10) {
             authenticated = true
-            clubDoc = data
+            clubDoc = { ...data, id: d.id }
+            try {
+              // Update Firestore to hashed password format
+              await setDoc(d.ref, { password: inputHash }, { merge: true })
+            } catch (migrateErr) {
+              console.error('Failed to migrate phone credential to hashed format:', migrateErr)
+            }
+            break
           }
         }
-      })
+      }
 
       if (authenticated && clubDoc) {
-        localStorage.setItem('isaac_logged_in', 'true')
-        localStorage.setItem('isaac_role', 'Club Admin')
-        localStorage.setItem('isaac_club_id', clubDoc.id)
-        localStorage.setItem('isaac_verified', String(clubDoc.verified === true))
-        localStorage.setItem('isaac_username', clubDoc.username || `club_${clubDoc.clubName.trim().toLowerCase().replace(/[^a-z0-9]/g, '_')}`)
-        localStorage.setItem('isaac_fullname', clubDoc.clubName)
-        localStorage.setItem('isaac_institution', clubDoc.institution || clubDoc.clubCollege || '')
-        localStorage.setItem('isaac_lat', clubDoc.latitude !== undefined ? String(clubDoc.latitude) : (clubDoc.clubLat !== undefined ? String(clubDoc.clubLat) : ''))
-        localStorage.setItem('isaac_lng', clubDoc.longitude !== undefined ? String(clubDoc.longitude) : (clubDoc.clubLng !== undefined ? String(clubDoc.clubLng) : ''))
-        localStorage.setItem('isaac_state', clubDoc.state || clubDoc.clubState || '')
-        localStorage.setItem('isaac_bio', clubDoc.description || clubDoc.clubDescription || '')
-        localStorage.setItem('isaac_logo', clubDoc.logo || clubDoc.clubLogo || '')
-        localStorage.setItem('isaac_banner', clubDoc.banner || clubDoc.clubBanner || '')
-        localStorage.setItem('isaac_onboarded', 'true')
-
-        // Save socials
-        localStorage.setItem('isaac_social_instagram', clubDoc.instagram || clubDoc.socialInstagram || '')
-        localStorage.setItem('isaac_social_linkedin', clubDoc.linkedin || clubDoc.socialLinkedIn || '')
-        localStorage.setItem('isaac_social_youtube', clubDoc.youtube || clubDoc.socialYouTube || '')
-        localStorage.setItem('isaac_social_facebook', clubDoc.facebook || clubDoc.socialFacebook || '')
-        localStorage.setItem('isaac_social_discord', clubDoc.discord || clubDoc.socialDiscord || '')
-        localStorage.setItem('isaac_social_github', clubDoc.github || clubDoc.socialGitHub || '')
-        localStorage.setItem('isaac_est_year', clubDoc.estYear || clubDoc.clubEstYear || '')
-
-        window.history.pushState(null, '', '/dashboard')
-        window.dispatchEvent(new PopStateEvent('popstate'))
+        if (clubDoc.twoFactorEnabled) {
+          setPendingClub(clubDoc)
+          setPendingPassword(cleanPass)
+          setShow2FAVerify(true)
+          setIsLoading(false)
+          return
+        }
+        performFullLogin(clubDoc)
       } else {
-        setError('Access authorization failed: Invalid key (Password mismatch).')
+        setToast({ message: 'Access authorization failed: Invalid key (Password mismatch).', type: 'error' })
         setShowForgotPassword(true)
+        setIsErrorShake(true)
+        setTimeout(() => setIsErrorShake(false), 500)
       }
     } catch (err: any) {
       console.error('Firestore query login error:', err)
-      setError('Network authentication link error. Please try again.')
+      setToast({ message: 'Network authentication link error. Please try again.', type: 'error' })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handle2FAVerify = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setToast(null)
+
+    const code = twoFactorCode.trim()
+    if (!code || code.length !== 6) {
+      setToast({ message: 'Please enter a valid 6-digit verification code.', type: 'error' })
+      return
+    }
+
+    if (!pendingClub || !pendingPassword) {
+      setToast({ message: 'Authentication context lost. Please try logging in again.', type: 'error' })
+      setShow2FAVerify(false)
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const passHash = await hashPassword(pendingPassword)
+      let decryptedSecret = ''
+      try {
+        decryptedSecret = await decryptData(pendingClub.twoFactorSecret, passHash)
+      } catch (decryptErr) {
+        console.error("2FA secret decryption failed:", decryptErr)
+        setToast({ message: 'Authentication encryption failure. Access denied.', type: 'error' })
+        setIsLoading(false)
+        return
+      }
+
+      const isValid = verifyTOTPToken(code, decryptedSecret)
+      if (isValid) {
+        performFullLogin(pendingClub)
+      } else {
+        setToast({ message: 'Invalid authentication code. Please check your authenticator app.', type: 'error' })
+        setIsErrorShake(true)
+        setTimeout(() => setIsErrorShake(false), 500)
+      }
+    } catch (err: any) {
+      console.error('2FA verification error:', err)
+      setToast({ message: 'An error occurred during verification. Please try again.', type: 'error' })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handlePasskeyLogin = async () => {
+    setError('')
+    setToast(null)
+    setIsLoading(true)
+
+    try {
+      // 1. Generate request challenge
+      const challenge = window.crypto.getRandomValues(new Uint8Array(32))
+      const rpId = window.location.hostname
+
+      const requestOptions: PublicKeyCredentialRequestOptions = {
+        challenge,
+        rpId,
+        userVerification: "preferred"
+      }
+
+      // 2. Call authenticator to get biometric verification
+      const assertion = await navigator.credentials.get({
+        publicKey: requestOptions
+      }) as PublicKeyCredential
+
+      if (!assertion) {
+        throw new Error("No biometric assertion was received.")
+      }
+
+      // 3. Extract userHandle
+      const response = assertion.response as AuthenticatorAssertionResponse
+      const userHandleBuffer = response.userHandle
+      if (!userHandleBuffer) {
+        throw new Error("Discoverable credential not found. Please log in with password first to register a passkey.")
+      }
+
+      // Decode clubId from userHandle
+      const clubId = new TextDecoder().decode(new Uint8Array(userHandleBuffer))
+      if (!clubId) {
+        throw new Error("Could not read club identity from passkey.")
+      }
+
+      // 4. Fetch corresponding club document from Firestore
+      const docRef = doc(db, 'clubs', clubId)
+      const docSnap = await getDoc(docRef)
+      if (!docSnap.exists()) {
+        throw new Error("Club account not found in database.")
+      }
+
+      const clubDoc = docSnap.data()
+      const registeredPasskeys = clubDoc.passkeys || []
+
+      // 5. Find the registered passkey matching assertion ID
+      const registeredKey = registeredPasskeys.find((pk: any) => pk.credentialId === assertion.id)
+      if (!registeredKey) {
+        throw new Error("Passkey is not registered on this account.")
+      }
+
+      // 6. Verify signature
+      const isVerified = await verifyPasskeySignature(
+        registeredKey.publicKey,
+        response.authenticatorData,
+        response.clientDataJSON,
+        response.signature
+      )
+
+      if (!isVerified) {
+        throw new Error("Biometric authentication verification failed.")
+      }
+
+      // 7. Login successful!
+      // Add document ID as clubId into clubDoc
+      const finalDoc = { ...clubDoc, clubId }
+      performFullLogin(finalDoc)
+    } catch (err: any) {
+      console.error("Passkey login error:", err)
+      let displayError = err.message || "Passkey login failed. Please try again or use standard credentials."
+      if (err.name === 'NotAllowedError' || displayError.includes('not allowed') || displayError.includes('timed out')) {
+        displayError = "Wait, did you just reject passkey check? Bruhh...Try again or use password!"
+      }
+      setToast({ message: displayError, type: 'error' })
+      setIsErrorShake(true)
+      setTimeout(() => setIsErrorShake(false), 500)
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleForgotPassword = () => {
-    alert("Key recovery initiated. We'll send authentication instructions to the club's registered telemetry channel.")
+    setToast({
+      message: "Key recovery initiated. We'll send authentication instructions to the club's registered telemetry channel.",
+      type: 'info'
+    })
   }
 
   return (
@@ -156,72 +349,157 @@ export default function Login() {
               </svg>
               Continue with Apple
             </button>
+
+            <button
+              type="button"
+              className="club-passkey-btn"
+              onClick={handlePasskeyLogin}
+              disabled={isLoading}
+              style={{ marginTop: '4px' }}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" className="passkey-btn-icon">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+              </svg>
+              Sign in with Passkey
+            </button>
           </div>
         </div>
 
         {/* Card 2: Club Deck / Management Access */}
         <div className="login-glass-card club-login">
-          <div className="login-header">
-            <h2 className="login-title">CLUB DECK</h2>
-            <p className="login-subtitle">Sign in with club management credentials</p>
-          </div>
-
-          <form className="club-login-form" onSubmit={handleClubSubmit}>
-            <div className="input-group">
-              <label className="input-label">Username</label>
-              <input
-                type="text"
-                className="login-input"
-                placeholder="Club Identifier"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            <div className="input-group">
-              <label className="input-label">Password</label>
-              <input
-                type="password"
-                className="login-input"
-                placeholder="Access Key"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            {error && (
-              <div className="login-error-message">
-                <span>{error}</span>
-                {showForgotPassword && (
-                  <button 
-                    type="button" 
-                    className="forgot-password-btn" 
-                    onClick={handleForgotPassword}
-                  >
-                    Forgot Password?
-                  </button>
-                )}
+          {show2FAVerify ? (
+            <>
+              <div className="login-header">
+                <h2 className="login-title">2-FACTOR SECURITY</h2>
+                <p className="login-subtitle">Enter the 6-digit authenticator code</p>
               </div>
-            )}
 
-            <button type="submit" className="club-submit-btn" disabled={isLoading}>
-              {isLoading ? 'Authorizing Access...' : 'Authorize Access'}
-            </button>
-            <button
-              type="button"
-              className="club-register-btn"
-              onClick={() => {
-                window.history.pushState(null, '', '/onboarding?role=club')
-                window.dispatchEvent(new PopStateEvent('popstate'))
-              }}
-              disabled={isLoading}
-            >
-              Register as a club
-            </button>
-          </form>
+              <form className="club-login-form" onSubmit={handle2FAVerify}>
+                <div className="input-group">
+                  <label className="input-label">Verification Code</label>
+                  <input
+                    type="text"
+                    maxLength={6}
+                    pattern="\d*"
+                    inputMode="numeric"
+                    className={`login-input ${isErrorShake ? 'shake-animation' : ''} ${error ? 'error-border' : ''}`}
+                    placeholder="000000"
+                    style={{ textAlign: 'center', letterSpacing: '8px', fontSize: '20px', fontFamily: 'D-Din-Bold' }}
+                    value={twoFactorCode}
+                    onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, ''))}
+                  />
+                </div>
+
+                {error && (
+                  <div className="login-error-message">
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                <button type="submit" className="club-submit-btn" disabled={isLoading}>
+                  {isLoading ? 'Verifying Code...' : 'Verify & Log In'}
+                </button>
+                <button
+                  type="button"
+                  className="club-register-btn"
+                  onClick={() => {
+                    setShow2FAVerify(false)
+                    setTwoFactorCode('')
+                    setPendingClub(null)
+                    setPendingPassword('')
+                    setError('')
+                  }}
+                  disabled={isLoading}
+                >
+                  Cancel Verification
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <div className="login-header">
+                <h2 className="login-title">CLUB DECK</h2>
+                <p className="login-subtitle">Sign in with club management credentials</p>
+              </div>
+
+              <form className="club-login-form" onSubmit={handleClubSubmit}>
+                <div className="input-group">
+                  <label className="input-label">Username</label>
+                  <input
+                    type="text"
+                    className={`login-input ${isErrorShake ? 'shake-animation' : ''} ${(error || (toast && toast.type === 'error')) ? 'error-border' : ''}`}
+                    placeholder="Club Identifier"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">Password</label>
+                  <input
+                    type="password"
+                    className={`login-input ${isErrorShake ? 'shake-animation' : ''} ${(error || (toast && toast.type === 'error')) ? 'error-border' : ''}`}
+                    placeholder="Access Key"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+
+                {showForgotPassword && (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom: '10px' }}>
+                    <button 
+                      type="button" 
+                      className="forgot-password-btn" 
+                      onClick={handleForgotPassword}
+                      style={{ padding: 0, background: 'none', border: 'none' }}
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  className="club-passkey-btn"
+                  onClick={handlePasskeyLogin}
+                  disabled={isLoading}
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" className="passkey-btn-icon">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                  </svg>
+                  Sign in with Passkey
+                </button>
+
+                <div className="login-row-buttons">
+                  <button type="submit" className="club-submit-btn" disabled={isLoading}>
+                    {isLoading ? 'Signing In...' : 'Sign In'}
+                  </button>
+                  <button
+                    type="button"
+                    className="club-register-btn"
+                    onClick={() => {
+                      window.history.pushState(null, '', '/onboarding?role=club')
+                      window.dispatchEvent(new PopStateEvent('popstate'))
+                    }}
+                    disabled={isLoading}
+                  >
+                    Register
+                  </button>
+                </div>
+              </form>
+            </>
+          )}
         </div>
 
       </div>
+      
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   )
 }

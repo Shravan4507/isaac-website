@@ -4,7 +4,7 @@
   position: relative;
   z-index: 5;
   box-sizing: border-box;
-  color: #f0f0fa;
+  color: #fcfeed;
 }
 
 .home-main-content {
@@ -58,7 +58,7 @@
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 48px;
   font-weight: 600;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 1px;
   line-height: 1.15;
   margin: 0 0 12px 0;
@@ -69,7 +69,7 @@
   font-family: 'D-Din-Regular', sans-serif;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(240, 240, 250, 0.85);
+  color: rgba(252, 254, 237, 0.85);
   letter-spacing: 0.5px;
   line-height: 1.4;
   margin: 0 0 20px 0;
@@ -79,7 +79,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 14px;
   font-weight: 400;
-  color: rgba(240, 240, 250, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   line-height: 1.6;
   margin: 0;
   letter-spacing: 0.5px;
@@ -98,7 +98,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(240, 240, 250, 0.35);
-  color: #f0f0fa;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -211,7 +211,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 12px;
@@ -221,7 +221,7 @@
 .mission-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 40px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin: 0;
@@ -255,7 +255,7 @@
 .pillar-num {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 14px;
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   letter-spacing: 1px;
   margin-bottom: 24px;
   display: block;
@@ -264,7 +264,7 @@
 .pillar-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 22px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 1px;
   margin: 0 0 16px 0;
   text-transform: uppercase;
@@ -274,7 +274,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 14px;
   line-height: 1.7;
-  color: rgba(240, 240, 250, 0.7);
+  color: rgba(252, 254, 237, 0.7);
   margin: 0;
 }
 
@@ -312,7 +312,7 @@
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 54px;
   font-weight: 600;
-  color: #ffffff;
+  color: #fcfeed;
   margin: 0 0 8px 0;
   letter-spacing: 1px;
 }
@@ -321,7 +321,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  color: rgba(240, 240, 250, 0.55);
+  color: rgba(252, 254, 237, 0.55);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
@@ -370,7 +370,7 @@
   font-style: italic;
   font-size: 32px;
   font-weight: 500;
-  color: #ffffff;
+  color: #fcfeed;
   line-height: 1.55;
   margin: 0 0 20px 0;
   letter-spacing: 0.5px;
@@ -380,7 +380,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(240, 240, 250, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   text-transform: uppercase;
   letter-spacing: 2px;
   display: block;
@@ -443,7 +443,7 @@
 .why-join-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 44px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin: 0 0 24px 0;
@@ -465,7 +465,7 @@
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #ffffff;
+  color: #fcfeed;
   margin: 0 0 16px 0;
   line-height: 1.4;
 }
@@ -474,7 +474,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: rgba(240, 240, 250, 0.65);
+  color: rgba(252, 254, 237, 0.65);
   letter-spacing: 0.5px;
   margin: 0;
 }
@@ -508,7 +508,7 @@
 }
 
 .why-join-row:hover .why-join-num {
-  color: #ffffff;
+  color: #fcfeed;
   -webkit-text-stroke: 1px #ffffff;
 }
 
@@ -519,7 +519,7 @@
 .why-join-row-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 22px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(252, 254, 237, 0.9);
   letter-spacing: 1px;
   margin: 0 0 12px 0;
   text-transform: uppercase;
@@ -527,14 +527,14 @@
 }
 
 .why-join-row:hover .why-join-row-title {
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .why-join-row-desc {
   font-family: 'D-Din', sans-serif;
   font-size: 14px;
   line-height: 1.65;
-  color: rgba(240, 240, 250, 0.65);
+  color: rgba(252, 254, 237, 0.65);
   margin: 0;
 }
 
@@ -619,7 +619,7 @@
 .events-section-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 40px;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin: 0 0 16px 0;
@@ -628,7 +628,7 @@
 .events-section-subtitle {
   font-family: 'D-Din', sans-serif;
   font-size: 16px;
-  color: rgba(240, 240, 250, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   letter-spacing: 1px;
   margin: 0;
 }

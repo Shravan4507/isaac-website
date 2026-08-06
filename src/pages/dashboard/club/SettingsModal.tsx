@@ -7,6 +7,18 @@ import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../../../firebase'
 import Dropdown from '../../../components/dropdown/Dropdown'
 import ImageCropper from '../../../components/image-cropper/ImageCropper'
+import QRCode from 'qrcode'
+import {
+  hashPassword,
+  encryptData,
+  decryptData,
+  generateTOTPSecret,
+  generateTOTPURI,
+  verifyTOTPToken,
+  arrayBufferToBase64,
+  base64ToArrayBuffer
+} from '../../../utils/security'
+import Toast, { type ToastType } from '../../../components/toast/Toast'
 import './SettingsModal.css'
 
 interface SettingsModalProps {
@@ -114,7 +126,6 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isResetting, setIsResetting] = useState(false)
-  const [resetSuccess, setResetSuccess] = useState(false)
   const [warningField, setWarningField] = useState<'current' | 'new' | 'confirm' | null>(null)
   const warningTimeoutRef = useRef<any>(null)
 
@@ -141,6 +152,34 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  // Two-Factor Authentication (2FA) states
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
+  const [twoFactorSetupStep, setTwoFactorSetupStep] = useState<'idle' | 'verify_password' | 'scan_verify'>('idle')
+  const [twoFactorPassword, setTwoFactorPassword] = useState('')
+  const [showTwoFactorPassword, setShowTwoFactorPassword] = useState(false)
+  const [twoFactorPasswordValid, setTwoFactorPasswordValid] = useState<boolean | null>(null)
+  const [twoFactorSecret, setTwoFactorSecret] = useState('')
+  const [twoFactorQR, setTwoFactorQR] = useState('')
+  const [twoFactorToken, setTwoFactorToken] = useState('')
+  const [twoFactorError, setTwoFactorError] = useState('')
+  const [twoFactorSuccess, setTwoFactorSuccess] = useState('')
+  const [isEnabling2FA, setIsEnabling2FA] = useState(false)
+  const [isDisabling2FA, setIsDisabling2FA] = useState(false)
+  const [showCopySuccess, setShowCopySuccess] = useState(false)
+  const [showDisableVerify, setShowDisableVerify] = useState(false)
+  const [is2FAShake, setIs2FAShake] = useState(false)
+  const [passkeys, setPasskeys] = useState<any[]>([])
+  const [isRegisteringPasskey, setIsRegisteringPasskey] = useState(false)
+  const [showPasskeyNameModal, setShowPasskeyNameModal] = useState(false)
+  const [tempPasskeyName, setTempPasskeyName] = useState('')
+  const [pendingPasskeyCred, setPendingPasskeyCred] = useState<{ credentialId: string, publicKey: string } | null>(null)
+  const [pendingDeleteCredId, setPendingDeleteCredId] = useState<string | null>(null)
+  const [showDeletePasswordModal, setShowDeletePasswordModal] = useState(false)
+  const [deletePasswordInput, setDeletePasswordInput] = useState('')
+  const [deletePasswordError, setDeletePasswordError] = useState('')
+  const [isVerifyingDeletePassword, setIsVerifyingDeletePassword] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
+
   // Real-time verification of current password with debounce
   useEffect(() => {
     if (!currentPassword) {
@@ -148,11 +187,18 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
       return
     }
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const cleanDbPhone = repPhone.replace(/\D/g, '').slice(-10)
-      const isCorrect = dbPassword
-        ? currentPassword === dbPassword
-        : currentPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone
+      let isCorrect = false
+      if (dbPassword) {
+        if (dbPassword.length === 64) {
+          isCorrect = (dbPassword === await hashPassword(currentPassword))
+        } else {
+          isCorrect = (dbPassword === currentPassword)
+        }
+      } else {
+        isCorrect = (currentPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone)
+      }
 
       setCurrentPasswordValid(isCorrect)
     }, 600)
@@ -171,13 +217,20 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault()
-    setResetSuccess(false)
+    setToast(null)
 
     // Validate current password synchronously on submit
     const cleanDbPhone = repPhone.replace(/\D/g, '').slice(-10)
-    const isCurrentCorrect = dbPassword
-      ? currentPassword === dbPassword
-      : currentPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone
+    let isCurrentCorrect = false
+    if (dbPassword) {
+      if (dbPassword.length === 64) {
+        isCurrentCorrect = (dbPassword === await hashPassword(currentPassword))
+      } else {
+        isCurrentCorrect = (dbPassword === currentPassword)
+      }
+    } else {
+      isCurrentCorrect = (currentPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone)
+    }
 
     if (!isCurrentCorrect) {
       setCurrentPasswordValid(false)
@@ -198,19 +251,411 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
     try {
       setIsResetting(true)
       const docRef = doc(db, 'clubs', clubId)
+      const hashedNew = await hashPassword(newPassword.trim())
 
-      await setDoc(docRef, { password: newPassword.trim() }, { merge: true })
-      setDbPassword(newPassword.trim())
-      setResetSuccess(true)
+      // If 2FA is active, we must decrypt with old credentials and re-encrypt with new ones
+      const docSnap = await getDoc(docRef)
+      const data = docSnap.data()
+
+      if (data && data.twoFactorEnabled && data.twoFactorSecret) {
+        const oldPassHash = dbPassword.length === 64 ? dbPassword : await hashPassword(currentPassword)
+        const decryptedSecret = await decryptData(data.twoFactorSecret, oldPassHash)
+        const reEncryptedSecret = await encryptData(decryptedSecret, hashedNew)
+
+        await setDoc(docRef, {
+          password: hashedNew,
+          twoFactorSecret: reEncryptedSecret
+        }, { merge: true })
+      } else {
+        await setDoc(docRef, { password: hashedNew }, { merge: true })
+      }
+
+      setDbPassword(hashedNew)
+      setToast({ message: "Password updated successfully! Use your new password on your next login.", type: "success" })
       setCurrentPassword('')
       setNewPassword('')
       setConfirmPassword('')
     } catch (err) {
       console.error("Failed to reset password:", err)
-      alert("Failed to reset password. Please try again.")
+      setToast({ message: "Failed to reset password. Please try again.", type: "error" })
     } finally {
       setIsResetting(false)
     }
+  }
+
+  // Two-Factor Authentication (2FA) handlers
+  const handleInitiate2FA = () => {
+    setToast(null)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+    setTwoFactorPassword('')
+    setTwoFactorPasswordValid(null)
+    setTwoFactorSetupStep('verify_password')
+  }
+
+  const handleVerifyPasswordFor2FA = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setToast(null)
+    setTwoFactorError('')
+
+    const cleanDbPhone = repPhone.replace(/\D/g, '').slice(-10)
+    let isCorrect = false
+    if (dbPassword) {
+      if (dbPassword.length === 64) {
+        isCorrect = (dbPassword === await hashPassword(twoFactorPassword))
+      } else {
+        isCorrect = (dbPassword === twoFactorPassword)
+      }
+    } else {
+      isCorrect = (twoFactorPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone)
+    }
+
+    if (!isCorrect) {
+      setTwoFactorPasswordValid(false)
+      setToast({ message: 'Current password is incorrect.', type: 'error' })
+      setIs2FAShake(true)
+      setTimeout(() => setIs2FAShake(false), 500)
+      return
+    }
+
+    setTwoFactorPasswordValid(true)
+    setIsEnabling2FA(true)
+
+    try {
+      // 1. Ensure password is hashed in Firestore
+      let passHash = dbPassword
+      if (!dbPassword || dbPassword.length !== 64) {
+        passHash = await hashPassword(twoFactorPassword)
+        const docRef = doc(db, 'clubs', clubId)
+        await setDoc(docRef, { password: passHash }, { merge: true })
+        setDbPassword(passHash)
+      }
+
+      // 2. Generate TOTP secret and QR code URI
+      const secret = generateTOTPSecret()
+      const label = repEmail || clubUsername
+      const uri = generateTOTPURI(secret, label, "ISAAC")
+      const qrUrl = await QRCode.toDataURL(uri)
+
+      setTwoFactorSecret(secret)
+      setTwoFactorQR(qrUrl)
+      setTwoFactorToken('')
+      setTwoFactorSetupStep('scan_verify')
+    } catch (err: any) {
+      console.error('Failed to initiate 2FA setup:', err)
+      setToast({ message: 'Could not generate 2FA credentials. Please try again.', type: 'error' })
+    } finally {
+      setIsEnabling2FA(false)
+    }
+  }
+
+  const handleEnable2FA = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setToast(null)
+    setTwoFactorError('')
+
+    const token = twoFactorToken.trim()
+    if (!token || token.length !== 6) {
+      setToast({ message: 'Please enter a valid 6-digit code.', type: 'error' })
+      return
+    }
+
+    setIsEnabling2FA(true)
+
+    try {
+      const isValid = verifyTOTPToken(token, twoFactorSecret)
+      if (!isValid) {
+        setToast({ message: 'Invalid verification code. Please check your app and try again.', type: 'error' })
+        setIs2FAShake(true)
+        setTimeout(() => setIs2FAShake(false), 500)
+        setIsEnabling2FA(false)
+        return
+      }
+
+      // Encrypt the secret using the hashed password
+      const passHash = dbPassword || await hashPassword(twoFactorPassword)
+      const encryptedSecret = await encryptData(twoFactorSecret, passHash)
+
+      const docRef = doc(db, 'clubs', clubId)
+      await setDoc(docRef, {
+        twoFactorEnabled: true,
+        twoFactorSecret: encryptedSecret
+      }, { merge: true })
+
+      setTwoFactorEnabled(true)
+      setToast({ message: 'Two-factor authentication has been successfully enabled on your account!', type: 'success' })
+      setTwoFactorSetupStep('idle')
+      setTwoFactorPassword('')
+      setTwoFactorSecret('')
+      setTwoFactorQR('')
+      setTwoFactorToken('')
+    } catch (err: any) {
+      console.error('Failed to enable 2FA:', err)
+      setToast({ message: 'An error occurred. Failed to enable 2FA.', type: 'error' })
+    } finally {
+      setIsEnabling2FA(false)
+    }
+  }
+
+  const handleDisable2FA = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setToast(null)
+    setTwoFactorError('')
+
+    const cleanDbPhone = repPhone.replace(/\D/g, '').slice(-10)
+    let isCorrect = false
+    if (dbPassword) {
+      if (dbPassword.length === 64) {
+        isCorrect = (dbPassword === await hashPassword(twoFactorPassword))
+      } else {
+        isCorrect = (dbPassword === twoFactorPassword)
+      }
+    } else {
+      isCorrect = (twoFactorPassword.replace(/\D/g, '').slice(-10) === cleanDbPhone)
+    }
+
+    if (!isCorrect) {
+      setTwoFactorPasswordValid(false)
+      setToast({ message: 'Current password is incorrect.', type: 'error' })
+      setIs2FAShake(true)
+      setTimeout(() => setIs2FAShake(false), 500)
+      return
+    }
+
+    setTwoFactorPasswordValid(true)
+    setIsDisabling2FA(true)
+
+    try {
+      const docRef = doc(db, 'clubs', clubId)
+      await setDoc(docRef, {
+        twoFactorEnabled: false,
+        twoFactorSecret: null
+      }, { merge: true })
+
+      setTwoFactorEnabled(false)
+      setToast({ message: 'Two-factor authentication has been disabled.', type: 'success' })
+      setShowDisableVerify(false)
+      setTwoFactorPassword('')
+    } catch (err: any) {
+      console.error('Failed to disable 2FA:', err)
+      setToast({ message: 'An error occurred. Failed to disable 2FA.', type: 'error' })
+    } finally {
+      setIsDisabling2FA(false)
+    }
+  }
+
+  const handleRegisterPasskey = async () => {
+    setToast(null)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+    setIsRegisteringPasskey(true)
+
+    if (passkeys.length >= 3) {
+      setToast({ message: "Maximum limit of 3 registered passkeys reached. Please remove an existing device first.", type: 'error' })
+      setIsRegisteringPasskey(false)
+      return
+    }
+
+    try {
+      // 1. Generate challenge and creation options
+      const challenge = window.crypto.getRandomValues(new Uint8Array(32))
+      const rpId = window.location.hostname
+      const userIdBytes = new TextEncoder().encode(clubId)
+
+      const creationOptions: PublicKeyCredentialCreationOptions = {
+        challenge,
+        rp: {
+          name: "ISAAC Website",
+          id: rpId
+        },
+        user: {
+          id: userIdBytes,
+          name: clubUsername || "club_user",
+          displayName: clubName || "Club Member"
+        },
+        pubKeyCredParams: [
+          { type: "public-key", alg: -7 } // ES256 (ECDSA P-256)
+        ],
+        authenticatorSelection: {
+          residentKey: "required", // discoverable credential
+          userVerification: "preferred"
+        },
+        timeout: 60000
+      }
+
+      // 2. Call WebAuthn API
+      const credential = await navigator.credentials.create({
+        publicKey: creationOptions
+      }) as PublicKeyCredential
+
+      if (!credential) {
+        throw new Error("No credential was generated by the authenticator.")
+      }
+
+      // 3. Extract properties
+      const response = credential.response as AuthenticatorAttestationResponse
+      const publicKeyBuffer = response.getPublicKey()
+      if (!publicKeyBuffer) {
+        throw new Error("Authenticator did not return a public key.")
+      }
+
+      const publicKeyBase64 = arrayBufferToBase64(publicKeyBuffer)
+      const credentialId = credential.id
+
+      // 4. Trigger name input overlay modal
+      setPendingPasskeyCred({ credentialId, publicKey: publicKeyBase64 })
+      setTempPasskeyName(`Passkey (${new Date().toLocaleDateString()})`)
+      setShowPasskeyNameModal(true)
+    } catch (err: any) {
+      console.error("Passkey registration failed:", err)
+      let displayError = err.message || "Failed to register passkey. Make sure biometrics are configured on your device."
+      if (err.name === 'NotAllowedError' || displayError.includes('not allowed') || displayError.includes('timed out')) {
+        displayError = "Wait, did you just reject passkey check? Bruhh...Try again!"
+      }
+      setToast({ message: displayError, type: 'error' })
+    } finally {
+      setIsRegisteringPasskey(false)
+    }
+  }
+
+  const handleSavePasskeyWithCustomName = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!pendingPasskeyCred) return
+
+    setToast(null)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+
+    try {
+      const name = tempPasskeyName.trim() || `Passkey (${new Date().toLocaleDateString()})`
+      const updatedPasskeys = [
+        ...passkeys,
+        {
+          credentialId: pendingPasskeyCred.credentialId,
+          publicKey: pendingPasskeyCred.publicKey,
+          name: name,
+          created: new Date().toISOString()
+        }
+      ]
+
+      const docRef = doc(db, 'clubs', clubId)
+      await setDoc(docRef, { passkeys: updatedPasskeys }, { merge: true })
+
+      setPasskeys(updatedPasskeys)
+      setToast({ message: `Successfully registered passkey "${name}"!`, type: 'success' })
+      setShowPasskeyNameModal(false)
+      setPendingPasskeyCred(null)
+    } catch (err: any) {
+      console.error("Failed to save passkey:", err)
+      setToast({ message: "Failed to save passkey. Please try again.", type: 'error' })
+    }
+  }
+
+  const executePasskeyDeletion = async (credentialId: string) => {
+    try {
+      const updatedPasskeys = passkeys.filter((pk: any) => pk.credentialId !== credentialId)
+      const docRef = doc(db, 'clubs', clubId)
+      await setDoc(docRef, { passkeys: updatedPasskeys }, { merge: true })
+      setPasskeys(updatedPasskeys)
+      setToast({ message: "Passkey removed successfully.", type: 'success' })
+    } catch (err: any) {
+      console.error("Failed to delete passkey:", err)
+      setToast({ message: "Failed to remove passkey. Please try again.", type: 'error' })
+    }
+  }
+
+  const handleDeletePasskey = async (credentialId: string) => {
+    if (!confirm("Are you sure you want to remove this passkey? You will no longer be able to log in with this biometric device.")) {
+      return
+    }
+
+    setToast(null)
+    setTwoFactorError('')
+    setTwoFactorSuccess('')
+
+    // Try to verify using the passkey itself first (same device check)
+    try {
+      const challenge = window.crypto.getRandomValues(new Uint8Array(32))
+      const requestOptions: PublicKeyCredentialRequestOptions = {
+        challenge,
+        rpId: window.location.hostname,
+        allowCredentials: [
+          {
+            type: 'public-key',
+            id: base64ToArrayBuffer(credentialId)
+          }
+        ],
+        userVerification: "preferred"
+      }
+
+      // Prompt user for local biometrics
+      const assertion = await navigator.credentials.get({
+        publicKey: requestOptions
+      })
+
+      if (assertion) {
+        // Verified: they are on the same device!
+        await executePasskeyDeletion(credentialId)
+        return
+      }
+    } catch (err) {
+      console.log("Biometric verification failed/canceled. Falling back to password validation.", err)
+    }
+
+    // Fallback: different device or biometric cancel -> Prompt for account password
+    setPendingDeleteCredId(credentialId)
+    setDeletePasswordInput('')
+    setDeletePasswordError('')
+    setShowDeletePasswordModal(true)
+  }
+
+  const handleVerifyDeletePassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!pendingDeleteCredId) return
+
+    setDeletePasswordError('')
+    setIsVerifyingDeletePassword(true)
+
+    try {
+      const cleanDbPhone = repPhone.replace(/\D/g, '').slice(-10)
+      let isCorrect = false
+      if (dbPassword) {
+        if (dbPassword.length === 64) {
+          isCorrect = (dbPassword === await hashPassword(deletePasswordInput))
+        } else {
+          isCorrect = (dbPassword === deletePasswordInput)
+        }
+      } else {
+        isCorrect = (deletePasswordInput.replace(/\D/g, '').slice(-10) === cleanDbPhone)
+      }
+
+      if (!isCorrect) {
+        setDeletePasswordError('Incorrect password. Access denied.')
+        setIs2FAShake(true)
+        setTimeout(() => setIs2FAShake(false), 500)
+        setIsVerifyingDeletePassword(false)
+        return
+      }
+
+      // Deletion allowed!
+      await executePasskeyDeletion(pendingDeleteCredId)
+      setShowDeletePasswordModal(false)
+      setPendingDeleteCredId(null)
+    } catch (err) {
+      console.error("Password verification delete error:", err)
+      setDeletePasswordError("Verification failed. Please try again.")
+    } finally {
+      setIsVerifyingDeletePassword(false)
+    }
+  }
+
+  const handleCopySecretToClipboard = () => {
+    navigator.clipboard.writeText(twoFactorSecret)
+    setToast({ message: "Secret key copied to clipboard!", type: 'success' })
+    setShowCopySuccess(true)
+    setTimeout(() => {
+      setShowCopySuccess(false)
+    }, 2000)
   }
 
   // Cropper states
@@ -243,6 +688,8 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
           setClubLogo(data.logo || null)
           setClubBanner(data.banner || null)
           setDbPassword(data.password || '')
+          setTwoFactorEnabled(data.twoFactorEnabled || false)
+          setPasskeys(data.passkeys || [])
 
           setRepFirstName(data.repFirstName || '')
           setRepMiddleName(data.repMiddleName || '')
@@ -516,7 +963,7 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
   if (!isOpen) return null
 
   return createPortal(
-    <div className="settings-modal-overlay" onClick={onClose}>
+    <div className="settings-modal-overlay">
       <div className="settings-modal-container" onClick={(e) => e.stopPropagation()}>
         {/* Left Side: Sidebar */}
         <div className="settings-modal-sidebar">
@@ -550,6 +997,22 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
               </svg>
               Password Reset
             </button>
+            <button
+              className={`settings-menu-item ${activeTab === 'TwoFactor' ? 'active' : ''}`}
+              onClick={() => {
+                setActiveTab('TwoFactor')
+                setTwoFactorSetupStep('idle')
+                setTwoFactorError('')
+                setTwoFactorSuccess('')
+                setShowDisableVerify(false)
+              }}
+            >
+              <svg className="settings-menu-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="M9 11l2 2 4-4" />
+              </svg>
+              Security & Passkeys
+            </button>
           </div>
         </div>
 
@@ -557,7 +1020,7 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
         <div className="settings-modal-content-panel">
           <div className="settings-content-header">
             <h2 className="settings-content-title">
-              {activeTab === 'Profile' ? 'Edit Profile' : activeTab === 'Password' ? 'Password Reset' : 'Settings'}
+              {activeTab === 'Profile' ? 'Edit Profile' : activeTab === 'Password' ? 'Password Reset' : activeTab === 'TwoFactor' ? 'Security & Passkeys' : 'Settings'}
             </h2>
           </div>
 
@@ -1101,18 +1564,13 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
                   </div>
                 )}
               </form>
-            ) : (
+            ) : activeTab === 'Password' ? (
               <form className="settings-edit-form" onSubmit={handlePasswordReset}>
                 <div className="settings-section-divider">
                   <span className="settings-divider-num">01</span>
                   <span className="settings-divider-label">Password Reset Authorization</span>
                 </div>
 
-                {resetSuccess && (
-                  <div className="field-help-text" style={{ color: '#22c55e', fontSize: '13.5px', marginBottom: '16px', fontFamily: 'D-Din', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    ✔ Password updated successfully! Use your new password on your next login.
-                  </div>
-                )}
 
                 <div className="settings-form-group">
                   <label className="settings-form-label">Current Password *</label>
@@ -1276,6 +1734,348 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
                   </button>
                 </div>
               </form>
+            ) : (
+              <div className="settings-twofactor-panel">
+                <div className="settings-section-divider">
+                  <span className="settings-divider-num">01</span>
+                  <span className="settings-divider-label">Security Settings</span>
+                  <div className="settings-divider-line" />
+                </div>
+
+                {twoFactorSuccess && (
+                  <div className="field-help-text" style={{ color: '#22c55e', fontSize: '13.5px', marginBottom: '16px', fontFamily: 'D-Din', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    ✔ {twoFactorSuccess}
+                  </div>
+                )}
+
+                {twoFactorError && (
+                  <div className="settings-error-text" style={{ fontSize: '13.5px', marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    ✖ {twoFactorError}
+                  </div>
+                )}
+
+                {/* Status shield & display */}
+                <div className="twofactor-status-container">
+                  <div className={`twofactor-shield-icon ${twoFactorEnabled ? 'enabled' : 'disabled'}`}>
+                    <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      {twoFactorEnabled ? (
+                        <path d="M9 11l2 2 4-4" strokeWidth="3" />
+                      ) : (
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                      )}
+                    </svg>
+                  </div>
+                  <div className="twofactor-status-info">
+                    <div className="twofactor-status-badge">
+                      STATUS: {twoFactorEnabled ? <span className="status-tag enabled">ENABLED</span> : <span className="status-tag disabled">DISABLED</span>}
+                    </div>
+                    <p className="twofactor-status-desc">
+                      {twoFactorEnabled 
+                        ? 'Your club management account is protected by an additional level of security. Each time you log in, you will be prompted to enter a verification code from your linked authenticator app.' 
+                        : 'Two-factor authentication adds an extra layer of protection to your club account. In addition to your representative password, you will be required to enter a dynamic code generated by your mobile authenticator app.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* State: IDLE - Show action buttons */}
+                {twoFactorSetupStep === 'idle' && !showDisableVerify && (
+                  <div className="twofactor-actions-row">
+                    {twoFactorEnabled ? (
+                      <button 
+                        type="button" 
+                        className="settings-btn settings-btn-danger"
+                        onClick={() => {
+                          setTwoFactorError('')
+                          setTwoFactorSuccess('')
+                          setTwoFactorPassword('')
+                          setTwoFactorPasswordValid(null)
+                          setShowDisableVerify(true)
+                        }}
+                      >
+                        Disable 2FA
+                      </button>
+                    ) : (
+                      <button 
+                        type="button" 
+                        className="settings-btn settings-btn-save"
+                        onClick={handleInitiate2FA}
+                      >
+                        Enable Two-Factor Authentication
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* State: VERIFY PASSWORD (for enabling 2FA) */}
+                {twoFactorSetupStep === 'verify_password' && (
+                  <form className="twofactor-form-step" onSubmit={handleVerifyPasswordFor2FA}>
+                    <p className="twofactor-step-instruction">
+                      To set up two-factor authentication, please confirm your current representative password first.
+                    </p>
+                    <div className="settings-form-group">
+                      <label className="settings-form-label">Verify Password *</label>
+                      <div className="password-input-wrapper">
+                        <input
+                          type={showTwoFactorPassword ? "text" : "password"}
+                          className={`settings-form-input ${twoFactorPasswordValid === false ? 'error-border' : twoFactorPasswordValid === true ? 'success-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
+                          placeholder="Enter current password"
+                          value={twoFactorPassword}
+                          onChange={(e) => setTwoFactorPassword(e.target.value)}
+                          onCopy={(e) => {
+                            e.preventDefault();
+                            triggerCopyPasteWarning('current');
+                          }}
+                          onPaste={(e) => {
+                            e.preventDefault();
+                            triggerCopyPasteWarning('current');
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="password-toggle-btn"
+                          onClick={() => setShowTwoFactorPassword(!showTwoFactorPassword)}
+                        >
+                          {showTwoFactorPassword ? (
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                              <line x1="1" y1="1" x2="23" y2="23" />
+                            </svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          )}
+                        </button>
+                        {warningField === 'current' && (
+                          <div className="copypaste-tooltip">Really bruh..? Type it Dude!</div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="twofactor-buttons-row">
+                      <button 
+                        type="button" 
+                        className="settings-btn settings-btn-cancel"
+                        onClick={() => setTwoFactorSetupStep('idle')}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="settings-btn settings-btn-save"
+                        disabled={isEnabling2FA}
+                      >
+                        {isEnabling2FA ? 'Verifying...' : 'Next Step'}
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* State: SCAN & VERIFY CODE */}
+                {twoFactorSetupStep === 'scan_verify' && (
+                  <form className="twofactor-form-step" onSubmit={handleEnable2FA}>
+                    <div className="twofactor-setup-grid">
+                      <div className="twofactor-qr-section">
+                        {twoFactorQR ? (
+                          <img src={twoFactorQR} alt="2FA Setup QR Code" className="twofactor-qr-img" />
+                        ) : (
+                          <div className="twofactor-qr-placeholder">Generating QR...</div>
+                        )}
+                      </div>
+                      <div className="twofactor-instructions-section">
+                        <h4 className="twofactor-step-heading">1. Scan the QR Code</h4>
+                        <p className="twofactor-step-text">
+                          Scan this image using your authenticator app (like Google Authenticator, Microsoft Authenticator, or Authy).
+                        </p>
+                        
+                        <h4 className="twofactor-step-heading" style={{ marginTop: '16px' }}>Or enter manually</h4>
+                        <div className="twofactor-manual-key-wrapper">
+                          <code className="twofactor-manual-key">{twoFactorSecret}</code>
+                          <button 
+                            type="button" 
+                            className="twofactor-copy-btn"
+                            onClick={handleCopySecretToClipboard}
+                          >
+                            {showCopySuccess ? 'COPIED!' : 'COPY'}
+                          </button>
+                        </div>
+
+                        <h4 className="twofactor-step-heading" style={{ marginTop: '16px' }}>2. Enter Verification Code</h4>
+                        <p className="twofactor-step-text">
+                          Input the 6-digit code displayed in your authenticator app to complete the link.
+                        </p>
+                        
+                        <div className="settings-form-group" style={{ marginTop: '8px' }}>
+                          <input
+                            type="text"
+                            maxLength={6}
+                            pattern="\d*"
+                            inputMode="numeric"
+                            className={`settings-form-input ${twoFactorError ? 'error-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
+                            placeholder="Enter 6-digit code"
+                            style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '18px', fontFamily: 'D-Din-Bold', width: '200px' }}
+                            value={twoFactorToken}
+                            onChange={(e) => setTwoFactorToken(e.target.value.replace(/\D/g, ''))}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="twofactor-buttons-row" style={{ marginTop: '24px', borderTop: '1px solid rgba(240, 240, 250, 0.08)', paddingTop: '20px' }}>
+                      <button 
+                        type="button" 
+                        className="settings-btn settings-btn-cancel"
+                        onClick={() => {
+                          setTwoFactorSetupStep('idle')
+                          setTwoFactorSecret('')
+                          setTwoFactorQR('')
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="settings-btn settings-btn-save"
+                        disabled={isEnabling2FA}
+                      >
+                        {isEnabling2FA ? 'Enabling...' : 'Verify & Enable'}
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* State: VERIFY PASSWORD FOR DISABLING */}
+                {showDisableVerify && (
+                  <form className="twofactor-form-step" onSubmit={handleDisable2FA}>
+                    <p className="twofactor-step-instruction" style={{ color: '#ef4444' }}>
+                      WARNING: Disabling two-factor authentication decreases your account security. Please verify your password to proceed.
+                    </p>
+                    <div className="settings-form-group">
+                      <label className="settings-form-label">Verify Password *</label>
+                      <div className="password-input-wrapper">
+                        <input
+                          type={showTwoFactorPassword ? "text" : "password"}
+                          className={`settings-form-input ${twoFactorPasswordValid === false ? 'error-border' : twoFactorPasswordValid === true ? 'success-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
+                          placeholder="Enter current password"
+                          value={twoFactorPassword}
+                          onChange={(e) => setTwoFactorPassword(e.target.value)}
+                          onCopy={(e) => {
+                            e.preventDefault();
+                            triggerCopyPasteWarning('current');
+                          }}
+                          onPaste={(e) => {
+                            e.preventDefault();
+                            triggerCopyPasteWarning('current');
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="password-toggle-btn"
+                          onClick={() => setShowTwoFactorPassword(!showTwoFactorPassword)}
+                        >
+                          {showTwoFactorPassword ? (
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                              <line x1="1" y1="1" x2="23" y2="23" />
+                            </svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                              <circle cx="12" cy="12" r="3" />
+                            </svg>
+                          )}
+                        </button>
+                        {warningField === 'current' && (
+                          <div className="copypaste-tooltip">Really bruh..? Type it Dude!</div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="twofactor-buttons-row">
+                      <button 
+                        type="button" 
+                        className="settings-btn settings-btn-cancel"
+                        onClick={() => setShowDisableVerify(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="settings-btn settings-btn-danger"
+                        disabled={isDisabling2FA}
+                      >
+                        {isDisabling2FA ? 'Disabling...' : 'Confirm Disable'}
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Section 2: Biometric Passkeys */}
+                {twoFactorSetupStep === 'idle' && !showDisableVerify && (
+                  <>
+                    <div className="settings-section-divider" style={{ marginTop: '32px' }}>
+                      <span className="settings-divider-num">02</span>
+                      <span className="settings-divider-label">Biometric Passkeys</span>
+                      <div className="settings-divider-line" />
+                    </div>
+
+                    <div className="passkeys-list-container">
+                      <p className="twofactor-status-desc" style={{ marginBottom: '16px' }}>
+                        Passkeys allow you to sign in securely using your device's biometric authentication (fingerprint, face recognition, or PIN) instead of typing your password.
+                      </p>
+
+                      {passkeys.length > 0 ? (
+                        <div className="passkeys-devices-list">
+                          {passkeys.map((pk: any) => (
+                            <div key={pk.credentialId} className="passkey-device-item">
+                              <div className="passkey-device-info">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22c55e" strokeWidth="2" className="passkey-icon">
+                                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                                  <line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="3" />
+                                </svg>
+                                <div className="passkey-device-meta">
+                                  <span className="passkey-device-name">{pk.name}</span>
+                                  <span className="passkey-device-date">Added {new Date(pk.created).toLocaleDateString()}</span>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                className="passkey-delete-btn"
+                                onClick={() => handleDeletePasskey(pk.credentialId)}
+                                title="Remove Passkey"
+                              >
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
+                                  <polyline points="3 6 5 6 21 6" />
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                  <line x1="10" y1="11" x2="10" y2="17" />
+                                  <line x1="14" y1="11" x2="14" y2="17" />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="passkey-empty-state">
+                          No passkeys registered yet. Register a device below to enable biometric sign-in.
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        className="settings-btn settings-btn-save"
+                        style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}
+                        onClick={handleRegisterPasskey}
+                        disabled={isRegisteringPasskey}
+                      >
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none">
+                          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                        </svg>
+                        {isRegisteringPasskey ? 'Registering...' : 'Register Passkey'}
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             )}
           </div>
 
@@ -1318,6 +2118,104 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
           aspect={cropperType === 'logo' ? 1 : 3.2}
           circularCrop={cropperType === 'logo'}
           title={cropperType === 'logo' ? 'ADJUST LOGO CROP' : 'ADJUST BANNER CROP'}
+        />
+      )}
+
+      {/* Embedded Passkey Naming Modal Overlay */}
+      {showPasskeyNameModal && (
+        <div className="settings-modal-overlay" style={{ zIndex: 100005 }}>
+          <div className="passkey-name-modal">
+            <h3 className="passkey-modal-title">Register Passkey</h3>
+            <p className="passkey-modal-desc">Provide a friendly name for this biometric credential to identify it later.</p>
+            <form onSubmit={handleSavePasskeyWithCustomName} className="passkey-modal-form">
+              <div className="settings-form-group" style={{ marginBottom: 0 }}>
+                <label className="settings-form-label">Device Name *</label>
+                <input
+                  type="text"
+                  className="settings-form-input"
+                  placeholder="e.g. My MacBook Air, Phone"
+                  value={tempPasskeyName}
+                  onChange={(e) => setTempPasskeyName(e.target.value)}
+                  autoFocus
+                  required
+                />
+              </div>
+              <div className="passkey-modal-actions">
+                <button
+                  type="button"
+                  className="settings-btn settings-btn-cancel"
+                  onClick={() => {
+                    setShowPasskeyNameModal(false)
+                    setPendingPasskeyCred(null)
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="settings-btn settings-btn-save"
+                >
+                  Save Passkey
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Embedded Passkey Deletion Password Verification Overlay */}
+      {showDeletePasswordModal && (
+        <div className="settings-modal-overlay" style={{ zIndex: 100005 }}>
+          <div className="passkey-name-modal">
+            <h3 className="passkey-modal-title">Verify Identity</h3>
+            <p className="passkey-modal-desc">To remove a passkey of a different device, please confirm your current representative password.</p>
+            <form onSubmit={handleVerifyDeletePassword} className="passkey-modal-form">
+              <div className="settings-form-group" style={{ marginBottom: 0 }}>
+                <label className="settings-form-label">Representative Password *</label>
+                <input
+                  type="password"
+                  className={`settings-form-input ${is2FAShake ? 'shake-animation' : ''} ${deletePasswordError ? 'error-border' : ''}`}
+                  placeholder="Enter current access key"
+                  value={deletePasswordInput}
+                  onChange={(e) => setDeletePasswordInput(e.target.value)}
+                  autoFocus
+                  required
+                />
+                {deletePasswordError && (
+                  <span className="settings-error-text" style={{ marginTop: '8px', display: 'block', color: '#ff3333', fontSize: '12px' }}>
+                    {deletePasswordError}
+                  </span>
+                )}
+              </div>
+              <div className="passkey-modal-actions">
+                <button
+                  type="button"
+                  className="settings-btn settings-btn-cancel"
+                  onClick={() => {
+                    setShowDeletePasswordModal(false)
+                    setPendingDeleteCredId(null)
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="settings-btn settings-btn-danger"
+                  disabled={isVerifyingDeletePassword}
+                >
+                  {isVerifyingDeletePassword ? 'Confirming...' : 'Verify & Delete'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
         />
       )}
     </div>,

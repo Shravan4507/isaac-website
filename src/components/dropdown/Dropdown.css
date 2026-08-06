@@ -8,7 +8,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(240, 240, 250, 0.15);
   border-radius: 4px;
-  color: #ffffff;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   padding: 12px 16px;
@@ -28,7 +28,7 @@
 
 .dropdown-trigger-btn .chevron {
   font-size: 9px;
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
 }
 
 .dropdown-options-list {
@@ -54,7 +54,7 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   padding: 8px 12px;
-  color: #ffffff;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   outline: none;
@@ -80,7 +80,7 @@
 .option-item {
   background: transparent;
   border: none;
-  color: rgba(240, 240, 250, 0.85);
+  color: rgba(252, 254, 237, 0.85);
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   padding: 8px 12px;
@@ -92,22 +92,22 @@
 
 .option-item:hover {
   background: rgba(255, 255, 255, 0.07);
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .option-item.other-option {
   border-top: 1px solid rgba(240, 240, 250, 0.08);
-  color: rgba(240, 240, 250, 0.60);
+  color: rgba(252, 254, 237, 0.60);
   border-radius: 0 0 4px 4px;
 }
 
 .option-item.other-option:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  color: #fcfeed;
 }
 
 .no-options-found {
-  color: rgba(240, 240, 250, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   text-align: center;

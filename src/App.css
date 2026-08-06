@@ -79,7 +79,7 @@
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 60px;
   font-weight: 500;
-  color: #ffffff;
+  color: #fcfeed;
   letter-spacing: 2px;
   margin: 0 0 15px 0;
   text-transform: uppercase;
@@ -101,7 +101,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  color: rgba(240, 240, 250, 0.8);
+  color: rgba(252, 254, 237, 0.8);
   letter-spacing: 3px;
   text-transform: uppercase;
   margin: 0 0 20px 0;
@@ -111,7 +111,7 @@
   font-family: 'D-Din', sans-serif;
   font-size: 1rem;
   line-height: 1.75;
-  color: rgba(240, 240, 250, 0.8);
+  color: rgba(252, 254, 237, 0.8);
   margin: 0;
   letter-spacing: 0.5px;
 }
@@ -142,7 +142,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(240, 240, 250, 0.35);
-  color: #f0f0fa;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -207,7 +207,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(240, 240, 250, 0.35);
-  color: #f0f0fa;
+  color: #fcfeed;
   font-family: 'D-Din', sans-serif;
   font-size: 13px;
   font-weight: 500;

@@ -62,14 +62,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
 }
 
 .cropper-header h3 {
   margin: 0;
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 13px;
-  color: #fff;
+  color: #fcfeed;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -77,7 +77,7 @@
 .cropper-header .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   font-size: 22px;
   cursor: pointer;
   line-height: 1;
@@ -87,7 +87,7 @@
 }
 
 .cropper-header .close-btn:hover {
-  color: #fff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -113,7 +113,7 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
   letter-spacing: 0.5px;
@@ -124,7 +124,7 @@
 }
 
 .tt-btn:hover {
-  color: #fff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.1);
 }
@@ -170,7 +170,7 @@
 .sidebar-label {
   font-family: 'D-Din', sans-serif;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   margin-bottom: 6px;
@@ -182,7 +182,7 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(252, 254, 237, 0.55);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   letter-spacing: 0.5px;
@@ -193,13 +193,13 @@
 
 .aspect-btn:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  color: #fcfeed;
 }
 
 .aspect-btn.active {
   background: rgba(0, 0, 0, 0.12);
   border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  color: #fcfeed;
   font-family: 'D-Din-Bold', sans-serif;
 }
 
@@ -261,7 +261,7 @@
 .control-label {
   font-family: 'D-Din', sans-serif;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(252, 254, 237, 0.4);
   letter-spacing: 1.2px;
   text-transform: uppercase;
   min-width: 36px;
@@ -284,7 +284,7 @@
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   cursor: pointer;
   transition: all 0.15s ease;
   flex-shrink: 0;
@@ -292,7 +292,7 @@
 
 .zoom-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: #fcfeed;
 }
 
 .zoom-btn:active {
@@ -338,7 +338,7 @@
 .zoom-pct {
   font-family: 'D-Din-Bold', monospace;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(252, 254, 237, 0.7);
   min-width: 42px;
   text-align: right;
 }
@@ -355,7 +355,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
   cursor: pointer;
@@ -364,7 +364,7 @@
 
 .rot-step-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: #fcfeed;
 }
 
 .rot-step-btn:active {
@@ -377,7 +377,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: #fff;
+  color: #fcfeed;
   font-family: 'D-Din', monospace;
   font-size: 12px;
   text-align: center;
@@ -404,7 +404,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   font-family: 'D-Din', sans-serif;
   font-size: 11px;
   letter-spacing: 0.5px;
@@ -415,12 +415,12 @@
 }
 
 .grid-toggle-btn:hover {
-  color: #fff;
+  color: #fcfeed;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .grid-toggle-btn.active {
-  color: #ffffff;
+  color: #fcfeed;
   background: rgba(0, 0, 0, 0.1);
   border-color: rgba(255, 255, 255, 0.3);
 }
@@ -440,7 +440,7 @@
 .panel-label {
   font-family: 'D-Din', sans-serif;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
@@ -493,14 +493,14 @@
 .dim-label {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 0.5px;
 }
 
 .dim-value {
   font-family: 'D-Din', monospace;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(252, 254, 237, 0.7);
 }
 
 /* Output settings */
@@ -519,7 +519,7 @@
 .setting-label {
   font-family: 'D-Din', sans-serif;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -529,7 +529,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(252, 254, 237, 0.8);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   outline: none;
@@ -543,7 +543,7 @@
 
 .setting-select option {
   background: #1a1a24;
-  color: #fff;
+  color: #fcfeed;
 }
 
 /* ============================================================
@@ -556,7 +556,7 @@
 .mobile-aspect-label {
   font-family: 'D-Din', sans-serif;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 1.5px;
   text-transform: uppercase;
   flex-shrink: 0;
@@ -581,7 +581,7 @@
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(252, 254, 237, 0.55);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   cursor: pointer;
@@ -592,7 +592,7 @@
 
 .aspect-pill:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  color: #fcfeed;
 }
 
 .aspect-pill.active {
@@ -624,7 +624,7 @@
 .mobile-output-field span {
   font-family: 'D-Din', sans-serif;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(252, 254, 237, 0.35);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
@@ -634,7 +634,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(252, 254, 237, 0.8);
   font-family: 'D-Din', sans-serif;
   font-size: 12px;
   outline: none;
@@ -642,7 +642,7 @@
 
 .mobile-output-field select option {
   background: #1a1a24;
-  color: #fff;
+  color: #fcfeed;
 }
 
 .mobile-preview-mini {
@@ -683,7 +683,7 @@
 .keyboard-hints span {
   font-family: 'D-Din', sans-serif;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(252, 254, 237, 0.3);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -697,7 +697,7 @@
   border-radius: 4px;
   font-family: 'D-Din', monospace;
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(252, 254, 237, 0.5);
   line-height: 1.4;
 }
 
@@ -722,12 +722,12 @@
 .footer-actions .cancel-btn {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(252, 254, 237, 0.6);
 }
 
 .footer-actions .cancel-btn:hover {
   border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
+  color: #fcfeed;
 }
 
 .footer-actions .cancel-btn:active {

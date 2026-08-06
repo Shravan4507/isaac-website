@@ -49,7 +49,7 @@
 .constellation-widget-title {
   font-family: 'D-Din-Bold', sans-serif;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(252, 254, 237, 0.85);
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -57,6 +57,6 @@
 .constellation-widget-subtitle {
   font-family: 'D-Din', sans-serif;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(252, 254, 237, 0.45);
   letter-spacing: 1px;
 }
