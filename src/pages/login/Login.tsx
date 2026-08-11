@@ -64,6 +64,9 @@ export default function Login({ search }: LoginProps = {}) {
     localStorage.setItem('isaac_avatar', userDoc.avatar || photoURL || '')
     localStorage.setItem('isaac_role', userDoc.role || 'Member')
     localStorage.setItem('isaac_onboarded', 'true')
+    if (userDoc.banner) {
+      localStorage.setItem('isaac_banner', userDoc.banner)
+    }
 
     if (userDoc.passkey === true || userDoc.hasPasskey === true || (userDoc.passkeys && userDoc.passkeys.length > 0)) {
       localStorage.setItem('isaac_has_passkey', 'true')

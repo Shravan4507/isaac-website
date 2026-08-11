@@ -796,6 +796,10 @@ export default function UserDashboard({ onSignOut }: UserDashboardProps) {
         if (data.institution) localStorage.setItem('isaac_institution', data.institution)
         if (data.avatar) localStorage.setItem('isaac_avatar', data.avatar)
         if (data.role) localStorage.setItem('isaac_role', data.role)
+        if (data.banner) {
+          localStorage.setItem('isaac_banner', data.banner)
+          setBannerImgSrc(data.banner)
+        }
       }
     }, (err) => {
       console.warn('Realtime user listener error:', err)

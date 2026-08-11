@@ -10,7 +10,18 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem('isaac_logged_in') === 'true')
+    const checkLoginState = () => {
+      setIsLoggedIn(localStorage.getItem('isaac_logged_in') === 'true')
+    }
+
+    checkLoginState()
+    window.addEventListener('popstate', checkLoginState)
+    window.addEventListener('storage', checkLoginState)
+
+    return () => {
+      window.removeEventListener('popstate', checkLoginState)
+      window.removeEventListener('storage', checkLoginState)
+    }
   }, [])
 
   return (
@@ -51,7 +62,7 @@ export default function Home() {
             {isLoggedIn ? (
               <a href="/dashboard" className="home-action-btn primary">Go to Dashboard</a>
             ) : (
-              <a href="/login" className="home-action-btn primary">Go to Dashboard</a>
+              <a href="/login" className="home-action-btn primary">Sign In</a>
             )}
           </div>
         </div>
