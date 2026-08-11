@@ -51,7 +51,7 @@ export default function Home() {
             {isLoggedIn ? (
               <a href="/dashboard" className="home-action-btn primary">Go to Dashboard</a>
             ) : (
-              <a href="/login" className="home-action-btn primary">Join ISAAC</a>
+              <a href="/login" className="home-action-btn primary">Go to Dashboard</a>
             )}
           </div>
         </div>

@@ -1,3 +1,5 @@
+/* 🌌 FULL-SCREEN GALLERY & DRIFT WALL STYLES */
+
 .gallery-route-layout {
   display: flex;
   flex-direction: column;
@@ -6,44 +8,164 @@
   position: relative;
   background: #020205;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .gallery-page-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
   width: 100%;
+  height: 100vh;
   position: relative;
   box-sizing: border-box;
+  overflow: hidden;
+  background: #020205;
 }
 
-.gallery-page-temp {
-  flex: 1;
+/* Full-Screen Container for DriftWall Component */
+.gallery-fullscreen-wall {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* ── FOOTER STYLES FOR GALLERY PAGE ── */
+
+/* Desktop Screens (> 768px): Fixed Glass Floating Footer Bar */
+@media (min-width: 769px) {
+  .gallery-route-layout .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background: rgba(2, 2, 5, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+  }
+}
+
+/* Mobile & Tablet Screens (<= 768px): Visible & Fully Accessible Scrollable Footer */
+@media (max-width: 768px) {
+  .gallery-route-layout {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100vh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gallery-page-container {
+    height: 85vh;
+    min-height: 520px;
+    flex-shrink: 0;
+  }
+
+  .gallery-route-layout .footer {
+    display: block !important;
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    background: #020205;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 24px 16px;
+    box-sizing: border-box;
+  }
+}
+
+/* ── MORPH SLIDER MODAL OVERLAY STYLES ── */
+.gallery-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(2, 2, 5, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 24px; /* Offset for navbar and footer */
+  padding: 32px;
   box-sizing: border-box;
+  animation: fadeInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-modal-content {
+  position: relative;
   width: 100%;
+  max-width: 1100px;
+  height: 80vh;
+  max-height: 720px;
+  background: #09090e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.15);
+  display: flex;
+  flex-direction: column;
 }
 
-.gallery-page-temp-text {
-  font-family: 'D-Din-Bold', sans-serif;
-  font-size: 28px;
-  color: rgba(252, 254, 237, 0.85);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-align: center;
-  animation: pulseOpacityGallery 2.5s ease-in-out infinite alternate;
+.gallery-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #ffffff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
 }
 
-@keyframes pulseOpacityGallery {
-  0% {
-    opacity: 0.45;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+.gallery-modal-close:hover {
+  background: rgba(24, 24, 28, 0.6);
+}
+
+.gallery-modal-slider-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
   }
-  100% {
-    opacity: 0.95;
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-modal-overlay {
+    padding: 16px;
+  }
+
+  .gallery-modal-content {
+    height: 85vh;
+    border-radius: 12px;
+  }
+
+  .gallery-modal-close {
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
   }
 }

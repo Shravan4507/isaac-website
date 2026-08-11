@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import * as maptilersdk from '@maptiler/sdk'
 import '@maptiler/sdk/dist/maptiler-sdk.css'
 import { signInWithPopup } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { auth, db, googleProvider, storage } from '../../firebase'
 import Toast, { type ToastType } from '../../components/toast/Toast'
@@ -273,8 +273,14 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const [usernameSuggestions, setUsernameSuggestions] = useState<string[]>([])
   const [suggestionsSeed, setSuggestionsSeed] = useState(0)
 
-  // Load from localStorage on mount
+  // Load draft & check notices on mount
   useEffect(() => {
+    const notice = sessionStorage.getItem('isaac_toast_notice')
+    if (notice) {
+      setToast({ message: notice, type: 'info' })
+      sessionStorage.removeItem('isaac_toast_notice')
+    }
+
     const savedFullName = localStorage.getItem('isaac_fullname') || ''
     const savedEmail = localStorage.getItem('isaac_email') || ''
     const savedDob = localStorage.getItem('isaac_dob') || '' // if present from Google/Apple
@@ -282,7 +288,6 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     if (savedFullName) {
       const parts = savedFullName.split(' ').filter(Boolean)
       if (parts.length > 0) {
-        // Sanitize name: only letters
         setFirstName(parts[0].replace(/[^a-zA-Z]/g, ''))
         if (parts.length > 2) {
           setMiddleName(parts[1].replace(/[^a-zA-Z]/g, ''))
@@ -302,7 +307,94 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
       setDob(savedDob)
       setIsDobReadOnly(true)
     }
+
+    // Restore draft if user left mid-way earlier
+    const draftStr = localStorage.getItem('isaac_onboarding_draft')
+    if (draftStr) {
+      try {
+        const draft = JSON.parse(draftStr)
+        if (draft.firstName) setFirstName(draft.firstName)
+        if (draft.middleName) setMiddleName(draft.middleName)
+        if (draft.lastName) setLastName(draft.lastName)
+        if (draft.rawUsername) setRawUsername(draft.rawUsername)
+        if (draft.rawContact) setRawContact(draft.rawContact)
+        if (draft.rawWhatsApp) setRawWhatsApp(draft.rawWhatsApp)
+        if (draft.sex) setSex(draft.sex)
+        if (draft.customSex) setCustomSex(draft.customSex)
+        if (draft.isStudent !== undefined) setIsStudent(draft.isStudent)
+        if (draft.college) setCollege(draft.college)
+        if (draft.customCollege) setCustomCollege(draft.customCollege)
+        if (draft.major) setMajor(draft.major)
+        if (draft.customMajor) setCustomMajor(draft.customMajor)
+        if (draft.currentYear) setCurrentYear(draft.currentYear)
+        if (draft.passingYear) setPassingYear(draft.passingYear)
+        if (draft.activeTab) setActiveTab(draft.activeTab)
+      } catch (e) {
+        console.warn('Failed to parse onboarding draft:', e)
+      }
+    }
   }, [])
+
+  // Auto-save form draft state to localStorage & Firestore incomplete record
+  useEffect(() => {
+    if (role !== 'user') return
+
+    const uid = localStorage.getItem('isaac_uid')
+    const draftData = {
+      firstName,
+      middleName,
+      lastName,
+      rawUsername,
+      rawContact,
+      rawWhatsApp,
+      sex,
+      customSex,
+      isStudent,
+      college,
+      customCollege,
+      major,
+      customMajor,
+      currentYear,
+      passingYear,
+      activeTab
+    }
+
+    localStorage.setItem('isaac_onboarding_draft', JSON.stringify(draftData))
+
+    if (uid) {
+      const timer = setTimeout(async () => {
+        try {
+          await setDoc(doc(db, 'users', uid), {
+            status: 'incomplete',
+            draftData,
+            updatedAt: new Date().toISOString()
+          }, { merge: true })
+        } catch (err) {
+          // Ignore network draft notice
+        }
+      }, 1000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [
+    role,
+    firstName,
+    middleName,
+    lastName,
+    rawUsername,
+    rawContact,
+    rawWhatsApp,
+    sex,
+    customSex,
+    isStudent,
+    college,
+    customCollege,
+    major,
+    customMajor,
+    currentYear,
+    passingYear,
+    activeTab
+  ])
 
   // Map initialization and geolocation handler
   useEffect(() => {
@@ -450,18 +542,37 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     }
 
     // Start debounce timer for uniqueness / claim checks
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const taken = TAKEN_USERNAMES.includes(user)
       let usernameErrorStr = ''
 
       if (taken) {
-        usernameErrorStr = 'This username is already claimed.'
-      } else if (user.length < 3 || user.length > 10) {
-        usernameErrorStr = 'Username must be between 3 and 10 characters.'
+        usernameErrorStr = 'This username is reserved or already claimed.'
+      } else if (user.length < 3 || user.length > 15) {
+        usernameErrorStr = 'Username must be between 3 and 15 characters.'
       } else if (user.startsWith('.') || user.endsWith('.')) {
         usernameErrorStr = 'Cannot start or end with a period.'
       } else if (/\.\./.test(user)) {
         usernameErrorStr = 'Cannot contain consecutive periods.'
+      }
+
+      if (!usernameErrorStr) {
+        try {
+          // Check Firestore users & clubs collections
+          const usersQ = query(collection(db, 'users'), where('username', '==', user))
+          const usersSnap = await getDocs(usersQ)
+          if (!usersSnap.empty) {
+            usernameErrorStr = 'This username is already claimed.'
+          } else {
+            const clubsQ = query(collection(db, 'clubs'), where('username', '==', user))
+            const clubsSnap = await getDocs(clubsQ)
+            if (!clubsSnap.empty) {
+              usernameErrorStr = 'This username is already claimed.'
+            }
+          }
+        } catch (err) {
+          console.warn('Firestore username check warning:', err)
+        }
       }
 
       if (usernameErrorStr) {
@@ -476,7 +587,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         })
         setUsernameSuggestions([]) // ONLY show suggestions if taken/invalid!
       }
-    }, 500)
+    }, 400)
 
     return () => clearTimeout(timer)
   }, [rawUsername, firstName, lastName, suggestionsSeed])
@@ -571,8 +682,8 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     const usernameClean = rawUsername.trim()
     if (!usernameClean) {
       newErrors.username = 'Username is required.'
-    } else if (usernameClean.length < 3 || usernameClean.length > 10) {
-      newErrors.username = 'Username must be between 3 and 10 characters.'
+    } else if (usernameClean.length < 3 || usernameClean.length > 15) {
+      newErrors.username = 'Username must be between 3 and 15 characters.'
     } else if (usernameClean.startsWith('.') || usernameClean.endsWith('.')) {
       newErrors.username = 'Username cannot start or end with a period.'
     } else if (/\.\./.test(usernameClean)) {
@@ -883,30 +994,60 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
     }
   }
 
-  const submitOnboarding = () => {
+  const submitOnboarding = async () => {
     // Collect profile data
     const finalUsername = rawUsername.trim().toLowerCase()
+    const fullName = [firstName, middleName, lastName].filter(Boolean).join(' ')
+    const uid = localStorage.getItem('isaac_uid') || `user_${Date.now()}`
+    const userCollege = isStudent ? (college === 'Other' ? customCollege : college) : 'ISAAC Synergy Network'
+    const avatar = localStorage.getItem('isaac_avatar') || '/test/shrvan.png'
 
-    localStorage.setItem('isaac_username', finalUsername)
-    localStorage.setItem('isaac_firstname', firstName)
-    localStorage.setItem('isaac_middlename', middleName)
-    localStorage.setItem('isaac_lastname', lastName)
-    localStorage.setItem('isaac_email', email)
-    localStorage.setItem('isaac_dob', dob)
-    localStorage.setItem('isaac_contact', `${selectedCountry.code} ${rawContact}`)
-    localStorage.setItem('isaac_whatsapp', `${selectedWaCountry.code} ${rawWhatsApp}`)
-    localStorage.setItem('isaac_sex', sex === 'Other' ? customSex : sex)
-    localStorage.setItem('isaac_is_student', String(isStudent))
-
-    if (isStudent) {
-      localStorage.setItem('isaac_college', college === 'Other' ? customCollege : college)
-      localStorage.setItem('isaac_major', major === 'Other' ? customMajor : major)
-      localStorage.setItem('isaac_current_year', currentYear)
-      localStorage.setItem('isaac_passing_year', passingYear)
+    const userData = {
+      uid,
+      username: finalUsername,
+      fullname: fullName,
+      firstName,
+      middleName,
+      lastName,
+      email,
+      dob,
+      contact: `${selectedCountry.code} ${rawContact}`,
+      whatsapp: `${selectedWaCountry.code} ${rawWhatsApp}`,
+      sex: sex === 'Other' ? customSex : sex,
+      isStudent: String(isStudent),
+      institution: userCollege,
+      major: isStudent ? (major === 'Other' ? customMajor : major) : '',
+      currentYear: isStudent ? currentYear : '',
+      passingYear: isStudent ? passingYear : '',
+      bio: 'Exploring coordinates and studying spectral signatures of distant nebulae.',
+      avatar,
+      role: 'Initiate Member',
+      status: 'completed',
+      onboarded: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     }
 
+    try {
+      await setDoc(doc(db, 'users', uid), userData, { merge: true })
+    } catch (e) {
+      console.error('Error saving user profile to Firestore:', e)
+    }
+
+    localStorage.removeItem('isaac_onboarding_draft')
+    localStorage.setItem('isaac_logged_in', 'true')
+    localStorage.setItem('isaac_uid', uid)
+    localStorage.setItem('isaac_username', finalUsername)
+    localStorage.setItem('isaac_fullname', fullName)
+    localStorage.setItem('isaac_institution', userCollege)
+    localStorage.setItem('isaac_role', 'Initiate Member')
+    localStorage.setItem('isaac_email', email)
+    localStorage.setItem('isaac_avatar', avatar)
     localStorage.setItem('isaac_onboarded', 'true')
     onComplete(finalUsername)
+
+    window.history.pushState(null, '', '/dashboard?role=user')
+    window.dispatchEvent(new Event('popstate'))
   }
 
   // Year list starting from current year
@@ -1792,7 +1933,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
 
                 {/* 2. Username (Starts with @ inside input box) */}
                 <div className="form-group">
-                  <label className="form-label">USERNAME * (Min 3, Max 10)</label>
+                  <label className="form-label">USERNAME * (Min 3, Max 15)</label>
                   <div className={`username-input-wrapper ${errors.username ? 'error-border' : ''}`}>
                     <span className="username-prefix-at">@</span>
                     <input
@@ -1801,7 +1942,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                       placeholder="username"
                       value={rawUsername}
                       onChange={(e) => handleUsernameChange(e.target.value)}
-                      maxLength={10}
+                      maxLength={15}
                       required
                     />
                   </div>

@@ -19,7 +19,18 @@ export default function Footer() {
           <a href="/events" className="footer-nav-link">Events</a>
           <a href="/resources" className="footer-nav-link">Resources</a>
           <a href="/gallery" className="footer-nav-link">Gallery</a>
-          <a href="/publications" className="footer-nav-link">Publications</a>
+          <a href="/team" className="footer-nav-link">Team</a>
+          <a
+            href="/login?role=club"
+            className="footer-nav-link footer-nav-club-link"
+            onClick={(e) => {
+              e.preventDefault()
+              window.history.pushState(null, '', '/login?role=club')
+              window.dispatchEvent(new Event('popstate'))
+            }}
+          >
+            Club <span className="footer-nav-arrow">↗</span>
+          </a>
         </div>
 
         {/* Right Side: Copyright */}

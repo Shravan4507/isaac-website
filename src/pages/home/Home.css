@@ -48,7 +48,7 @@
   top: 50%;
   transform: translateY(-50%);
   left: 6%;
-  max-width: 580px;
+  max-width: 650px;
   z-index: 2;
   padding-right: 24px;
   box-sizing: border-box;
@@ -56,20 +56,20 @@
 
 .home-hero-heading {
   font-family: 'D-Din-Bold', sans-serif;
-  font-size: 48px;
-  font-weight: 600;
-  color: #fcfeed;
+  font-size: clamp(34px, 4.5vw + 16px, 58px);
+  font-weight: 700;
+  color: #ffffff;
   letter-spacing: 1px;
-  line-height: 1.15;
-  margin: 0 0 12px 0;
+  line-height: 1.1;
+  margin: 0 0 16px 0;
   text-transform: uppercase;
 }
 
 .home-hero-subheading {
   font-family: 'D-Din-Regular', sans-serif;
-  font-size: 18px;
+  font-size: clamp(17px, 1.5vw + 10px, 23px);
   font-weight: 500;
-  color: rgba(252, 254, 237, 0.85);
+  color: rgba(252, 254, 237, 0.92);
   letter-spacing: 0.5px;
   line-height: 1.4;
   margin: 0 0 20px 0;
@@ -77,10 +77,10 @@
 
 .home-hero-description {
   font-family: 'D-Din', sans-serif;
-  font-size: 14px;
+  font-size: clamp(13px, 0.9vw + 9px, 15.5px);
   font-weight: 400;
-  color: rgba(252, 254, 237, 0.6);
-  line-height: 1.6;
+  color: rgba(252, 254, 237, 0.72);
+  line-height: 1.65;
   margin: 0;
   letter-spacing: 0.5px;
 }
@@ -88,7 +88,7 @@
 .home-hero-actions {
   display: flex;
   gap: 16px;
-  margin-top: 32px;
+  margin-top: 36px;
 }
 
 .home-action-btn {
@@ -97,13 +97,13 @@
   background: rgba(0, 0, 0, 0);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(240, 240, 250, 0.35);
+  border: 1px solid rgba(240, 240, 250, 0.4);
   color: #fcfeed;
-  font-family: 'D-Din', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  font-family: 'D-Din-Bold', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
   letter-spacing: 1.5px;
-  padding: 10px 24px;
+  padding: 12px 28px;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -220,7 +220,7 @@
 
 .mission-title {
   font-family: 'D-Din-Bold', sans-serif;
-  font-size: 40px;
+  font-size: clamp(26px, 3vw + 14px, 40px);
   color: #fcfeed;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -263,7 +263,7 @@
 
 .pillar-title {
   font-family: 'D-Din-Bold', sans-serif;
-  font-size: 22px;
+  font-size: clamp(18px, 1.5vw + 12px, 22px);
   color: #fcfeed;
   letter-spacing: 1px;
   margin: 0 0 16px 0;
@@ -310,7 +310,7 @@
 
 .stat-number {
   font-family: 'D-Din-Bold', sans-serif;
-  font-size: 54px;
+  font-size: clamp(36px, 4vw + 16px, 54px);
   font-weight: 600;
   color: #fcfeed;
   margin: 0 0 8px 0;
@@ -334,14 +334,6 @@
 
   .stats-container {
     gap: 30px;
-  }
-
-  .stat-number {
-    font-size: 40px;
-  }
-
-  .stat-label {
-    font-size: 11px;
   }
 }
 
@@ -368,7 +360,7 @@
 .quote-text {
   font-family: 'D-Din', sans-serif;
   font-style: italic;
-  font-size: 32px;
+  font-size: clamp(18px, 2vw + 12px, 32px);
   font-weight: 500;
   color: #fcfeed;
   line-height: 1.55;

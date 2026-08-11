@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import BorderGlow from '../../../components/border-glow/BorderGlow'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '../../../firebase'
 import SettingsModal from './SettingsModal'
 import Toast, { type ToastType } from '../../../components/toast/Toast'
@@ -108,10 +108,52 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
   }
 
   useEffect(() => {
-    // Reference onSignOut to bypass unused variable check
-    if (false) console.log(onSignOut)
-
     syncDashboardData()
+
+    let unsubscribe: (() => void) | null = null
+
+    if (clubId) {
+      const docRef = doc(db, 'clubs', clubId)
+      unsubscribe = onSnapshot(docRef, (docSnap) => {
+        if (!docSnap.exists()) {
+          // Document deleted from Firestore in real-time!
+          sessionStorage.setItem('isaac_toast_notice', 'Club account document was removed from database.')
+          onSignOut()
+        } else {
+          const data = docSnap.data()
+          setClubName(data.clubName || '')
+          setUsername(data.username || '')
+          setCollege(data.institution || '')
+          setLogo(data.logo || '')
+          setBanner(data.banner || '')
+          setEstYear(data.estYear || '')
+          setVerified(data.verified === true)
+
+          setSocialInstagram(data.instagram || '')
+          setSocialLinkedIn(data.linkedin || '')
+          setSocialYouTube(data.youtube || '')
+          setSocialFacebook(data.facebook || '')
+          setSocialDiscord(data.discord || '')
+          setSocialGitHub(data.github || '')
+
+          localStorage.setItem('isaac_fullname', data.clubName || '')
+          localStorage.setItem('isaac_username', data.username || '')
+          localStorage.setItem('isaac_institution', data.institution || '')
+          localStorage.setItem('isaac_logo', data.logo || '')
+          localStorage.setItem('isaac_banner', data.banner || '')
+          localStorage.setItem('isaac_est_year', data.estYear || '')
+          localStorage.setItem('isaac_verified', String(data.verified === true))
+          localStorage.setItem('isaac_social_instagram', data.instagram || '')
+          localStorage.setItem('isaac_social_linkedin', data.linkedin || '')
+          localStorage.setItem('isaac_social_youtube', data.youtube || '')
+          localStorage.setItem('isaac_social_facebook', data.facebook || '')
+          localStorage.setItem('isaac_social_discord', data.discord || '')
+          localStorage.setItem('isaac_social_github', data.github || '')
+        }
+      }, (err) => {
+        console.error("Realtime club listener error:", err)
+      })
+    }
 
     // Listen to tab changes in URL query params
     const handleUrlChange = () => {
@@ -127,6 +169,7 @@ export default function ClubDashboard({ onSignOut }: ClubDashboardProps) {
     handleUrlChange()
     window.addEventListener('popstate', handleUrlChange)
     return () => {
+      if (unsubscribe) unsubscribe()
       window.removeEventListener('popstate', handleUrlChange)
     }
   }, [onSignOut, clubId])

@@ -17,6 +17,11 @@ import Resources from './pages/resources/Resources'
 import Gallery from './pages/gallery/Gallery'
 import Publications from './pages/publications/Publications'
 import Constellations from './pages/constellations/Constellations'
+import Team from './pages/team/Team'
+import NotFound from './pages/not-found/NotFound'
+import ErrorBoundary from './components/error-boundary/ErrorBoundary'
+import { onIdTokenChanged } from 'firebase/auth'
+import { auth } from './firebase'
 import { usePerformanceTier } from './hooks/usePerformanceTier'
 import './App.css'
 
@@ -33,9 +38,13 @@ function App() {
   // Check if currentPath is a dynamic user profile route
   const getProfileUsername = (path: string): string | null => {
     const segments = path.split('/').filter(Boolean)
-    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'dashboard', 'events', 'resources', 'gallery', 'publications', 'constellations', 'club']
+    const systemPages = ['home', 'clubs', 'about', 'login', 'onboarding', 'dashboard', 'events', 'resources', 'gallery', 'publications', 'constellations', 'team', 'club']
     if (segments.length === 1 && !systemPages.includes(segments[0])) {
-      return segments[0]
+      const loggedInUser = (localStorage.getItem('isaac_username') || '').toLowerCase()
+      const target = segments[0].toLowerCase()
+      if (target.startsWith('@') || (loggedInUser && target === loggedInUser)) {
+        return target.replace(/^@/, '')
+      }
     }
     return null
   }
@@ -65,6 +74,7 @@ function App() {
                       path === '/gallery' || 
                       path === '/publications' || 
                       path === '/constellations' || 
+                      path === '/team' || 
                       getProfileUsername(path) !== null ||
                       getClubProfileUsername(path) !== null
     if (isSpecial) return 'home'
@@ -102,7 +112,8 @@ function App() {
                            path === '/resources' || 
                            path === '/gallery' || 
                            path === '/publications' || 
-                           path === '/constellations'
+                           path === '/constellations' ||
+                           path === '/team'
 
           // Intercept page route changes to prevent full refresh
           if (isSystem || isProfile || isClubProfile) {
@@ -111,6 +122,7 @@ function App() {
             setCurrentPath(path)
             setCurrentSearch(url.search)
             setStage('home')
+            window.dispatchEvent(new Event('popstate'))
             
             // If there's a hash, scroll to it
             if (url.hash) {
@@ -124,10 +136,28 @@ function App() {
       }
     }
 
+    const unsubscribeAuth = onIdTokenChanged(auth, (firebaseUser) => {
+      const isLoggedIn = localStorage.getItem('isaac_logged_in') === 'true'
+      const role = localStorage.getItem('isaac_role')
+      // If user account is deleted in Firebase Auth Console while logged in:
+      if (isLoggedIn && role === 'user' && !firebaseUser) {
+        localStorage.removeItem('isaac_logged_in')
+        localStorage.removeItem('isaac_uid')
+        localStorage.removeItem('isaac_email')
+        localStorage.removeItem('isaac_fullname')
+        localStorage.removeItem('isaac_avatar')
+        localStorage.removeItem('isaac_onboarded')
+        sessionStorage.setItem('isaac_toast_notice', 'Firebase Auth account session has been terminated.')
+        setCurrentPath('/home')
+        window.history.pushState(null, '', '/home')
+      }
+    })
+
     window.addEventListener('popstate', handlePopState)
     document.addEventListener('click', handleLinkClick)
 
     return () => {
+      unsubscribeAuth()
       window.removeEventListener('popstate', handlePopState)
       document.removeEventListener('click', handleLinkClick)
     }
@@ -141,20 +171,14 @@ function App() {
     const isOnboarded = localStorage.getItem('isaac_onboarded') === 'true'
     const isProfilePath = getProfileUsername(currentPath) !== null
 
-    const isClubRegistration = currentPath === '/onboarding' && new URLSearchParams(window.location.search).get('role') === 'club'
+    const onboardingRole = new URLSearchParams(currentSearch || window.location.search).get('role')
+    const isValidOnboardingRole = onboardingRole === 'user' || onboardingRole === 'club'
 
-    if (currentPath === '/dashboard' || (currentPath === '/onboarding' && !isClubRegistration) || isProfilePath) {
+    if (currentPath === '/dashboard' || isProfilePath) {
       if (!isLoggedIn) {
         window.history.pushState(null, '', '/login')
         setCurrentPath('/login')
         setCurrentSearch('')
-      } else if (currentPath === '/onboarding' && isOnboarded) {
-        const role = localStorage.getItem('isaac_role') || ''
-        const isClub = role === 'Club Admin'
-        const targetQuery = isClub ? '?roll=club' : '?roll=user'
-        window.history.pushState(null, '', `/dashboard${targetQuery}`)
-        setCurrentPath('/dashboard')
-        setCurrentSearch(targetQuery)
       } else if (currentPath === '/dashboard') {
         const params = new URLSearchParams(window.location.search)
         if (!params.has('roll')) {
@@ -164,6 +188,15 @@ function App() {
           window.history.pushState(null, '', `/dashboard${targetQuery}`)
           setCurrentSearch(targetQuery)
         }
+      }
+    } else if (currentPath === '/onboarding') {
+      if (isValidOnboardingRole && isLoggedIn && isOnboarded) {
+        const role = localStorage.getItem('isaac_role') || ''
+        const isClub = role === 'Club Admin'
+        const targetQuery = isClub ? '?roll=club' : '?roll=user'
+        window.history.pushState(null, '', `/dashboard${targetQuery}`)
+        setCurrentPath('/dashboard')
+        setCurrentSearch(targetQuery)
       }
     } else if (currentPath === '/login') {
       if (isLoggedIn) {
@@ -360,21 +393,41 @@ function App() {
                 <Footer />
               </div>
             )}
+            {currentPath === '/team' && (
+              <div className="team-route-layout">
+                <Team />
+                <Footer />
+              </div>
+            )}
             {currentPath === '/login' && (
               <div className="login-route-layout">
-                <Login />
+                <Login search={currentSearch} />
                 <Footer />
               </div>
             )}
-            {currentPath === '/onboarding' && (
-              <div className="onboarding-route-layout">
-                <Onboarding onComplete={handleOnboardingComplete} />
-                <Footer />
-              </div>
-            )}
+            {currentPath === '/onboarding' && (() => {
+              const role = new URLSearchParams(currentSearch || window.location.search).get('role')
+              const isValidRole = role === 'user' || role === 'club'
+
+              if (!isValidRole) {
+                return (
+                  <div className="not-found-route-layout">
+                    <NotFound />
+                    <Footer />
+                  </div>
+                )
+              }
+
+              return (
+                <div className="onboarding-route-layout">
+                  <Onboarding onComplete={handleOnboardingComplete} />
+                  <Footer />
+                </div>
+              )
+            })()}
             {currentPath === '/dashboard' && (() => {
               const params = new URLSearchParams(window.location.search)
-              const queryRole = params.get('role') || params.get('type')
+              const queryRole = params.get('role') || params.get('type') || params.get('roll')
               const role = localStorage.getItem('isaac_role') || ''
               const username = localStorage.getItem('isaac_username') || ''
               
@@ -387,11 +440,13 @@ function App() {
 
               return (
                 <div className="dashboard-route-layout">
-                  {isClub ? (
-                    <ClubDashboard onSignOut={handleSignOut} />
-                  ) : (
-                    <UserDashboard onSignOut={handleSignOut} />
-                  )}
+                  <ErrorBoundary>
+                    {isClub ? (
+                      <ClubDashboard onSignOut={handleSignOut} />
+                    ) : (
+                      <UserDashboard onSignOut={handleSignOut} />
+                    )}
+                  </ErrorBoundary>
                   <Footer />
                 </div>
               )
@@ -408,40 +463,51 @@ function App() {
                 <Footer />
               </div>
             )}
-            {currentPath !== '/clubs' && 
+            {(currentPath === '/home' || currentPath === '/') && (
+              <Home />
+            )}
+            {currentPath !== '/home' && 
+             currentPath !== '/' &&
+             currentPath !== '/clubs' && 
              currentPath !== '/about' && 
              currentPath !== '/events' && 
              currentPath !== '/resources' && 
              currentPath !== '/gallery' && 
              currentPath !== '/publications' && 
-             currentPath !== '/constellations' && 
+             currentPath !== '/constellations' &&
+             currentPath !== '/team' && 
              currentPath !== '/login' && 
              currentPath !== '/onboarding' && 
              currentPath !== '/dashboard' && 
              profileUsername === null && 
              clubProfileUsername === null && (
-               <Home />
+               <div className="not-found-route-layout">
+                 <NotFound />
+                 <Footer />
+               </div>
              )}
           </div>
         </>
       )}
 
-      <div className="background-wrapper">
-        <Galaxy
-          mouseRepulsion={false}
-          mouseInteraction={false}
-          density={0.3}
-          glowIntensity={0.1}
-          saturation={0}
-          hueShift={80}
-          twinkleIntensity={0.1}
-          rotationSpeed={0}
-          repulsionStrength={1.5}
-          autoCenterRepulsion={0}
-          starSpeed={0.3}
-          speed={0.3}
-        />
-      </div>
+      {currentPath !== '/dashboard' && (
+        <div className="background-wrapper">
+          <Galaxy
+            mouseRepulsion={false}
+            mouseInteraction={false}
+            density={0.3}
+            glowIntensity={0.1}
+            saturation={0}
+            hueShift={80}
+            twinkleIntensity={0.1}
+            rotationSpeed={0}
+            repulsionStrength={1.5}
+            autoCenterRepulsion={0}
+            starSpeed={0.3}
+            speed={0.3}
+          />
+        </div>
+      )}
     </div>
   )
 }

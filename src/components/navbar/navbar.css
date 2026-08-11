@@ -51,7 +51,7 @@
 .navbar-link {
   position: relative;
   font-family: 'D-Din', sans-serif;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 0.8vw + 0.6rem, 1rem);
   font-weight: 500;
   color: rgba(252, 254, 237, 0.7);
   text-decoration: none;

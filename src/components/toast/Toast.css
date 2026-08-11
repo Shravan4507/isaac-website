@@ -1,20 +1,21 @@
 .toast-wrapper {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 999999;
+  top: 32px;
+  right: 32px;
+  z-index: 9999999;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-width: 320px;
+  min-width: 300px;
   max-width: 480px;
   padding: 14px 18px;
-  background: rgba(10, 10, 12, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 4px;
+  background: rgba(10, 10, 14, 0.9);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 6px;
   box-sizing: border-box;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -100,4 +101,14 @@
 
 .toast-close-btn:hover {
   color: #fcfeed;
+}
+
+@media (max-width: 640px) {
+  .toast-wrapper {
+    top: 20px;
+    right: 16px;
+    left: 16px;
+    min-width: auto;
+    max-width: calc(100vw - 32px);
+  }
 }

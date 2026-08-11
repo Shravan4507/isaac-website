@@ -22,7 +22,7 @@
 .footer-social-link,
 .footer-nav-link {
   font-family: 'D-Din', sans-serif;
-  font-size: 11px;
+  font-size: clamp(9px, 0.5vw + 7px, 11px);
   font-weight: 500;
   color: rgba(252, 254, 237, 0.5);
   text-decoration: none;
@@ -34,6 +34,16 @@
 .footer-social-link:hover,
 .footer-nav-link:hover {
   color: #fcfeed;
+}
+
+.footer-nav-arrow {
+  display: inline-block;
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.footer-nav-link:hover .footer-nav-arrow {
+  transform: translate(2px, -2px);
 }
 
 .footer-socials {
@@ -49,11 +59,46 @@
 }
 
 .footer-copyright {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   font-family: 'D-Din', sans-serif;
-  font-size: 11px;
+  font-size: clamp(9px, 0.5vw + 7px, 11px);
   color: rgba(252, 254, 237, 0.4);
   letter-spacing: 1px;
   text-transform: uppercase;
+}
+
+.footer-club-link {
+  font-family: 'D-Din-Bold', sans-serif;
+  font-size: clamp(10px, 0.5vw + 8px, 11.5px);
+  color: #fcfeed;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.footer-club-link:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.footer-club-link .footer-arrow {
+  transition: transform 0.25s ease;
+  font-size: 12px;
+}
+
+.footer-club-link:hover .footer-arrow {
+  transform: translateX(4px);
 }
 
 /* Responsiveness */

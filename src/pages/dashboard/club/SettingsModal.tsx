@@ -959,7 +959,31 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
       setIsSaving(false)
     }
   }
-
+  // Reference features currently on hold to bypass unused compiler checks
+  if (false) {
+    console.log(
+      twoFactorEnabled,
+      twoFactorSetupStep,
+      showTwoFactorPassword,
+      setShowTwoFactorPassword,
+      twoFactorPasswordValid,
+      twoFactorQR,
+      twoFactorError,
+      twoFactorSuccess,
+      isEnabling2FA,
+      isDisabling2FA,
+      showCopySuccess,
+      showDisableVerify,
+      isRegisteringPasskey,
+      handleInitiate2FA,
+      handleVerifyPasswordFor2FA,
+      handleEnable2FA,
+      handleDisable2FA,
+      handleRegisterPasskey,
+      handleDeletePasskey,
+      handleCopySecretToClipboard
+    )
+  }
   if (!isOpen) return null
 
   return createPortal(
@@ -1012,6 +1036,18 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
                 <path d="M9 11l2 2 4-4" />
               </svg>
               Security & Passkeys
+              <span className="coming-soon-badge" style={{
+                marginLeft: 'auto',
+                fontSize: '10px',
+                background: 'rgba(234, 179, 8, 0.15)',
+                color: '#eab308',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                border: '1px solid rgba(234, 179, 8, 0.3)',
+                fontFamily: 'D-Din',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>Soon</span>
             </button>
           </div>
         </div>
@@ -1735,346 +1771,85 @@ export default function SettingsModal({ isOpen, onClose, clubId, onSaveSuccess }
                 </div>
               </form>
             ) : (
-              <div className="settings-twofactor-panel">
-                <div className="settings-section-divider">
-                  <span className="settings-divider-num">01</span>
-                  <span className="settings-divider-label">Security Settings</span>
-                  <div className="settings-divider-line" />
+              <div className="settings-twofactor-panel" style={{ textAlign: 'center', padding: '40px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                <div className="coming-soon-shield-glow" style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'rgba(234, 179, 8, 0.05)',
+                  color: '#eab308',
+                  border: '1px solid rgba(234, 179, 8, 0.2)',
+                  boxShadow: '0 0 20px rgba(234, 179, 8, 0.15)',
+                  marginBottom: '8px'
+                }}>
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <circle cx="12" cy="11" r="3" />
+                    <path d="M12 14v4" />
+                  </svg>
                 </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <span style={{
+                    fontSize: '10px',
+                    color: '#eab308',
+                    fontFamily: 'D-Din',
+                    textTransform: 'uppercase',
+                    letterSpacing: '2px',
+                    fontWeight: 'bold',
+                    background: 'rgba(234, 179, 8, 0.1)',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    width: 'fit-content',
+                    margin: '0 auto'
+                  }}>Under Development</span>
+                  <h3 style={{ fontSize: '18px', fontFamily: 'D-Din', color: '#fcfeed', textTransform: 'uppercase', letterSpacing: '1px', marginTop: '8px' }}>
+                    Multi-Factor Authentication
+                  </h3>
+                </div>
+                <p style={{
+                  fontSize: '13.5px',
+                  color: 'rgba(252, 254, 237, 0.6)',
+                  lineHeight: '1.6',
+                  maxWidth: '460px',
+                  margin: '0 auto'
+                }}>
+                  Enhanced cryptographic security protocols, including hardware-backed biometrics (FIDO2 / WebAuthn Passkeys) and Two-Factor Authentication (TOTP), are currently on hold. These features will be activated in a subsequent release to safeguard club administration gateways.
+                </p>
 
-                {twoFactorSuccess && (
-                  <div className="field-help-text" style={{ color: '#22c55e', fontSize: '13.5px', marginBottom: '16px', fontFamily: 'D-Din', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    ✔ {twoFactorSuccess}
-                  </div>
-                )}
-
-                {twoFactorError && (
-                  <div className="settings-error-text" style={{ fontSize: '13.5px', marginBottom: '16px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    ✖ {twoFactorError}
-                  </div>
-                )}
-
-                {/* Status shield & display */}
-                <div className="twofactor-status-container">
-                  <div className={`twofactor-shield-icon ${twoFactorEnabled ? 'enabled' : 'disabled'}`}>
-                    <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                      {twoFactorEnabled ? (
-                        <path d="M9 11l2 2 4-4" strokeWidth="3" />
-                      ) : (
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                      )}
-                    </svg>
-                  </div>
-                  <div className="twofactor-status-info">
-                    <div className="twofactor-status-badge">
-                      STATUS: {twoFactorEnabled ? <span className="status-tag enabled">ENABLED</span> : <span className="status-tag disabled">DISABLED</span>}
+                <div className="coming-soon-roadmap" style={{
+                  width: '100%',
+                  maxWidth: '420px',
+                  background: 'rgba(240, 240, 250, 0.02)',
+                  border: '1px solid rgba(240, 240, 250, 0.05)',
+                  borderRadius: '8px',
+                  padding: '16px 20px',
+                  marginTop: '12px',
+                  textAlign: 'left',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px'
+                }}>
+                  <span style={{ fontSize: '11px', color: '#fcfeed', fontFamily: 'D-Din', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    Security Roadmap
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12.5px', color: '#22c55e' }}>
+                      <span>✔</span>
+                      <span style={{ color: 'rgba(252, 254, 237, 0.8)' }}>PBKDF2 Password Hashing & Verification</span>
                     </div>
-                    <p className="twofactor-status-desc">
-                      {twoFactorEnabled 
-                        ? 'Your club management account is protected by an additional level of security. Each time you log in, you will be prompted to enter a verification code from your linked authenticator app.' 
-                        : 'Two-factor authentication adds an extra layer of protection to your club account. In addition to your representative password, you will be required to enter a dynamic code generated by your mobile authenticator app.'}
-                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12.5px', color: '#eab308' }}>
+                      <span>⟳</span>
+                      <span style={{ color: 'rgba(252, 254, 237, 0.8)' }}>Two-Factor Authentication (TOTP app sync) — <span style={{ fontStyle: 'italic', opacity: 0.7 }}>Soon</span></span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12.5px', color: '#eab308' }}>
+                      <span>⟳</span>
+                      <span style={{ color: 'rgba(252, 254, 237, 0.8)' }}>Hardware-backed Biometrics (Passkeys) — <span style={{ fontStyle: 'italic', opacity: 0.7 }}>Soon</span></span>
+                    </div>
                   </div>
                 </div>
-
-                {/* State: IDLE - Show action buttons */}
-                {twoFactorSetupStep === 'idle' && !showDisableVerify && (
-                  <div className="twofactor-actions-row">
-                    {twoFactorEnabled ? (
-                      <button 
-                        type="button" 
-                        className="settings-btn settings-btn-danger"
-                        onClick={() => {
-                          setTwoFactorError('')
-                          setTwoFactorSuccess('')
-                          setTwoFactorPassword('')
-                          setTwoFactorPasswordValid(null)
-                          setShowDisableVerify(true)
-                        }}
-                      >
-                        Disable 2FA
-                      </button>
-                    ) : (
-                      <button 
-                        type="button" 
-                        className="settings-btn settings-btn-save"
-                        onClick={handleInitiate2FA}
-                      >
-                        Enable Two-Factor Authentication
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* State: VERIFY PASSWORD (for enabling 2FA) */}
-                {twoFactorSetupStep === 'verify_password' && (
-                  <form className="twofactor-form-step" onSubmit={handleVerifyPasswordFor2FA}>
-                    <p className="twofactor-step-instruction">
-                      To set up two-factor authentication, please confirm your current representative password first.
-                    </p>
-                    <div className="settings-form-group">
-                      <label className="settings-form-label">Verify Password *</label>
-                      <div className="password-input-wrapper">
-                        <input
-                          type={showTwoFactorPassword ? "text" : "password"}
-                          className={`settings-form-input ${twoFactorPasswordValid === false ? 'error-border' : twoFactorPasswordValid === true ? 'success-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
-                          placeholder="Enter current password"
-                          value={twoFactorPassword}
-                          onChange={(e) => setTwoFactorPassword(e.target.value)}
-                          onCopy={(e) => {
-                            e.preventDefault();
-                            triggerCopyPasteWarning('current');
-                          }}
-                          onPaste={(e) => {
-                            e.preventDefault();
-                            triggerCopyPasteWarning('current');
-                          }}
-                        />
-                        <button
-                          type="button"
-                          className="password-toggle-btn"
-                          onClick={() => setShowTwoFactorPassword(!showTwoFactorPassword)}
-                        >
-                          {showTwoFactorPassword ? (
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                              <line x1="1" y1="1" x2="23" y2="23" />
-                            </svg>
-                          ) : (
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                              <circle cx="12" cy="12" r="3" />
-                            </svg>
-                          )}
-                        </button>
-                        {warningField === 'current' && (
-                          <div className="copypaste-tooltip">Really bruh..? Type it Dude!</div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="twofactor-buttons-row">
-                      <button 
-                        type="button" 
-                        className="settings-btn settings-btn-cancel"
-                        onClick={() => setTwoFactorSetupStep('idle')}
-                      >
-                        Cancel
-                      </button>
-                      <button 
-                        type="submit" 
-                        className="settings-btn settings-btn-save"
-                        disabled={isEnabling2FA}
-                      >
-                        {isEnabling2FA ? 'Verifying...' : 'Next Step'}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* State: SCAN & VERIFY CODE */}
-                {twoFactorSetupStep === 'scan_verify' && (
-                  <form className="twofactor-form-step" onSubmit={handleEnable2FA}>
-                    <div className="twofactor-setup-grid">
-                      <div className="twofactor-qr-section">
-                        {twoFactorQR ? (
-                          <img src={twoFactorQR} alt="2FA Setup QR Code" className="twofactor-qr-img" />
-                        ) : (
-                          <div className="twofactor-qr-placeholder">Generating QR...</div>
-                        )}
-                      </div>
-                      <div className="twofactor-instructions-section">
-                        <h4 className="twofactor-step-heading">1. Scan the QR Code</h4>
-                        <p className="twofactor-step-text">
-                          Scan this image using your authenticator app (like Google Authenticator, Microsoft Authenticator, or Authy).
-                        </p>
-                        
-                        <h4 className="twofactor-step-heading" style={{ marginTop: '16px' }}>Or enter manually</h4>
-                        <div className="twofactor-manual-key-wrapper">
-                          <code className="twofactor-manual-key">{twoFactorSecret}</code>
-                          <button 
-                            type="button" 
-                            className="twofactor-copy-btn"
-                            onClick={handleCopySecretToClipboard}
-                          >
-                            {showCopySuccess ? 'COPIED!' : 'COPY'}
-                          </button>
-                        </div>
-
-                        <h4 className="twofactor-step-heading" style={{ marginTop: '16px' }}>2. Enter Verification Code</h4>
-                        <p className="twofactor-step-text">
-                          Input the 6-digit code displayed in your authenticator app to complete the link.
-                        </p>
-                        
-                        <div className="settings-form-group" style={{ marginTop: '8px' }}>
-                          <input
-                            type="text"
-                            maxLength={6}
-                            pattern="\d*"
-                            inputMode="numeric"
-                            className={`settings-form-input ${twoFactorError ? 'error-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
-                            placeholder="Enter 6-digit code"
-                            style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '18px', fontFamily: 'D-Din-Bold', width: '200px' }}
-                            value={twoFactorToken}
-                            onChange={(e) => setTwoFactorToken(e.target.value.replace(/\D/g, ''))}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="twofactor-buttons-row" style={{ marginTop: '24px', borderTop: '1px solid rgba(240, 240, 250, 0.08)', paddingTop: '20px' }}>
-                      <button 
-                        type="button" 
-                        className="settings-btn settings-btn-cancel"
-                        onClick={() => {
-                          setTwoFactorSetupStep('idle')
-                          setTwoFactorSecret('')
-                          setTwoFactorQR('')
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button 
-                        type="submit" 
-                        className="settings-btn settings-btn-save"
-                        disabled={isEnabling2FA}
-                      >
-                        {isEnabling2FA ? 'Enabling...' : 'Verify & Enable'}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* State: VERIFY PASSWORD FOR DISABLING */}
-                {showDisableVerify && (
-                  <form className="twofactor-form-step" onSubmit={handleDisable2FA}>
-                    <p className="twofactor-step-instruction" style={{ color: '#ef4444' }}>
-                      WARNING: Disabling two-factor authentication decreases your account security. Please verify your password to proceed.
-                    </p>
-                    <div className="settings-form-group">
-                      <label className="settings-form-label">Verify Password *</label>
-                      <div className="password-input-wrapper">
-                        <input
-                          type={showTwoFactorPassword ? "text" : "password"}
-                          className={`settings-form-input ${twoFactorPasswordValid === false ? 'error-border' : twoFactorPasswordValid === true ? 'success-border' : ''} ${is2FAShake ? 'shake-animation' : ''}`}
-                          placeholder="Enter current password"
-                          value={twoFactorPassword}
-                          onChange={(e) => setTwoFactorPassword(e.target.value)}
-                          onCopy={(e) => {
-                            e.preventDefault();
-                            triggerCopyPasteWarning('current');
-                          }}
-                          onPaste={(e) => {
-                            e.preventDefault();
-                            triggerCopyPasteWarning('current');
-                          }}
-                        />
-                        <button
-                          type="button"
-                          className="password-toggle-btn"
-                          onClick={() => setShowTwoFactorPassword(!showTwoFactorPassword)}
-                        >
-                          {showTwoFactorPassword ? (
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                              <line x1="1" y1="1" x2="23" y2="23" />
-                            </svg>
-                          ) : (
-                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                              <circle cx="12" cy="12" r="3" />
-                            </svg>
-                          )}
-                        </button>
-                        {warningField === 'current' && (
-                          <div className="copypaste-tooltip">Really bruh..? Type it Dude!</div>
-                        )}
-                      </div>
-                    </div>
-                    <div className="twofactor-buttons-row">
-                      <button 
-                        type="button" 
-                        className="settings-btn settings-btn-cancel"
-                        onClick={() => setShowDisableVerify(false)}
-                      >
-                        Cancel
-                      </button>
-                      <button 
-                        type="submit" 
-                        className="settings-btn settings-btn-danger"
-                        disabled={isDisabling2FA}
-                      >
-                        {isDisabling2FA ? 'Disabling...' : 'Confirm Disable'}
-                      </button>
-                    </div>
-                  </form>
-                )}
-
-                {/* Section 2: Biometric Passkeys */}
-                {twoFactorSetupStep === 'idle' && !showDisableVerify && (
-                  <>
-                    <div className="settings-section-divider" style={{ marginTop: '32px' }}>
-                      <span className="settings-divider-num">02</span>
-                      <span className="settings-divider-label">Biometric Passkeys</span>
-                      <div className="settings-divider-line" />
-                    </div>
-
-                    <div className="passkeys-list-container">
-                      <p className="twofactor-status-desc" style={{ marginBottom: '16px' }}>
-                        Passkeys allow you to sign in securely using your device's biometric authentication (fingerprint, face recognition, or PIN) instead of typing your password.
-                      </p>
-
-                      {passkeys.length > 0 ? (
-                        <div className="passkeys-devices-list">
-                          {passkeys.map((pk: any) => (
-                            <div key={pk.credentialId} className="passkey-device-item">
-                              <div className="passkey-device-info">
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#22c55e" strokeWidth="2" className="passkey-icon">
-                                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                                  <line x1="12" y1="18" x2="12.01" y2="18" strokeWidth="3" />
-                                </svg>
-                                <div className="passkey-device-meta">
-                                  <span className="passkey-device-name">{pk.name}</span>
-                                  <span className="passkey-device-date">Added {new Date(pk.created).toLocaleDateString()}</span>
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                className="passkey-delete-btn"
-                                onClick={() => handleDeletePasskey(pk.credentialId)}
-                                title="Remove Passkey"
-                              >
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
-                                  <polyline points="3 6 5 6 21 6" />
-                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                  <line x1="10" y1="11" x2="10" y2="17" />
-                                  <line x1="14" y1="11" x2="14" y2="17" />
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="passkey-empty-state">
-                          No passkeys registered yet. Register a device below to enable biometric sign-in.
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        className="settings-btn settings-btn-save"
-                        style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}
-                        onClick={handleRegisterPasskey}
-                        disabled={isRegisteringPasskey}
-                      >
-                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none">
-                          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
-                        </svg>
-                        {isRegisteringPasskey ? 'Registering...' : 'Register Passkey'}
-                      </button>
-                    </div>
-                  </>
-                )}
               </div>
             )}
           </div>

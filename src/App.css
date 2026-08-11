@@ -77,7 +77,7 @@
 
 .welcome-title {
   font-family: 'D-Din-Bold', sans-serif;
-  font-size: 60px;
+  font-size: clamp(28px, 4vw + 16px, 60px);
   font-weight: 500;
   color: #fcfeed;
   letter-spacing: 2px;
@@ -99,7 +99,7 @@
 
 .welcome-subtitle {
   font-family: 'D-Din', sans-serif;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 0.8vw + 0.6rem, 1rem);
   font-weight: 500;
   color: rgba(252, 254, 237, 0.8);
   letter-spacing: 3px;
@@ -109,7 +109,7 @@
 
 .welcome-text {
   font-family: 'D-Din', sans-serif;
-  font-size: 1rem;
+  font-size: clamp(0.875rem, 0.8vw + 0.65rem, 1rem);
   line-height: 1.75;
   color: rgba(252, 254, 237, 0.8);
   margin: 0;
@@ -285,7 +285,8 @@
    PUBLIC PROFILES STICKY FOOTER LAYOUT
    ────────────────────────────────────────────────────────────────────────── */
 .profile-route-layout,
-.club-profile-route-layout {
+.club-profile-route-layout,
+.not-found-route-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -302,7 +303,7 @@
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  background: #000000;
+  background: transparent;
 }
 
 .club-dashboard-page-container {
@@ -316,12 +317,35 @@
   flex: 1;
   overflow-y: auto;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   box-sizing: border-box;
 }
 
 .dashboard-route-layout > footer {
   flex-shrink: 0;
   z-index: 100;
+}
+
+/* On mobile & tablet: dashboard becomes scrollable, footer flows naturally */
+@media (max-width: 1024px) {
+  .app-container.dashboard-active {
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: auto !important;
+  }
+
+  .dashboard-route-layout {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .dashboard-route-layout > footer {
+    position: relative;
+    flex-shrink: 0;
+    display: block !important;
+    width: 100%;
+    margin-top: 40px;
+  }
 }
