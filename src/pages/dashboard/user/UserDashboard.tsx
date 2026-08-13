@@ -1152,19 +1152,45 @@ export default function UserDashboard({ onSignOut }: UserDashboardProps) {
     const handleWindowBlur = () => {
       // Temporary blackout when window loses focus (e.g. Snipping tool launch)
       setIsScreenshotBlocked(true)
-      setTimeout(() => setIsScreenshotBlocked(false), 2000)
+      setTimeout(() => setIsScreenshotBlocked(false), 2500)
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden || document.visibilityState === 'hidden') {
+        setIsScreenshotBlocked(true)
+      } else {
+        setIsScreenshotBlocked(true)
+        setTimeout(() => setIsScreenshotBlocked(false), 2500)
+      }
+    }
+
+    const handlePageHide = () => {
+      setIsScreenshotBlocked(true)
+      setTimeout(() => setIsScreenshotBlocked(false), 2500)
+    }
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches && e.touches.length >= 3) {
+        handleScreenshotTrigger()
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
     window.addEventListener('blur', handleWindowBlur)
     window.addEventListener('popstate', handlePopState)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pagehide', handlePageHide)
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
       window.removeEventListener('blur', handleWindowBlur)
       window.removeEventListener('popstate', handlePopState)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pagehide', handlePageHide)
+      window.removeEventListener('touchstart', handleTouchStart)
     }
   }, [showAvatarModal, showSearchOverlay])
 

@@ -2115,7 +2115,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                 <div className="form-group">
                   <label className="form-label">SEX *</label>
                   <Dropdown
-                    options={['Male (Adam)', 'Female (Eve)', 'Transgender']}
+                    options={['Male (Adam)', 'Female (Eve)', 'Prefer not to say']}
                     value={sex === 'Other' ? 'Other' : sex}
                     onChange={(val) => {
                       setSex(val)
