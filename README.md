@@ -1,40 +1,57 @@
 # ISAAC Synergy Network (Indian Synergy of Astronomy & Astrophysics Clubs)
 
-Welcome to the ISAAC Synergy Network dashboard. This platform is a unified space designed to connect astronomy clubs, students, educators, and space enthusiasts across India to share resources, plan events, publish research findings, and coordinate observations.
+Welcome to the ISAAC Synergy Network platform — a unified space connecting astronomy clubs, students, educators, and space enthusiasts across India to share resources, organize national events, publish research findings, and coordinate observations.
 
-## 🛰️ Current Development Status
+> [!IMPORTANT]
+> **📢 Branch Protection & Contribution Notice**  
+> Direct pushes to the `main` branch are currently locked. Collaborators working on this repository should create a separate feature branch and submit a Pull Request (PR):
+> 
+> ```bash
+> # 1. Create a feature branch
+> git checkout -b feature/your-feature-name
+> 
+> # 2. Push your changes
+> git push origin feature/your-feature-name
+> 
+> # 3. Open a Pull Request on GitHub against `main`
+> ```
+> All submitted PRs will be reviewed and merged.
 
-> [!WARNING]
-> **Work In Progress**
-> This repository represents a few hours of rapid development. There is a significant amount of work remaining to reach production-grade features.
->
-> As this is an early prototype, **there might be bugs**. If you encounter any unexpected behaviors, please report them immediately so we can refine our flight deck coordinate systems!
+---
 
-## 🪐 Features Implemented So Far
+## 🪐 Core Features
 
-- **Custom State-Based SPA Router**: Allows seamless transitions between cosmic coordinates without page reloads.
-  - `/home` - Main Dashboard showing upcoming events, resources, gallery, and publications.
-  - `/clubs` - Clubs interactive map directory with map style toggles (Cosmos, Satellite, Streets) and zoom controls.
-  - `/about` - About placeholder page.
-  - `/login` - Auth gateway with premium glassmorphic credentials styling.
-  - `/onboarding` - Pilot configuration settings card (horizontal split layout).
-  - `/{username}` - Dynamic pilot profile card showing ranks and cosmic telemetry logs.
-- **Dynamic 3D Backgrounds**: Integration of custom WebGL-based stars/galaxy renderings.
-- **Responsive Layouts**: Scaled and refined interfaces optimized for mobile views up to massive desktop screens.
+- **Command Palette Search**: Minimalist, keyboard-driven search overlay (`ESC` & back-button aware) for quick settings and action launches.
+- **User Dashboard**: Personal profile hub featuring custom banner presets, avatar crop & upload, telemetry stats, and badges.
+- **Security Suite**: Hardware Passkeys (WebAuthn), 2FA TOTP Authenticator, real-time screenshot protection, and full account deletion.
+- **Editable Handles & Verification**: Custom username validation (3–15 characters) with real-time Firestore availability checks & auto-suggestions.
+- **Club Directory Map**: Interactive India astronomy club map with satellite, cosmos, and street views.
+- **Glassmorphic UI**: SpaceX/Cosmic-inspired dark mode aesthetics built with Vanilla CSS and responsive layouts.
 
-## 🚀 Setting Up local Orbit
+---
 
-1. **Clone & Install**:
+## 🛠️ Tech Stack
+
+- **Frontend**: React + Vite + TypeScript
+- **Styling**: Vanilla CSS (Custom Design System & Dynamic Tokens)
+- **Backend & Database**: Firebase Auth, Cloud Firestore, Firebase Storage
+- **Hosting**: Vercel
+
+---
+
+## 🚀 Local Setup
+
+1. **Clone & Install Dependencies**:
    ```bash
    npm install
    ```
 
-2. **Launch Dev Engine**:
+2. **Start Local Engine**:
    ```bash
    npm run dev
    ```
 
-3. **Verify Bundle**:
+3. **Verify Production Build**:
    ```bash
    npm run build
    ```
